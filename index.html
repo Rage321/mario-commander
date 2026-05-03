@@ -1,335 +1,1014 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Dad Commander 🎮</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 Dad Commander — Ultimate Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;700;900&display=swap');
+/* ── RESET & ROOT ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --mario-red: #E52521;
-    --mario-blue: #049CD8;
-    --mario-yellow: #FBD000;
-    --mario-green: #43B047;
-    --mario-dark: #0a0a1a;
-    --mario-darker: #050510;
-    --glow-red: rgba(229,37,33,0.4);
-    --glow-blue: rgba(4,156,216,0.4);
-    --glow-yellow: rgba(251,208,0,0.4);
-    --glow-green: rgba(67,176,71,0.4);
-  }
+:root {
+  --red:    #E52521;
+  --blue:   #049CD8;
+  --yellow: #FBD000;
+  --green:  #43B047;
+  --purple: #9B30FF;
+  --orange: #FF6B00;
+  --dark:   #09090f;
+  --panel:  rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --text:   rgba(255,255,255,0.88);
+  --muted:  rgba(255,255,255,0.35);
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-ui:    'Rajdhani', sans-serif;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--dark);
+  font-family: var(--font-ui);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 15% 10%, rgba(4,156,216,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 90%, rgba(229,37,33,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(155,48,255,0.03) 0%, transparent 70%);
+}
 
-  body {
-    background: var(--mario-darker);
-    font-family: 'Outfit', sans-serif;
-    color: white;
-    min-height: 100vh;
-    overflow-x: hidden;
-    background-image: 
-      radial-gradient(ellipse at 20% 20%, rgba(4,156,216,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(229,37,33,0.08) 0%, transparent 50%);
-  }
+/* ── SCANLINE OVERLAY ────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
 
-  .stars { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; }
-  .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: twinkle 3s infinite; }
+/* ── STARS ───────────────────────────────────────────────────── */
+#stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.star { position: absolute; border-radius: 50%; animation: twinkle var(--d, 3s) var(--delay, 0s) infinite; }
+@keyframes twinkle { 0%,100%{opacity:.15;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 
-  @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+/* ── LOGIN SCREEN ────────────────────────────────────────────── */
+#login-screen {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--dark);
+}
+.login-box {
+  text-align: center;
+  padding: 48px 56px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  max-width: 420px;
+  width: 90%;
+  animation: loginFadeIn 0.6s ease;
+}
+@keyframes loginFadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-  .container { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 16px; }
+.login-logo {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--yellow);
+  text-shadow: 0 0 30px rgba(251,208,0,0.5);
+  line-height: 2;
+  margin-bottom: 8px;
+}
+.login-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 36px;
+  font-family: var(--font-pixel);
+}
+.login-box input {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  color: white;
+  font-size: 20px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+}
+.login-box input:focus { border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(251,208,0,0.15); }
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--yellow);
+  color: #1a1000;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  border: none; border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+.login-btn:hover { background: #ffe033; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(251,208,0,0.3); }
+.login-error {
+  margin-top: 14px;
+  color: var(--red);
+  font-size: 13px;
+  font-family: var(--font-pixel);
+  min-height: 20px;
+  animation: shake 0.4s ease;
+}
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
 
-  .header { text-align: center; padding: 20px 0 16px; }
-  .header h1 { font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--mario-yellow); text-shadow: 0 0 20px var(--glow-yellow), 2px 2px 0 rgba(0,0,0,0.8); line-height: 1.6; }
-  .header .subtitle { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 8px; font-family: 'Press Start 2P', monospace; }
+/* ── MAIN APP ────────────────────────────────────────────────── */
+#app { display: none; position: relative; z-index: 1; }
 
-  .status-bar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #888; flex-shrink: 0; transition: all 0.3s; }
-  .status-dot.connected { background: var(--mario-green); box-shadow: 0 0 8px var(--glow-green); animation: pulse 2s infinite; }
-  .status-dot.error { background: var(--mario-red); box-shadow: 0 0 8px var(--glow-red); }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  .status-text { color: rgba(255,255,255,0.6); font-size: 11px; }
-  .last-command { margin-left: auto; font-size: 10px; color: var(--mario-yellow); font-family: 'Press Start 2P', monospace; text-align: right; }
+/* ── HEADER ──────────────────────────────────────────────────── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-title { font-family: var(--font-pixel); font-size: 10px; color: var(--yellow); text-shadow: 0 0 20px rgba(251,208,0,0.4); line-height: 1.8; }
+.header-sub { font-size: 12px; color: var(--muted); font-family: var(--font-pixel); }
+.status-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; transition: all 0.3s; flex-shrink: 0; }
+.status-dot.on  { background: var(--green); box-shadow: 0 0 10px rgba(67,176,71,0.6); animation: pulse 2s infinite; }
+.status-dot.err { background: var(--red); box-shadow: 0 0 10px rgba(229,37,33,0.6); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-  .section { margin-bottom: 20px; }
-  .section-label { font-family: 'Press Start 2P', monospace; font-size: 8px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; padding-left: 4px; }
+.cmd-count {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--muted);
+  text-align: right;
+  line-height: 2;
+}
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .grid-1 { display: grid; grid-template-columns: 1fr; gap: 10px; }
+/* ── MAIN LAYOUT ─────────────────────────────────────────────── */
+.main {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  min-height: calc(100vh - 65px);
+}
 
-  .cmd-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 14px 10px; cursor: pointer; text-align: center; transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; overflow: hidden; }
-  .cmd-btn:active { transform: scale(0.94); }
-  .cmd-btn.fired { animation: fired 0.4s ease; }
-  @keyframes fired { 0% { transform: scale(1); } 30% { transform: scale(1.08); } 100% { transform: scale(1); } }
-  .cmd-btn .emoji { font-size: 28px; display: block; margin-bottom: 6px; line-height: 1; }
-  .cmd-btn .label { font-family: 'Press Start 2P', monospace; font-size: 7px; color: rgba(255,255,255,0.8); line-height: 1.4; }
-  .cmd-btn .sub { font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 3px; font-family: 'Outfit', sans-serif; }
+/* ── SIDEBAR ─────────────────────────────────────────────────── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  background: rgba(0,0,0,0.2);
+  position: sticky;
+  top: 65px;
+  height: calc(100vh - 65px);
+  overflow-y: auto;
+}
+.sidebar-label {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  padding: 6px 20px 10px;
+  text-transform: uppercase;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  border-left: 3px solid transparent;
+  user-select: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.04); color: white; }
+.nav-item.active { color: white; border-left-color: var(--cat-color, var(--yellow)); background: rgba(255,255,255,0.06); }
+.nav-item .nav-icon { font-size: 18px; width: 24px; text-align: center; }
+.nav-item .nav-badge { margin-left: auto; font-family: var(--font-pixel); font-size: 7px; color: var(--muted); }
 
-  .btn-red { border-color: rgba(229,37,33,0.4); }
-  .btn-red:active { background: rgba(229,37,33,0.15); border-color: var(--mario-red); box-shadow: 0 0 20px var(--glow-red); }
-  .btn-blue { border-color: rgba(4,156,216,0.4); }
-  .btn-blue:active { background: rgba(4,156,216,0.15); border-color: var(--mario-blue); box-shadow: 0 0 20px var(--glow-blue); }
-  .btn-yellow { border-color: rgba(251,208,0,0.4); }
-  .btn-yellow:active { background: rgba(251,208,0,0.15); border-color: var(--mario-yellow); box-shadow: 0 0 20px var(--glow-yellow); }
-  .btn-green { border-color: rgba(67,176,71,0.4); }
-  .btn-green:active { background: rgba(67,176,71,0.15); border-color: var(--mario-green); box-shadow: 0 0 20px var(--glow-green); }
-  .btn-big { padding: 18px 10px; }
-  .btn-big .emoji { font-size: 36px; }
+/* ── CONTENT ─────────────────────────────────────────────────── */
+.content { padding: 28px 32px; overflow-y: auto; }
 
-  .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 4px 0 20px; }
+.section { display: none; }
+.section.active { display: block; }
 
-  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(10,10,26,0.95); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 10px 20px; font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--mario-yellow); z-index: 100; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; text-shadow: 0 0 10px var(--glow-yellow); box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.section-icon { font-size: 28px; }
+.section-title { font-family: var(--font-pixel); font-size: 11px; color: white; line-height: 1.8; }
+.section-desc { font-size: 14px; color: var(--muted); margin-top: 2px; font-weight: 400; }
 
-  .config-section { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; margin-bottom: 20px; }
-  .config-section input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: white; padding: 10px 12px; font-family: 'Outfit', sans-serif; font-size: 12px; margin-top: 8px; outline: none; }
-  .config-section input:focus { border-color: var(--mario-yellow); }
-  .config-section label { font-size: 10px; color: rgba(255,255,255,0.5); }
-  .connect-btn { width: 100%; margin-top: 10px; background: var(--mario-yellow); color: #000; border: none; border-radius: 8px; padding: 11px; font-family: 'Press Start 2P', monospace; font-size: 9px; cursor: pointer; transition: all 0.15s; }
-  .connect-btn:active { transform: scale(0.97); opacity: 0.9; }
+/* ── BUTTON GRID ─────────────────────────────────────────────── */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.btn-grid-3 { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 
-  .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.3); transform: scale(0); animation: ripple 0.5s linear; pointer-events: none; }
-  @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+.cmd-btn {
+  position: relative;
+  padding: 18px 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: left;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cmd-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--btn-color, #fff) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: inherit;
+}
+.cmd-btn:hover { transform: translateY(-3px) scale(1.02); border-color: var(--btn-color, rgba(255,255,255,0.2)); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--btn-color, transparent); }
+.cmd-btn:hover::before { opacity: 0.06; }
+.cmd-btn:active { transform: translateY(0) scale(0.98); transition-duration: 0.08s; }
+
+.cmd-btn.fired {
+  animation: btnFire 0.4s ease;
+  border-color: var(--btn-color, var(--yellow));
+  box-shadow: 0 0 20px var(--btn-color, var(--yellow)), inset 0 0 20px rgba(255,255,255,0.05);
+}
+@keyframes btnFire { 0%{transform:scale(1)} 30%{transform:scale(0.94)} 60%{transform:scale(1.04)} 100%{transform:scale(1)} }
+
+.btn-emoji { font-size: 26px; display: block; margin-bottom: 10px; line-height: 1; }
+.btn-name { font-size: 15px; font-weight: 700; display: block; margin-bottom: 4px; color: white; }
+.btn-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.btn-hotkey {
+  position: absolute; top: 10px; right: 10px;
+  font-family: var(--font-pixel); font-size: 7px;
+  color: var(--muted);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 6px;
+}
+
+/* ── SUBSECTION LABEL ────────────────────────────────────────── */
+.sub-label {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  margin: 20px 0 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sub-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── TOAST ───────────────────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  z-index: 9000;
+  display: flex; flex-direction: column-reverse; gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  padding: 14px 20px;
+  background: rgba(15,15,25,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-left: 3px solid var(--toast-color, var(--yellow));
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  backdrop-filter: blur(20px);
+  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1), toastOut 0.3s ease 2.5s forwards;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  max-width: 320px;
+}
+@keyframes toastIn  { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+@keyframes toastOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(20px)} }
+
+/* ── LOG ─────────────────────────────────────────────────────── */
+.cmd-log {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+}
+.log-entry { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--muted); }
+.log-entry span { color: var(--yellow); }
+.log-entry .log-time { color: rgba(255,255,255,0.2); margin-right: 8px; }
+
+/* ── CUSTOM COMMAND ──────────────────────────────────────────── */
+.custom-row {
+  display: flex; gap: 10px; align-items: center;
+  margin-top: 20px;
+}
+.custom-input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-family: var(--font-ui);
+  outline: none;
+  transition: all 0.2s;
+}
+.custom-input:focus { border-color: var(--yellow); box-shadow: 0 0 0 2px rgba(251,208,0,0.1); }
+.custom-send {
+  padding: 12px 20px;
+  background: var(--yellow);
+  color: #1a1000;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  border: none; border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.custom-send:hover { background: #ffe033; transform: translateY(-1px); }
+
+/* ── KEYBOARD HINT ───────────────────────────────────────────── */
+.kb-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.kbd { display: inline-block; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 11px; }
+
+/* ── SCROLLBAR ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 </style>
 </head>
 <body>
 
-<div class="stars" id="stars"></div>
+<!-- ══ STARS ══════════════════════════════════════════════════ -->
+<div id="stars"></div>
 
-<div class="container">
-  <div class="header">
-    <h1>🎮 DAD<br>COMMANDER</h1>
-    <div class="subtitle">mario sunshine ops</div>
+<!-- ══ LOGIN ══════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">DAD<br>COMMANDER</div>
+    <div class="login-sub">🔒 AUTHORIZED PERSONNEL ONLY</div>
+    <input type="password" id="pw-input" placeholder="enter password" autocomplete="off" />
+    <button class="login-btn" onclick="tryLogin()">ENTER THE CHAOS ZONE</button>
+    <div class="login-error" id="login-error"></div>
   </div>
-
-  <div class="config-section" id="configSection">
-    <label>Firebase Database URL</label>
-    <input type="text" id="dbUrl" value="https://mario-commander-default-rtdb.firebaseio.com">
-    <label style="margin-top:10px;display:block;">API Key</label>
-    <input type="text" id="apiKey" value="">
-    <button class="connect-btn" onclick="connectFirebase()">⚡ CONNECT TO UNITY</button>
-  </div>
-
-  <div class="status-bar">
-    <div class="status-dot" id="statusDot"></div>
-    <span class="status-text" id="statusText">Not connected</span>
-    <div class="last-command" id="lastCmd"></div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">☠️ Chaos & Trolling</div>
-    <div class="grid-2">
-      <button class="cmd-btn btn-red btn-big" onclick="sendCommand('earthquake', '🌋 EARTHQUAKE', this)">
-        <span class="emoji">🌋</span><span class="label">EARTHQUAKE</span><span class="sub">shake everything</span>
-      </button>
-      <button class="cmd-btn btn-red btn-big" onclick="sendCommand('lights_out', '🌑 LIGHTS OUT', this)">
-        <span class="emoji">🌑</span><span class="label">LIGHTS OUT</span><span class="sub">10 seconds dark</span>
-      </button>
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('reverse_controls', '🔄 REVERSED', this)">
-        <span class="emoji">🔄</span><span class="label">FLIP CONTROLS</span><span class="sub">8 seconds</span>
-      </button>
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('slippery_floor', '🧊 ICY FLOOR', this)">
-        <span class="emoji">🧊</span><span class="label">ICY FLOOR</span><span class="sub">slip & slide</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-label">👾 Spawn Enemies</div>
-    <div class="grid-3">
-      <button class="cmd-btn btn-red" onclick="sendCommand('spawn_goomba', '🍄 GOOMBA!', this)">
-        <span class="emoji">🍄</span><span class="label">GOOMBA</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('spawn_boo', '👻 BOO!', this)">
-        <span class="emoji">👻</span><span class="label">BOO</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('spawn_chain_chomp', '⛓️ CHOMP!', this)">
-        <span class="emoji">⛓️</span><span class="label">CHOMP</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('spawn_bullet', '💣 BULLET!', this)">
-        <span class="emoji">💣</span><span class="label">BULLET</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('spawn_swarm', '🐟 SWARM!', this)">
-        <span class="emoji">🐟</span><span class="label">SWARM</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('spawn_boss', '👾 BOSS!', this)">
-        <span class="emoji">👾</span><span class="label">BIG ONE</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-label">🌤️ Weather & Environment</div>
-    <div class="grid-3">
-      <button class="cmd-btn btn-blue" onclick="sendCommand('weather_rain', '🌧️ RAIN', this)">
-        <span class="emoji">🌧️</span><span class="label">RAIN</span>
-      </button>
-      <button class="cmd-btn btn-blue" onclick="sendCommand('weather_fog', '🌫️ FOG', this)">
-        <span class="emoji">🌫️</span><span class="label">FOG</span>
-      </button>
-      <button class="cmd-btn btn-blue" onclick="sendCommand('weather_storm', '⚡ STORM', this)">
-        <span class="emoji">⚡</span><span class="label">STORM</span>
-      </button>
-      <button class="cmd-btn btn-green" onclick="sendCommand('weather_sunny', '☀️ SUNNY', this)">
-        <span class="emoji">☀️</span><span class="label">CLEAR</span>
-      </button>
-      <button class="cmd-btn btn-blue" onclick="sendCommand('flood_water', '🌊 FLOOD', this)">
-        <span class="emoji">🌊</span><span class="label">FLOOD</span>
-      </button>
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('fire_zone', '🔥 FIRE', this)">
-        <span class="emoji">🔥</span><span class="label">FIRE</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-label">🗺️ Map Control</div>
-    <div class="grid-2">
-      <button class="cmd-btn btn-blue" onclick="sendCommand('block_path', '🧱 BLOCKED', this)">
-        <span class="emoji">🧱</span><span class="label">BLOCK PATH</span><span class="sub">wall appears</span>
-      </button>
-      <button class="cmd-btn btn-blue" onclick="sendCommand('open_path', '🚪 OPEN', this)">
-        <span class="emoji">🚪</span><span class="label">OPEN PATH</span><span class="sub">remove walls</span>
-      </button>
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('platform_vanish', '💨 VANISH', this)">
-        <span class="emoji">💨</span><span class="label">PLATFORMS OFF</span><span class="sub">disappear!</span>
-      </button>
-      <button class="cmd-btn btn-green" onclick="sendCommand('platform_appear', '✨ APPEAR', this)">
-        <span class="emoji">✨</span><span class="label">PLATFORMS ON</span><span class="sub">come back</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-label">⭐ Power-Ups & Tricks</div>
-    <div class="grid-3">
-      <button class="cmd-btn btn-green" onclick="sendCommand('drop_star', '⭐ STAR!', this)">
-        <span class="emoji">⭐</span><span class="label">STAR</span>
-      </button>
-      <button class="cmd-btn btn-green" onclick="sendCommand('drop_coin', '🪙 COINS!', this)">
-        <span class="emoji">🪙</span><span class="label">COINS</span>
-      </button>
-      <button class="cmd-btn btn-green" onclick="sendCommand('drop_mushroom', '1UP!', this)">
-        <span class="emoji">🍄</span><span class="label">1-UP</span>
-      </button>
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('make_tiny', '🔻 TINY!', this)">
-        <span class="emoji">🔻</span><span class="label">SHRINK</span>
-      </button>
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('make_giant', '🔺 GIANT!', this)">
-        <span class="emoji">🔺</span><span class="label">GROW</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('take_item', '💀 STOLEN!', this)">
-        <span class="emoji">💀</span><span class="label">STEAL</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-label">📢 Boss Messages</div>
-    <div class="grid-1">
-      <button class="cmd-btn btn-yellow" onclick="sendCommand('msg_warning', '⚠️ WARNING SENT', this)">
-        <span class="emoji">⚠️</span><span class="label">INCOMING THREAT...</span><span class="sub">flashes on his screen</span>
-      </button>
-      <button class="cmd-btn btn-red" onclick="sendCommand('msg_countdown', '⏱️ TIMER STARTED', this)">
-        <span class="emoji">⏱️</span><span class="label">60 SECOND COUNTDOWN</span><span class="sub">survive or else</span>
-      </button>
-      <button class="cmd-btn btn-green" onclick="sendCommand('msg_good_job', '✅ PRAISE SENT', this)">
-        <span class="emoji">✅</span><span class="label">NICE WORK, KID</span><span class="sub">dad approves</span>
-      </button>
-    </div>
-  </div>
-
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- ══ APP ════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div>
+        <div class="header-title">🎮 DAD COMMANDER</div>
+        <div class="header-sub">ULTIMATE EDITION</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div class="cmd-count" id="cmd-count">COMMANDS SENT<br><span style="color:var(--yellow);font-size:14px" id="cmd-num">0</span></div>
+      <div class="status-pill">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text" style="font-size:13px;font-weight:600">connecting...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-label">CATEGORIES</div>
+      <div class="nav-item active" onclick="showSection('chaos')" style="--cat-color:var(--red)">
+        <span class="nav-icon">💥</span> Chaos
+        <span class="nav-badge">8</span>
+      </div>
+      <div class="nav-item" onclick="showSection('enemies')" style="--cat-color:var(--orange)">
+        <span class="nav-icon">👾</span> Enemies
+        <span class="nav-badge">12</span>
+      </div>
+      <div class="nav-item" onclick="showSection('weather')" style="--cat-color:var(--blue)">
+        <span class="nav-icon">⛅</span> Weather
+        <span class="nav-badge">8</span>
+      </div>
+      <div class="nav-item" onclick="showSection('map')" style="--cat-color:var(--green)">
+        <span class="nav-icon">🗺️</span> Map
+        <span class="nav-badge">4</span>
+      </div>
+      <div class="nav-item" onclick="showSection('powerups')" style="--cat-color:var(--yellow)">
+        <span class="nav-icon">⭐</span> Power-Ups
+        <span class="nav-badge">6</span>
+      </div>
+      <div class="nav-item" onclick="showSection('messages')" style="--cat-color:var(--purple)">
+        <span class="nav-icon">📢</span> Messages
+        <span class="nav-badge">5</span>
+      </div>
+      <div class="nav-item" onclick="showSection('combos')" style="--cat-color:#ff69b4">
+        <span class="nav-icon">🔥</span> Combos
+        <span class="nav-badge">4</span>
+      </div>
+      <div class="nav-item" onclick="showSection('log')" style="--cat-color:var(--muted)">
+        <span class="nav-icon">📋</span> Log
+      </div>
+
+      <!-- Keyboard hints in sidebar -->
+      <div style="padding: 20px; margin-top: auto;">
+        <div class="sidebar-label" style="margin-bottom:10px;">HOTKEYS</div>
+        <div style="font-size:12px;color:var(--muted);line-height:2.2;">
+          <kbd class="kbd">1-8</kbd> Chaos tabs<br>
+          <kbd class="kbd">E</kbd> Random enemy<br>
+          <kbd class="kbd">B</kbd> Spawn Boss<br>
+          <kbd class="kbd">Q</kbd> Earthquake<br>
+          <kbd class="kbd">L</kbd> Lights Out<br>
+          <kbd class="kbd">G</kbd> Good Job<br>
+          <kbd class="kbd">C</kbd> Countdown
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ══ CHAOS ══════════════════════════════════════════════ -->
+      <div class="section active" id="section-chaos">
+        <div class="section-header">
+          <span class="section-icon">💥</span>
+          <div>
+            <div class="section-title">CHAOS & TROLLING</div>
+            <div class="section-desc">Make his life difficult. You're the dad. It's your right.</div>
+          </div>
+        </div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('earthquake','🌋 Earthquake!','var(--red)')">
+            <span class="btn-emoji">🌋</span>
+            <span class="btn-name">Earthquake</span>
+            <span class="btn-desc">Camera shake, shockwave, object jitter for 4s</span>
+            <span class="btn-hotkey">Q</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#111" onclick="send('lights_out','🌑 Lights Out!','#555')">
+            <span class="btn-emoji">🌑</span>
+            <span class="btn-name">Lights Out</span>
+            <span class="btn-desc">Total darkness for 10s with creepy sounds</span>
+            <span class="btn-hotkey">L</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('reverse_controls','🔄 Controls Flipped!','var(--blue)')">
+            <span class="btn-emoji">🔄</span>
+            <span class="btn-name">Flip Controls</span>
+            <span class="btn-desc">Camera spin + 8 second control confusion</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#aef" onclick="send('slippery_floor','🧊 Icy Floor!','#aef')">
+            <span class="btn-emoji">🧊</span>
+            <span class="btn-name">Icy Floor</span>
+            <span class="btn-desc">Ice patches shimmer around the player</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_flip','🙃 Gravity Flip!','var(--orange)')">
+            <span class="btn-emoji">🙃</span>
+            <span class="btn-name">Gravity Flip</span>
+            <span class="btn-desc">Camera goes upside down. Pure disorientation.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('disco_mode','🪩 Disco Mode!','var(--purple)')">
+            <span class="btn-emoji">🪩</span>
+            <span class="btn-name">Disco Mode</span>
+            <span class="btn-desc">Strobing rainbow lights. Party time.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('screen_shake','😵 Constant Shake!','#f0f')">
+            <span class="btn-emoji">😵</span>
+            <span class="btn-name">Shake It</span>
+            <span class="btn-desc">Constant mild camera shake for 6s</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#ff8" onclick="send('warp_speed','⚡ Warp Speed!','#ff8')">
+            <span class="btn-emoji">⚡</span>
+            <span class="btn-name">Speed Boost</span>
+            <span class="btn-desc">Triples enemy movement speed for 10s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ENEMIES ════════════════════════════════════════════ -->
+      <div class="section" id="section-enemies">
+        <div class="section-header">
+          <span class="section-icon">👾</span>
+          <div>
+            <div class="section-title">ENEMY SPAWNER</div>
+            <div class="section-desc">Classic Mario enemies with real AI. Punch them to kill them.</div>
+          </div>
+        </div>
+
+        <div class="sub-label">CLASSIC ENEMIES</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('spawn_goomba','🍄 Goomba spawned!','#8B4513')">
+            <span class="btn-emoji">🍄</span>
+            <span class="btn-name">Goomba</span>
+            <span class="btn-desc">Basic chaser. Slow but relentless.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_boo','👻 3 Boos!','#aab')">
+            <span class="btn-emoji">👻</span>
+            <span class="btn-name">Boo × 3</span>
+            <span class="btn-desc">Only moves when you're NOT looking at it</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_chain_chomp','⛓️ Chain Chomp!','#888')">
+            <span class="btn-emoji">⛓️</span>
+            <span class="btn-name">Chain Chomp</span>
+            <span class="btn-desc">Big, black, very hungry. Fast.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#555" onclick="send('spawn_bullet','💣 Bullet Bill!','#777')">
+            <span class="btn-emoji">💣</span>
+            <span class="btn-name">Bullet Bill</span>
+            <span class="btn-desc">Fires from above with exhaust trail</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_koopa','🐢 Koopa!','var(--orange)')">
+            <span class="btn-emoji">🐢</span>
+            <span class="btn-name">Koopa Troopa</span>
+            <span class="btn-desc">Green shell. Bounces off walls.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#f80" onclick="send('spawn_hammer_bro','🔨 Hammer Bro!','#f80')">
+            <span class="btn-emoji">🔨</span>
+            <span class="btn-name">Hammer Bro</span>
+            <span class="btn-desc">Throws hammers in arcs. Dangerous.</span>
+          </div>
+        </div>
+
+        <div class="sub-label">SUNSHINE ENEMIES</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_shadow_mario','👤 Shadow Mario!','#ff6af0')">
+            <span class="btn-emoji">👤</span>
+            <span class="btn-name">Shadow Mario</span>
+            <span class="btn-desc">Your dark doppelganger. Mirrors movement.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#b060ff" onclick="send('spawn_piranha','🪴 Piranha Plant!','#b060ff')">
+            <span class="btn-emoji">🪴</span>
+            <span class="btn-name">Piranha Plant</span>
+            <span class="btn-desc">Pops out of floor pipes, snaps at you</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('spawn_blooper','🦑 Blooper!','var(--blue)')">
+            <span class="btn-emoji">🦑</span>
+            <span class="btn-name">Blooper</span>
+            <span class="btn-desc">Squid that squirts ink and charges</span>
+          </div>
+        </div>
+
+        <div class="sub-label">HORDES</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_swarm','🐟 SWARM × 10!','var(--orange)')">
+            <span class="btn-emoji">🌊</span>
+            <span class="btn-name">Swarm Attack</span>
+            <span class="btn-desc">10 tiny enemies from all directions</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_goomba_army','🍄🍄🍄 ARMY!','#4f0')">
+            <span class="btn-emoji">🍄🍄</span>
+            <span class="btn-name">Goomba Army</span>
+            <span class="btn-desc">5 goombas from different directions</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_boss','👾 THE BOSS!','var(--purple)')" style="grid-column:span 2">
+            <span class="btn-emoji">💀</span>
+            <span class="btn-name">SPAWN BOSS</span>
+            <span class="btn-desc">The big purple cube. 3 red eyes. Circles and lunges. Good luck.</span>
+            <span class="btn-hotkey">B</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ WEATHER ════════════════════════════════════════════ -->
+      <div class="section" id="section-weather">
+        <div class="section-header">
+          <span class="section-icon">⛅</span>
+          <div>
+            <div class="section-title">WEATHER CONTROL</div>
+            <div class="section-desc">Dad controls the forecast. Always has.</div>
+          </div>
+        </div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('weather_sunny','☀️ Clear Skies!','var(--yellow)')">
+            <span class="btn-emoji">☀️</span>
+            <span class="btn-name">Clear Skies</span>
+            <span class="btn-desc">Remove all weather effects</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#aac" onclick="send('weather_fog','🌫️ Fog rolling in...','#aac')">
+            <span class="btn-emoji">🌫️</span>
+            <span class="btn-name">Dense Fog</span>
+            <span class="btn-desc">Gradual visibility loss</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('weather_rain','🌧️ Rain!','var(--blue)')">
+            <span class="btn-emoji">🌧️</span>
+            <span class="btn-name">Rain</span>
+            <span class="btn-desc">Physics rain drops + blue tint</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#668" onclick="send('weather_storm','⚡ Storm!','#668')">
+            <span class="btn-emoji">⛈️</span>
+            <span class="btn-name">Full Storm</span>
+            <span class="btn-desc">8 lightning strikes + heavy rain</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('fire_zone','🔥 Fire Zone!','var(--orange)')">
+            <span class="btn-emoji">🔥</span>
+            <span class="btn-name">Fire Zone</span>
+            <span class="btn-desc">Ring of 16 fire pillars + 8 random spots</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#5af" onclick="send('flood_water','🌊 Flood!','#5af')">
+            <span class="btn-emoji">🌊</span>
+            <span class="btn-name">Flood</span>
+            <span class="btn-desc">Water rises slowly over 10s then drains</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#fff4" onclick="send('weather_blizzard','❄️ Blizzard!','#adf')">
+            <span class="btn-emoji">❄️</span>
+            <span class="btn-name">Blizzard</span>
+            <span class="btn-desc">Snow + white fog + frozen floor patches</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#f90" onclick="send('weather_sandstorm','🏜️ Sandstorm!','#f90')">
+            <span class="btn-emoji">🏜️</span>
+            <span class="btn-name">Sandstorm</span>
+            <span class="btn-desc">Orange fog + debris particles</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MAP ════════════════════════════════════════════════ -->
+      <div class="section" id="section-map">
+        <div class="section-header">
+          <span class="section-icon">🗺️</span>
+          <div>
+            <div class="section-title">MAP CONTROL</div>
+            <div class="section-desc">Reshape Delfino Plaza to your will.</div>
+          </div>
+        </div>
+        <div class="btn-grid btn-grid-3">
+          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('block_path','🧱 Wall spawned!','#8B4513')">
+            <span class="btn-emoji">🧱</span>
+            <span class="btn-name">Block Path</span>
+            <span class="btn-desc">Spawns a wall in front of the player. Dad built it.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('open_path','🚪 Path cleared!','var(--green)')">
+            <span class="btn-emoji">🚪</span>
+            <span class="btn-name">Open Path</span>
+            <span class="btn-desc">Removes all walls AND clears enemies</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#aaa" onclick="send('platform_vanish','💨 Platforms gone!','#aaa')">
+            <span class="btn-emoji">💨</span>
+            <span class="btn-name">Vanish Platforms</span>
+            <span class="btn-desc">Any tagged Platform objects flicker and disappear</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('platform_appear','✨ Platforms back!','var(--yellow)')">
+            <span class="btn-emoji">✨</span>
+            <span class="btn-name">Restore Platforms</span>
+            <span class="btn-desc">Platforms flicker back into existence</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ POWER-UPS ══════════════════════════════════════════ -->
+      <div class="section" id="section-powerups">
+        <div class="section-header">
+          <span class="section-icon">⭐</span>
+          <div>
+            <div class="section-title">POWER-UPS</div>
+            <div class="section-desc">Sometimes dad is generous. Sometimes he takes it all away.</div>
+          </div>
+        </div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('drop_star','⭐ Star Power!','var(--yellow)')">
+            <span class="btn-emoji">⭐</span>
+            <span class="btn-name">Star Power</span>
+            <span class="btn-desc">Rainbow lights + coin shower bonus</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#ffd700" onclick="send('drop_coin','🪙 Coins!','#ffd700')">
+            <span class="btn-emoji">🪙</span>
+            <span class="btn-name">Coin Shower</span>
+            <span class="btn-desc">25 physics coins rain down with spin</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('drop_mushroom','🍄 Mushroom!','var(--green)')">
+            <span class="btn-emoji">🍄</span>
+            <span class="btn-name">1-Up Mushroom</span>
+            <span class="btn-desc">Dad feeling generous. Briefly.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('make_tiny','🔻 Shrinking!','#f44')">
+            <span class="btn-emoji">🔻</span>
+            <span class="btn-name">Make Tiny</span>
+            <span class="btn-desc">Player shrinks to 18% size for 15s</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('make_giant','🔺 GIANT!','var(--orange)')">
+            <span class="btn-emoji">🔺</span>
+            <span class="btn-name">Make Giant</span>
+            <span class="btn-desc">Player grows to 3.5× for 15s</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('take_item','💀 Stolen!','var(--red)')">
+            <span class="btn-emoji">💀</span>
+            <span class="btn-name">Take Everything</span>
+            <span class="btn-desc">Resets size + destroys all power-ups</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MESSAGES ═══════════════════════════════════════════ -->
+      <div class="section" id="section-messages">
+        <div class="section-header">
+          <span class="section-icon">📢</span>
+          <div>
+            <div class="section-title">MESSAGES & EVENTS</div>
+            <div class="section-desc">Taunt, motivate, terrorize. You have options.</div>
+          </div>
+        </div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_good_job','✅ Good Job sent!','var(--green)')">
+            <span class="btn-emoji">✅</span>
+            <span class="btn-name">Good Job!</span>
+            <span class="btn-desc">Coins + clear all enemies. Dad is proud.</span>
+            <span class="btn-hotkey">G</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_warning','⚠️ Warning sent!','var(--red)')">
+            <span class="btn-emoji">⚠️</span>
+            <span class="btn-name">WARNING</span>
+            <span class="btn-desc">Alarm + flash + random enemy follows</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('msg_countdown','⏱️ Countdown started!','var(--orange)')">
+            <span class="btn-emoji">⏱️</span>
+            <span class="btn-name">60s Countdown</span>
+            <span class="btn-desc">Escalating panic + swarm on time's up</span>
+            <span class="btn-hotkey">C</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('msg_dad_watching','👁️ Watching...','#f0f')">
+            <span class="btn-emoji">👁️</span>
+            <span class="btn-name">Dad is Watching</span>
+            <span class="btn-desc">Creepy message. Ambient flicker.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('msg_nice_try','😏 Nice Try...','var(--blue)')">
+            <span class="btn-emoji">😏</span>
+            <span class="btn-name">Nice Try</span>
+            <span class="btn-desc">When he almost makes it out alive</span>
+          </div>
+        </div>
+
+        <div class="sub-label">CUSTOM MESSAGE</div>
+        <div class="custom-row">
+          <input class="custom-input" id="custom-cmd" placeholder="type a command key..." />
+          <button class="custom-send" onclick="sendCustom()">SEND ▶</button>
+        </div>
+        <div class="kb-hint">e.g. <kbd class="kbd">spawn_goomba</kbd> or any command from the list</div>
+      </div>
+
+      <!-- ══ COMBOS ═════════════════════════════════════════════ -->
+      <div class="section" id="section-combos">
+        <div class="section-header">
+          <span class="section-icon">🔥</span>
+          <div>
+            <div class="section-title">COMBO ATTACKS</div>
+            <div class="section-desc">Multi-command sequences. Maximum chaos delivery.</div>
+          </div>
+        </div>
+        <div class="btn-grid btn-grid-3">
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="sendCombo(['earthquake','spawn_swarm','fire_zone'], 600, 'THE WORKS sent 🌋🐟🔥')">
+            <span class="btn-emoji">🌋🐟🔥</span>
+            <span class="btn-name">THE WORKS</span>
+            <span class="btn-desc">Earthquake → Swarm → Fire Zone in rapid succession. No escape.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:#446" onclick="sendCombo(['lights_out','spawn_boo','spawn_boo'], 800, 'NIGHTMARE MODE 🌑👻👻')">
+            <span class="btn-emoji">🌑👻</span>
+            <span class="btn-name">Nightmare Mode</span>
+            <span class="btn-desc">Lights Out + 6 Boos in total darkness. Truly evil.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['make_tiny','spawn_swarm','spawn_chain_chomp'], 700, 'TINY PROBLEM 🔻👾⛓️')">
+            <span class="btn-emoji">🔻⛓️</span>
+            <span class="btn-name">Tiny Problem</span>
+            <span class="btn-desc">Shrink the player → release the swarm → drop a Chain Chomp. Rude.</span>
+          </div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['weather_storm','spawn_boss','earthquake'], 1000, 'APOCALYPSE ⛈️👾🌋')">
+            <span class="btn-emoji">⛈️💀</span>
+            <span class="btn-name">APOCALYPSE</span>
+            <span class="btn-desc">Storm → Boss spawns → Earthquake. The final form of dad.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ LOG ════════════════════════════════════════════════ -->
+      <div class="section" id="section-log">
+        <div class="section-header">
+          <span class="section-icon">📋</span>
+          <div>
+            <div class="section-title">COMMAND LOG</div>
+            <div class="section-desc">Your history of devastation.</div>
+          </div>
+        </div>
+        <div class="cmd-log" id="cmd-log">
+          <div class="log-entry" style="color:var(--muted);font-style:italic">— no commands sent yet —</div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;">
+          <button class="custom-send" onclick="clearLog()" style="background:rgba(255,255,255,0.08);color:white;font-size:9px;">CLEAR LOG</button>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- TOASTS -->
+<div id="toast-container"></div>
 
 <script>
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 60; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = Math.random() * 3 + 's';
-    star.style.opacity = Math.random() * 0.5;
-    starsEl.appendChild(star);
+// ══ CONFIG ══════════════════════════════════════════════════════
+const PASSWORD     = "delfino2024";          // ← change this
+const SECRET       = "dad2026_";             // prefix Unity checks for
+const FIREBASE_URL = "https://mario-commander-default-rtdb.firebaseio.com/commands/current.json";
+const API_KEY      = "AIzaSyC-pcUZd0WYIyi53j14CX1FXoNz3pTc5NE";
+
+// ══ STATE ════════════════════════════════════════════════════════
+let cmdCount = 0;
+let logEntries = [];
+
+// ══ STARS ════════════════════════════════════════════════════════
+(function spawnStars() {
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      width:${size}px;height:${size}px;
+      --d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;
+      opacity:${Math.random()*0.6+0.1};
+    `;
+    container.appendChild(s);
   }
+})();
 
-  let firebaseConnected = false;
-  let dbBaseUrl = '';
-  let apiKeyVal = '';
+// ══ LOGIN ════════════════════════════════════════════════════════
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') tryLogin();
+});
 
-  function connectFirebase() {
-    dbBaseUrl = document.getElementById('dbUrl').value.trim().replace(/\/$/, '');
-    apiKeyVal = document.getElementById('apiKey').value.trim();
-
-    fetch(`${dbBaseUrl}/ping.json?auth=${apiKeyVal}`, {
-      method: 'PUT',
-      body: JSON.stringify({ connected: true, time: Date.now() })
-    })
-    .then(r => r.json())
-    .then(() => {
-      firebaseConnected = true;
-      document.getElementById('statusDot').className = 'status-dot connected';
-      document.getElementById('statusText').textContent = 'Connected to Unity';
-      document.getElementById('configSection').style.display = 'none';
-      showToast('🟢 CONNECTED! Fire away, Commander!');
-    })
-    .catch(() => {
-      document.getElementById('statusDot').className = 'status-dot error';
-      document.getElementById('statusText').textContent = 'Connection failed';
-      showToast('❌ Check your URL and API key');
-    });
+function tryLogin() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initFirebase();
+  } else {
+    const err = document.getElementById('login-error');
+    err.textContent = '❌ WRONG PASSWORD. DAD DOES NOT FORGET.';
+    err.style.animation = 'none';
+    requestAnimationFrame(() => err.style.animation = 'shake 0.4s ease');
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
   }
+}
 
-  function sendCommand(command, label, btn) {
-    if (!firebaseConnected) { showToast('⚠️ Connect Firebase first!'); return; }
+// ══ NAVIGATION ═══════════════════════════════════════════════════
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
 
-    const ripple = document.createElement('div');
-    ripple.className = 'ripple';
-    ripple.style.width = ripple.style.height = '60px';
-    ripple.style.left = '50%';
-    ripple.style.top = '50%';
-    ripple.style.marginLeft = '-30px';
-    ripple.style.marginTop = '-30px';
-    btn.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
+// ══ FIREBASE ═════════════════════════════════════════════════════
+function initFirebase() {
+  setStatus('connecting...');
+  // Quick test write
+  sendCommand('ping').then(() => setStatus('connected', true)).catch(() => setStatus('error', false, true));
+}
 
-    btn.classList.add('fired');
-    setTimeout(() => btn.classList.remove('fired'), 400);
+function setStatus(text, on = false, err = false) {
+  document.getElementById('status-text').textContent = text;
+  const dot = document.getElementById('status-dot');
+  dot.className = 'status-dot' + (on ? ' on' : err ? ' err' : '');
+}
 
-    fetch(`${dbBaseUrl}/commands/current.json?auth=${apiKeyVal}`, {
-      method: 'PUT',
-      body: JSON.stringify({ command: command, timestamp: Date.now(), executed: false })
-    })
-    .then(r => r.json())
-    .then(() => {
-      showToast('🎮 ' + label);
-      document.getElementById('lastCmd').textContent = label;
-    })
-    .catch(() => showToast('❌ Failed to send!'));
+async function sendCommand(command) {
+  const url = `${FIREBASE_URL}?auth=${API_KEY}`;
+  const payload = {
+    command: SECRET + command,
+    timestamp: Date.now().toString(),
+    executed: false
+  };
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('Firebase error ' + res.status);
+  return res;
+}
+
+// ══ SEND ═════════════════════════════════════════════════════════
+async function send(command, label, color = 'var(--yellow)') {
+  const btn = event?.currentTarget;
+  try {
+    await sendCommand(command);
+    cmdCount++;
+    document.getElementById('cmd-num').textContent = cmdCount;
+    setStatus('connected', true);
+    if (btn) {
+      btn.classList.add('fired');
+      setTimeout(() => btn.classList.remove('fired'), 600);
+    }
+    showToast('▶ ' + label, color);
+    addLog(command, label);
+  } catch (e) {
+    setStatus('error', false, true);
+    showToast('❌ Send failed: ' + e.message, 'var(--red)');
   }
+}
 
-  let toastTimer;
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+async function sendCombo(commands, delayMs, label) {
+  showToast('🔥 COMBO: ' + label, '#ff69b4');
+  for (let i = 0; i < commands.length; i++) {
+    await new Promise(r => setTimeout(r, i === 0 ? 0 : delayMs));
+    try {
+      await sendCommand(commands[i]);
+      cmdCount++;
+      document.getElementById('cmd-num').textContent = cmdCount;
+      addLog(commands[i], commands[i]);
+    } catch(e) {
+      setStatus('error', false, true);
+    }
   }
+}
+
+function sendCustom() {
+  const val = document.getElementById('custom-cmd').value.trim();
+  if (!val) return;
+  send(val, '📡 Custom: ' + val, 'var(--muted)');
+  document.getElementById('custom-cmd').value = '';
+}
+
+document.getElementById && document.addEventListener('keydown', e => {
+  if (document.getElementById('login-screen').style.display === 'none') {
+    switch(e.key.toLowerCase()) {
+      case 'q': send('earthquake','🌋 Earthquake!','var(--red)'); break;
+      case 'l': send('lights_out','🌑 Lights Out!','#555'); break;
+      case 'b': send('spawn_boss','👾 BOSS!','var(--purple)'); break;
+      case 'g': send('msg_good_job','✅ Good Job!','var(--green)'); break;
+      case 'c': send('msg_countdown','⏱️ Countdown!','var(--orange)'); break;
+      case 'e': {
+        const enemies = ['spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_swarm'];
+        const r = enemies[Math.floor(Math.random()*enemies.length)];
+        send(r, '👾 Random enemy: '+r, 'var(--orange)');
+        break;
+      }
+    }
+  }
+});
+
+// ══ TOAST ════════════════════════════════════════════════════════
+function showToast(msg, color = 'var(--yellow)') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.style.setProperty('--toast-color', color);
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ══ LOG ══════════════════════════════════════════════════════════
+function addLog(command, label) {
+  const log = document.getElementById('cmd-log');
+  const time = new Date().toLocaleTimeString();
+  if (log.querySelector('em, i') || log.children[0]?.style?.fontStyle === 'italic') {
+    log.innerHTML = '';
+  }
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = `<span class="log-time">${time}</span><span>${command}</span> — ${label}`;
+  log.prepend(entry);
+  while (log.children.length > 50) log.removeChild(log.lastChild);
+}
+
+function clearLog() {
+  document.getElementById('cmd-log').innerHTML = '<div class="log-entry" style="color:var(--muted);font-style:italic">— log cleared —</div>';
+}
+
+// Custom input enter key
+document.getElementById('custom-cmd') && document.getElementById('custom-cmd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendCustom();
+});
 </script>
 </body>
 </html>
