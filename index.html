@@ -7,394 +7,122 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── RESET & ROOT ────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --red:    #E52521;
-  --blue:   #049CD8;
-  --yellow: #FBD000;
-  --green:  #43B047;
-  --purple: #9B30FF;
-  --orange: #FF6B00;
-  --dark:   #09090f;
-  --panel:  rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.08);
-  --text:   rgba(255,255,255,0.88);
-  --muted:  rgba(255,255,255,0.35);
-  --font-pixel: 'Press Start 2P', monospace;
-  --font-ui:    'Rajdhani', sans-serif;
+  --red:#E52521; --blue:#049CD8; --yellow:#FBD000; --green:#43B047;
+  --purple:#9B30FF; --orange:#FF6B00; --pink:#ff69b4;
+  --dark:#09090f; --panel:rgba(255,255,255,0.04); --border:rgba(255,255,255,0.08);
+  --text:rgba(255,255,255,0.88); --muted:rgba(255,255,255,0.35);
+  --font-pixel:'Press Start 2P',monospace; --font-ui:'Rajdhani',sans-serif;
 }
-
-body {
-  background: var(--dark);
-  font-family: var(--font-ui);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 15% 10%, rgba(4,156,216,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 85% 90%, rgba(229,37,33,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(155,48,255,0.03) 0%, transparent 70%);
-}
-
-/* ── SCANLINE OVERLAY ────────────────────────────────────────── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* ── STARS ───────────────────────────────────────────────────── */
-#stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.star { position: absolute; border-radius: 50%; animation: twinkle var(--d, 3s) var(--delay, 0s) infinite; }
+body { background:var(--dark); font-family:var(--font-ui); color:var(--text); min-height:100vh; overflow-x:hidden;
+  background-image:radial-gradient(ellipse 80% 50% at 15% 10%,rgba(4,156,216,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 85% 90%,rgba(229,37,33,0.06) 0%,transparent 60%); }
+body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px); pointer-events:none; z-index:9999; }
+#stars { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.star { position:absolute; border-radius:50%; animation:twinkle var(--d,3s) var(--delay,0s) infinite; }
 @keyframes twinkle { 0%,100%{opacity:.15;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 
-/* ── LOGIN SCREEN ────────────────────────────────────────────── */
-#login-screen {
-  position: fixed; inset: 0; z-index: 1000;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--dark);
-}
-.login-box {
-  text-align: center;
-  padding: 48px 56px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(20px);
-  max-width: 420px;
-  width: 90%;
-  animation: loginFadeIn 0.6s ease;
-}
+/* LOGIN */
+#login-screen { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; background:var(--dark); }
+.login-box { text-align:center; padding:48px 56px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:20px; backdrop-filter:blur(20px); max-width:420px; width:90%; animation:loginFadeIn 0.6s ease; }
 @keyframes loginFadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-
-.login-logo {
-  font-family: var(--font-pixel);
-  font-size: 11px;
-  color: var(--yellow);
-  text-shadow: 0 0 30px rgba(251,208,0,0.5);
-  line-height: 2;
-  margin-bottom: 8px;
-}
-.login-sub {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 36px;
-  font-family: var(--font-pixel);
-}
-.login-box input {
-  width: 100%;
-  padding: 14px 20px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 10px;
-  color: white;
-  font-size: 20px;
-  font-family: var(--font-ui);
-  font-weight: 700;
-  letter-spacing: 6px;
-  text-align: center;
-  outline: none;
-  transition: all 0.2s;
-  margin-bottom: 16px;
-}
-.login-box input:focus { border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(251,208,0,0.15); }
-.login-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--yellow);
-  color: #1a1000;
-  font-family: var(--font-pixel);
-  font-size: 10px;
-  border: none; border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 1px;
-}
-.login-btn:hover { background: #ffe033; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(251,208,0,0.3); }
-.login-error {
-  margin-top: 14px;
-  color: var(--red);
-  font-size: 13px;
-  font-family: var(--font-pixel);
-  min-height: 20px;
-  animation: shake 0.4s ease;
-}
+.login-logo { font-family:var(--font-pixel); font-size:11px; color:var(--yellow); text-shadow:0 0 30px rgba(251,208,0,0.5); line-height:2; margin-bottom:8px; }
+.login-sub { font-size:12px; color:var(--muted); margin-bottom:36px; font-family:var(--font-pixel); }
+.login-box input { width:100%; padding:14px 20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:white; font-size:20px; font-family:var(--font-ui); font-weight:700; letter-spacing:6px; text-align:center; outline:none; transition:all 0.2s; margin-bottom:16px; }
+.login-box input:focus { border-color:var(--yellow); box-shadow:0 0 0 3px rgba(251,208,0,0.15); }
+.login-btn { width:100%; padding:14px; background:var(--yellow); color:#1a1000; font-family:var(--font-pixel); font-size:10px; border:none; border-radius:10px; cursor:pointer; transition:all 0.2s; }
+.login-btn:hover { background:#ffe033; transform:translateY(-2px); box-shadow:0 8px 24px rgba(251,208,0,0.3); }
+.login-error { margin-top:14px; color:var(--red); font-size:13px; font-family:var(--font-pixel); min-height:20px; }
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
 
-/* ── MAIN APP ────────────────────────────────────────────────── */
-#app { display: none; position: relative; z-index: 1; }
-
-/* ── HEADER ──────────────────────────────────────────────────── */
-.header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 32px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(10px);
-  position: sticky; top: 0; z-index: 100;
-}
-.header-left { display: flex; align-items: center; gap: 16px; }
-.header-title { font-family: var(--font-pixel); font-size: 10px; color: var(--yellow); text-shadow: 0 0 20px rgba(251,208,0,0.4); line-height: 1.8; }
-.header-sub { font-size: 12px; color: var(--muted); font-family: var(--font-pixel); }
-.status-pill {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  font-size: 13px; font-weight: 600;
-}
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; transition: all 0.3s; flex-shrink: 0; }
-.status-dot.on  { background: var(--green); box-shadow: 0 0 10px rgba(67,176,71,0.6); animation: pulse 2s infinite; }
-.status-dot.err { background: var(--red); box-shadow: 0 0 10px rgba(229,37,33,0.6); }
+/* APP */
+#app { display:none; position:relative; z-index:1; }
+.header { display:flex; align-items:center; justify-content:space-between; padding:18px 32px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.4); backdrop-filter:blur(10px); position:sticky; top:0; z-index:100; }
+.header-title { font-family:var(--font-pixel); font-size:10px; color:var(--yellow); text-shadow:0 0 20px rgba(251,208,0,0.4); line-height:1.8; }
+.header-sub { font-size:12px; color:var(--muted); font-family:var(--font-pixel); }
+.status-pill { display:flex; align-items:center; gap:8px; padding:8px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:100px; }
+.status-dot { width:8px; height:8px; border-radius:50%; background:#555; transition:all 0.3s; }
+.status-dot.on { background:var(--green); box-shadow:0 0 10px rgba(67,176,71,0.6); animation:pulse 2s infinite; }
+.status-dot.err { background:var(--red); box-shadow:0 0 10px rgba(229,37,33,0.6); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-.cmd-count {
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  color: var(--muted);
-  text-align: right;
-  line-height: 2;
-}
-
-/* ── MAIN LAYOUT ─────────────────────────────────────────────── */
-.main {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 0;
-  min-height: calc(100vh - 65px);
-}
-
-/* ── SIDEBAR ─────────────────────────────────────────────────── */
-.sidebar {
-  border-right: 1px solid var(--border);
-  padding: 20px 0;
-  background: rgba(0,0,0,0.2);
-  position: sticky;
-  top: 65px;
-  height: calc(100vh - 65px);
-  overflow-y: auto;
-}
-.sidebar-label {
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  color: var(--muted);
-  letter-spacing: 2px;
-  padding: 6px 20px 10px;
-  text-transform: uppercase;
-}
-.nav-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 20px;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--muted);
-  border-left: 3px solid transparent;
-  user-select: none;
-}
-.nav-item:hover { background: rgba(255,255,255,0.04); color: white; }
-.nav-item.active { color: white; border-left-color: var(--cat-color, var(--yellow)); background: rgba(255,255,255,0.06); }
-.nav-item .nav-icon { font-size: 18px; width: 24px; text-align: center; }
-.nav-item .nav-badge { margin-left: auto; font-family: var(--font-pixel); font-size: 7px; color: var(--muted); }
-
-/* ── CONTENT ─────────────────────────────────────────────────── */
-.content { padding: 28px 32px; overflow-y: auto; }
-
-.section { display: none; }
-.section.active { display: block; }
-
-.section-header {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-.section-icon { font-size: 28px; }
-.section-title { font-family: var(--font-pixel); font-size: 11px; color: white; line-height: 1.8; }
-.section-desc { font-size: 14px; color: var(--muted); margin-top: 2px; font-weight: 400; }
-
-/* ── BUTTON GRID ─────────────────────────────────────────────── */
-.btn-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.btn-grid-3 { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-
-.cmd-btn {
-  position: relative;
-  padding: 18px 16px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  text-align: left;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.cmd-btn::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--btn-color, #fff) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.2s;
-  border-radius: inherit;
-}
-.cmd-btn:hover { transform: translateY(-3px) scale(1.02); border-color: var(--btn-color, rgba(255,255,255,0.2)); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--btn-color, transparent); }
-.cmd-btn:hover::before { opacity: 0.06; }
-.cmd-btn:active { transform: translateY(0) scale(0.98); transition-duration: 0.08s; }
-
-.cmd-btn.fired {
-  animation: btnFire 0.4s ease;
-  border-color: var(--btn-color, var(--yellow));
-  box-shadow: 0 0 20px var(--btn-color, var(--yellow)), inset 0 0 20px rgba(255,255,255,0.05);
-}
+.cmd-count { font-family:var(--font-pixel); font-size:9px; color:var(--muted); text-align:right; line-height:2; }
+.main { display:grid; grid-template-columns:220px 1fr; min-height:calc(100vh - 65px); }
+.sidebar { border-right:1px solid var(--border); padding:20px 0; background:rgba(0,0,0,0.2); position:sticky; top:65px; height:calc(100vh - 65px); overflow-y:auto; }
+.sidebar-label { font-family:var(--font-pixel); font-size:7px; color:var(--muted); letter-spacing:2px; padding:6px 20px 10px; text-transform:uppercase; }
+.nav-item { display:flex; align-items:center; gap:12px; padding:11px 20px; cursor:pointer; transition:all 0.15s; font-size:15px; font-weight:600; color:var(--muted); border-left:3px solid transparent; user-select:none; }
+.nav-item:hover { background:rgba(255,255,255,0.04); color:white; }
+.nav-item.active { color:white; border-left-color:var(--cat-color,var(--yellow)); background:rgba(255,255,255,0.06); }
+.nav-item .nav-icon { font-size:18px; width:24px; text-align:center; }
+.nav-item .nav-badge { margin-left:auto; font-family:var(--font-pixel); font-size:7px; color:var(--muted); }
+.content { padding:28px 32px; overflow-y:auto; }
+.section { display:none; }
+.section.active { display:block; }
+.section-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.section-icon { font-size:28px; }
+.section-title { font-family:var(--font-pixel); font-size:11px; color:white; line-height:1.8; }
+.section-desc { font-size:14px; color:var(--muted); margin-top:2px; }
+.btn-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:28px; }
+.btn-grid-3 { grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
+.cmd-btn { position:relative; padding:18px 16px; background:var(--panel); border:1px solid var(--border); border-radius:14px; cursor:pointer; transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1); text-align:left; overflow:hidden; user-select:none; }
+.cmd-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--btn-color,#fff) 0%,transparent 60%); opacity:0; transition:opacity 0.2s; border-radius:inherit; }
+.cmd-btn:hover { transform:translateY(-3px) scale(1.02); border-color:var(--btn-color,rgba(255,255,255,0.2)); box-shadow:0 8px 24px rgba(0,0,0,0.4),0 0 0 1px var(--btn-color,transparent); }
+.cmd-btn:hover::before { opacity:0.06; }
+.cmd-btn:active { transform:translateY(0) scale(0.98); transition-duration:0.08s; }
+.cmd-btn.fired { animation:btnFire 0.4s ease; border-color:var(--btn-color,var(--yellow)); box-shadow:0 0 20px var(--btn-color,var(--yellow)),inset 0 0 20px rgba(255,255,255,0.05); }
 @keyframes btnFire { 0%{transform:scale(1)} 30%{transform:scale(0.94)} 60%{transform:scale(1.04)} 100%{transform:scale(1)} }
-
-.btn-emoji { font-size: 26px; display: block; margin-bottom: 10px; line-height: 1; }
-.btn-name { font-size: 15px; font-weight: 700; display: block; margin-bottom: 4px; color: white; }
-.btn-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
-.btn-hotkey {
-  position: absolute; top: 10px; right: 10px;
-  font-family: var(--font-pixel); font-size: 7px;
-  color: var(--muted);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 3px 6px;
-}
-
-/* ── SUBSECTION LABEL ────────────────────────────────────────── */
-.sub-label {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--muted);
-  letter-spacing: 2px;
-  margin: 20px 0 12px;
-  display: flex; align-items: center; gap: 10px;
-}
-.sub-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-/* ── TOAST ───────────────────────────────────────────────────── */
-#toast-container {
-  position: fixed;
-  bottom: 28px; right: 28px;
-  z-index: 9000;
-  display: flex; flex-direction: column-reverse; gap: 10px;
-  pointer-events: none;
-}
-.toast {
-  padding: 14px 20px;
-  background: rgba(15,15,25,0.95);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-left: 3px solid var(--toast-color, var(--yellow));
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  backdrop-filter: blur(20px);
-  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1), toastOut 0.3s ease 2.5s forwards;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  max-width: 320px;
-}
+.btn-emoji { font-size:26px; display:block; margin-bottom:10px; line-height:1; }
+.btn-name { font-size:15px; font-weight:700; display:block; margin-bottom:4px; color:white; }
+.btn-desc { font-size:12px; color:var(--muted); line-height:1.4; }
+.btn-hotkey { position:absolute; top:10px; right:10px; font-family:var(--font-pixel); font-size:7px; color:var(--muted); background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:4px; padding:3px 6px; }
+.reckoning-btn { background:linear-gradient(135deg,rgba(229,37,33,0.15),rgba(155,48,255,0.15)); border-color:rgba(229,37,33,0.4); }
+.reckoning-btn:hover { box-shadow:0 0 40px rgba(229,37,33,0.4),0 0 80px rgba(155,48,255,0.2); }
+.sub-label { font-family:var(--font-pixel); font-size:8px; color:var(--muted); letter-spacing:2px; margin:20px 0 12px; display:flex; align-items:center; gap:10px; }
+.sub-label::after { content:''; flex:1; height:1px; background:var(--border); }
+#toast-container { position:fixed; bottom:28px; right:28px; z-index:9000; display:flex; flex-direction:column-reverse; gap:10px; pointer-events:none; }
+.toast { padding:14px 20px; background:rgba(15,15,25,0.95); border:1px solid rgba(255,255,255,0.12); border-left:3px solid var(--toast-color,var(--yellow)); border-radius:10px; font-size:14px; font-weight:600; backdrop-filter:blur(20px); animation:toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1),toastOut 0.3s ease 2.5s forwards; box-shadow:0 8px 32px rgba(0,0,0,0.5); max-width:320px; }
 @keyframes toastIn  { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-@keyframes toastOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(20px)} }
-
-/* ── LOG ─────────────────────────────────────────────────────── */
-.cmd-log {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 20px;
-}
-.log-entry { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--muted); }
-.log-entry span { color: var(--yellow); }
-.log-entry .log-time { color: rgba(255,255,255,0.2); margin-right: 8px; }
-
-/* ── CUSTOM COMMAND ──────────────────────────────────────────── */
-.custom-row {
-  display: flex; gap: 10px; align-items: center;
-  margin-top: 20px;
-}
-.custom-input {
-  flex: 1;
-  padding: 12px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: white;
-  font-size: 14px;
-  font-family: var(--font-ui);
-  outline: none;
-  transition: all 0.2s;
-}
-.custom-input:focus { border-color: var(--yellow); box-shadow: 0 0 0 2px rgba(251,208,0,0.1); }
-.custom-send {
-  padding: 12px 20px;
-  background: var(--yellow);
-  color: #1a1000;
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  border: none; border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.custom-send:hover { background: #ffe033; transform: translateY(-1px); }
-
-/* ── KEYBOARD HINT ───────────────────────────────────────────── */
-.kb-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
-.kbd { display: inline-block; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 11px; }
-
-/* ── SCROLLBAR ───────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+@keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateX(20px)} }
+.cmd-log { background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:12px; padding:16px; font-family:'Courier New',monospace; font-size:12px; max-height:200px; overflow-y:auto; margin-top:20px; }
+.log-entry { padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--muted); }
+.log-entry span { color:var(--yellow); }
+.log-entry .log-time { color:rgba(255,255,255,0.2); margin-right:8px; }
+.custom-row { display:flex; gap:10px; align-items:center; margin-top:20px; }
+.custom-input { flex:1; padding:12px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; color:white; font-size:14px; font-family:var(--font-ui); outline:none; transition:all 0.2s; }
+.custom-input:focus { border-color:var(--yellow); box-shadow:0 0 0 2px rgba(251,208,0,0.1); }
+.custom-send { padding:12px 20px; background:var(--yellow); color:#1a1000; font-family:var(--font-pixel); font-size:8px; border:none; border-radius:10px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.custom-send:hover { background:#ffe033; transform:translateY(-1px); }
+.kb-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.kbd { display:inline-block; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:4px; padding:1px 6px; font-family:monospace; font-size:11px; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:2px; }
 </style>
 </head>
 <body>
-
-<!-- ══ STARS ══════════════════════════════════════════════════ -->
 <div id="stars"></div>
 
-<!-- ══ LOGIN ══════════════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">DAD<br>COMMANDER</div>
     <div class="login-sub">🔒 AUTHORIZED PERSONNEL ONLY</div>
-    <input type="password" id="pw-input" placeholder="enter password" autocomplete="off" />
+    <input type="password" id="pw-input" placeholder="enter password" autocomplete="off"/>
     <button class="login-btn" onclick="tryLogin()">ENTER THE CHAOS ZONE</button>
     <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
-<!-- ══ APP ════════════════════════════════════════════════════ -->
+<!-- APP -->
 <div id="app">
-
-  <!-- HEADER -->
   <div class="header">
-    <div class="header-left">
+    <div class="header-left" style="display:flex;align-items:center;gap:16px;">
       <div>
         <div class="header-title">🎮 DAD COMMANDER</div>
         <div class="header-sub">ULTIMATE EDITION</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:20px;">
-      <div class="cmd-count" id="cmd-count">COMMANDS SENT<br><span style="color:var(--yellow);font-size:14px" id="cmd-num">0</span></div>
+      <div class="cmd-count">COMMANDS SENT<br><span style="color:var(--yellow);font-size:14px" id="cmd-num">0</span></div>
       <div class="status-pill">
         <div class="status-dot" id="status-dot"></div>
         <span id="status-text" style="font-size:13px;font-weight:600">connecting...</span>
@@ -402,613 +130,418 @@ body::after {
     </div>
   </div>
 
-  <!-- MAIN LAYOUT -->
   <div class="main">
-
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-label">CATEGORIES</div>
-      <div class="nav-item active" onclick="showSection('chaos')" style="--cat-color:var(--red)">
-        <span class="nav-icon">💥</span> Chaos
-        <span class="nav-badge">8</span>
-      </div>
-      <div class="nav-item" onclick="showSection('enemies')" style="--cat-color:var(--orange)">
-        <span class="nav-icon">👾</span> Enemies
-        <span class="nav-badge">12</span>
-      </div>
-      <div class="nav-item" onclick="showSection('weather')" style="--cat-color:var(--blue)">
-        <span class="nav-icon">⛅</span> Weather
-        <span class="nav-badge">8</span>
-      </div>
-      <div class="nav-item" onclick="showSection('map')" style="--cat-color:var(--green)">
-        <span class="nav-icon">🗺️</span> Map
-        <span class="nav-badge">4</span>
-      </div>
-      <div class="nav-item" onclick="showSection('powerups')" style="--cat-color:var(--yellow)">
-        <span class="nav-icon">⭐</span> Power-Ups
-        <span class="nav-badge">6</span>
-      </div>
-      <div class="nav-item" onclick="showSection('messages')" style="--cat-color:var(--purple)">
-        <span class="nav-icon">📢</span> Messages
-        <span class="nav-badge">5</span>
-      </div>
-      <div class="nav-item" onclick="showSection('combos')" style="--cat-color:#ff69b4">
-        <span class="nav-icon">🔥</span> Combos
-        <span class="nav-badge">4</span>
-      </div>
-      <div class="nav-item" onclick="showSection('log')" style="--cat-color:var(--muted)">
-        <span class="nav-icon">📋</span> Log
-      </div>
-
-      <!-- Keyboard hints in sidebar -->
-      <div style="padding: 20px; margin-top: auto;">
+      <div class="nav-item active" onclick="showSection('chaos',this)" style="--cat-color:var(--red)"><span class="nav-icon">💥</span>Chaos<span class="nav-badge">17</span></div>
+      <div class="nav-item" onclick="showSection('enemies',this)" style="--cat-color:var(--orange)"><span class="nav-icon">👾</span>Enemies<span class="nav-badge">26</span></div>
+      <div class="nav-item" onclick="showSection('weather',this)" style="--cat-color:var(--blue)"><span class="nav-icon">⛅</span>Weather<span class="nav-badge">22</span></div>
+      <div class="nav-item" onclick="showSection('map',this)" style="--cat-color:var(--green)"><span class="nav-icon">🗺️</span>Map<span class="nav-badge">10</span></div>
+      <div class="nav-item" onclick="showSection('powerups',this)" style="--cat-color:var(--yellow)"><span class="nav-icon">⭐</span>Power-Ups<span class="nav-badge">12</span></div>
+      <div class="nav-item" onclick="showSection('messages',this)" style="--cat-color:var(--purple)"><span class="nav-icon">📢</span>Messages<span class="nav-badge">13</span></div>
+      <div class="nav-item" onclick="showSection('combos',this)" style="--cat-color:var(--pink)"><span class="nav-icon">🔥</span>Combos<span class="nav-badge">5</span></div>
+      <div class="nav-item" onclick="showSection('log',this)" style="--cat-color:var(--muted)"><span class="nav-icon">📋</span>Log</div>
+      <div style="padding:20px;margin-top:auto;">
         <div class="sidebar-label" style="margin-bottom:10px;">HOTKEYS</div>
         <div style="font-size:12px;color:var(--muted);line-height:2.2;">
-          <kbd class="kbd">1-8</kbd> Chaos tabs<br>
-          <kbd class="kbd">E</kbd> Random enemy<br>
-          <kbd class="kbd">B</kbd> Spawn Boss<br>
           <kbd class="kbd">Q</kbd> Earthquake<br>
           <kbd class="kbd">L</kbd> Lights Out<br>
+          <kbd class="kbd">B</kbd> Spawn Boss<br>
           <kbd class="kbd">G</kbd> Good Job<br>
-          <kbd class="kbd">C</kbd> Countdown
+          <kbd class="kbd">C</kbd> Countdown<br>
+          <kbd class="kbd">E</kbd> Random Enemy<br>
+          <kbd class="kbd">W</kbd> Random Weather<br>
+          <kbd class="kbd">R</kbd> THE RECKONING
         </div>
       </div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
 
-      <!-- ══ CHAOS ══════════════════════════════════════════════ -->
+      <!-- CHAOS -->
       <div class="section active" id="section-chaos">
-        <div class="section-header">
-          <span class="section-icon">💥</span>
-          <div>
-            <div class="section-title">CHAOS & TROLLING</div>
-            <div class="section-desc">Make his life difficult. You're the dad. It's your right.</div>
-          </div>
-        </div>
+        <div class="section-header"><span class="section-icon">💥</span><div><div class="section-title">CHAOS & TROLLING</div><div class="section-desc">Make his life difficult. You're the dad.</div></div></div>
+        <div class="sub-label">CLASSICS</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('earthquake','🌋 Earthquake!','var(--red)')">
-            <span class="btn-emoji">🌋</span>
-            <span class="btn-name">Earthquake</span>
-            <span class="btn-desc">Camera shake, shockwave, object jitter for 4s</span>
-            <span class="btn-hotkey">Q</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#111" onclick="send('lights_out','🌑 Lights Out!','#555')">
-            <span class="btn-emoji">🌑</span>
-            <span class="btn-name">Lights Out</span>
-            <span class="btn-desc">Total darkness for 10s with creepy sounds</span>
-            <span class="btn-hotkey">L</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('reverse_controls','🔄 Controls Flipped!','var(--blue)')">
-            <span class="btn-emoji">🔄</span>
-            <span class="btn-name">Flip Controls</span>
-            <span class="btn-desc">Camera spin + 8 second control confusion</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#aef" onclick="send('slippery_floor','🧊 Icy Floor!','#aef')">
-            <span class="btn-emoji">🧊</span>
-            <span class="btn-name">Icy Floor</span>
-            <span class="btn-desc">Ice patches shimmer around the player</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_flip','🙃 Gravity Flip!','var(--orange)')">
-            <span class="btn-emoji">🙃</span>
-            <span class="btn-name">Gravity Flip</span>
-            <span class="btn-desc">Camera goes upside down. Pure disorientation.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('disco_mode','🪩 Disco Mode!','var(--purple)')">
-            <span class="btn-emoji">🪩</span>
-            <span class="btn-name">Disco Mode</span>
-            <span class="btn-desc">Strobing rainbow lights. Party time.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('screen_shake','😵 Constant Shake!','#f0f')">
-            <span class="btn-emoji">😵</span>
-            <span class="btn-name">Shake It</span>
-            <span class="btn-desc">Constant mild camera shake for 6s</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#ff8" onclick="send('warp_speed','⚡ Warp Speed!','#ff8')">
-            <span class="btn-emoji">⚡</span>
-            <span class="btn-name">Speed Boost</span>
-            <span class="btn-desc">Triples enemy movement speed for 10s</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('earthquake','🌋 Earthquake!','var(--red)')"><span class="btn-emoji">🌋</span><span class="btn-name">Earthquake</span><span class="btn-desc">Camera shake + shockwave for 4s</span><span class="btn-hotkey">Q</span></div>
+          <div class="cmd-btn" style="--btn-color:#111" onclick="send('lights_out','🌑 Lights Out!','#555')"><span class="btn-emoji">🌑</span><span class="btn-name">Lights Out</span><span class="btn-desc">Total darkness for 10s with creepy sounds</span><span class="btn-hotkey">L</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('reverse_controls','🔄 Flipped!','var(--blue)')"><span class="btn-emoji">🔄</span><span class="btn-name">Flip Controls</span><span class="btn-desc">Camera spin + 8s confusion</span></div>
+          <div class="cmd-btn" style="--btn-color:#aef" onclick="send('slippery_floor','🧊 Icy Floor!','#aef')"><span class="btn-emoji">🧊</span><span class="btn-name">Icy Floor</span><span class="btn-desc">Shimmering ice patches around player</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_flip','🙃 Flip!','var(--orange)')"><span class="btn-emoji">🙃</span><span class="btn-name">Gravity Flip</span><span class="btn-desc">Camera upside down for 8s</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('disco_mode','🪩 Disco!','var(--purple)')"><span class="btn-emoji">🪩</span><span class="btn-name">Disco Mode</span><span class="btn-desc">Strobing rainbow lights for 12s</span></div>
+          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('screen_shake','😵 Shake!','#f0f')"><span class="btn-emoji">😵</span><span class="btn-name">Shake It</span><span class="btn-desc">Constant mild camera shake for 6s</span></div>
+          <div class="cmd-btn" style="--btn-color:#ff8" onclick="send('warp_speed','⚡ Warp!','#ff8')"><span class="btn-emoji">⚡</span><span class="btn-name">Warp Speed</span><span class="btn-desc">Enemy speed ×3 for 10s</span></div>
+        </div>
+        <div class="sub-label">NEW CHAOS</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#0ff" onclick="send('bouncy_world','🏀 Bouncy!','#0ff')"><span class="btn-emoji">🏀</span><span class="btn-name">Bouncy World</span><span class="btn-desc">Everything he touches launches him</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('spinning_map','🌀 Spinning!','var(--green)')"><span class="btn-emoji">🌀</span><span class="btn-name">Spinning Map</span><span class="btn-desc">Delfino Plaza slowly rotates</span></div>
+          <div class="cmd-btn" style="--btn-color:#334" onclick="send('dark_mode','🕶️ Dark!','#446')"><span class="btn-emoji">🕶️</span><span class="btn-name">Dark Mode</span><span class="btn-desc">Dark + enemies invisible until close</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_random','🎲 Gravity!','var(--orange)')"><span class="btn-emoji">🎲</span><span class="btn-name">Random Gravity</span><span class="btn-desc">Flips every ~10s for 60s</span></div>
+          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('fake_game_over','💀 GAME OVER!','#f44')"><span class="btn-emoji">💀</span><span class="btn-name">Fake Game Over</span><span class="btn-desc">Screen flashes then disappears</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('random_teleport','🌀 Teleport!','var(--purple)')"><span class="btn-emoji">🌀</span><span class="btn-name">Random Teleport</span><span class="btn-desc">Sends Mason somewhere on the map</span></div>
+          <div class="cmd-btn" style="--btn-color:#888" onclick="send('giant_foot','🦶 STOMP!','#888')"><span class="btn-emoji">🦶</span><span class="btn-name">Giant Foot</span><span class="btn-desc">Foot descends from sky to stomp him</span></div>
+        </div>
+        <div class="sub-label">NUCLEAR</div>
+        <div class="btn-grid">
+          <div class="cmd-btn reckoning-btn" onclick="triggerReckoning()" style="grid-column:span 2"><span class="btn-emoji">💀</span><span class="btn-name" style="color:var(--red);font-size:16px;">THE RECKONING</span><span class="btn-desc">Dark + invisible enemies + gravity flips + 60s countdown + Bowser X at 30s + lava at the end. No survivors.</span><span class="btn-hotkey">R</span></div>
         </div>
       </div>
 
-      <!-- ══ ENEMIES ════════════════════════════════════════════ -->
+      <!-- ENEMIES -->
       <div class="section" id="section-enemies">
-        <div class="section-header">
-          <span class="section-icon">👾</span>
-          <div>
-            <div class="section-title">ENEMY SPAWNER</div>
-            <div class="section-desc">Classic Mario enemies with real AI. Punch them to kill them.</div>
-          </div>
-        </div>
-
-        <div class="sub-label">CLASSIC ENEMIES</div>
+        <div class="section-header"><span class="section-icon">👾</span><div><div class="section-title">ENEMY SPAWNER</div><div class="section-desc">Punch to kill. Kills explode and drop coins.</div></div></div>
+        <div class="sub-label">CLASSIC</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('spawn_goomba','🍄 Goomba spawned!','#8B4513')">
-            <span class="btn-emoji">🍄</span>
-            <span class="btn-name">Goomba</span>
-            <span class="btn-desc">Basic chaser. Slow but relentless.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_boo','👻 3 Boos!','#aab')">
-            <span class="btn-emoji">👻</span>
-            <span class="btn-name">Boo × 3</span>
-            <span class="btn-desc">Only moves when you're NOT looking at it</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_chain_chomp','⛓️ Chain Chomp!','#888')">
-            <span class="btn-emoji">⛓️</span>
-            <span class="btn-name">Chain Chomp</span>
-            <span class="btn-desc">Big, black, very hungry. Fast.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#555" onclick="send('spawn_bullet','💣 Bullet Bill!','#777')">
-            <span class="btn-emoji">💣</span>
-            <span class="btn-name">Bullet Bill</span>
-            <span class="btn-desc">Fires from above with exhaust trail</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_koopa','🐢 Koopa!','var(--orange)')">
-            <span class="btn-emoji">🐢</span>
-            <span class="btn-name">Koopa Troopa</span>
-            <span class="btn-desc">Green shell. Bounces off walls.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#f80" onclick="send('spawn_hammer_bro','🔨 Hammer Bro!','#f80')">
-            <span class="btn-emoji">🔨</span>
-            <span class="btn-name">Hammer Bro</span>
-            <span class="btn-desc">Throws hammers in arcs. Dangerous.</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('spawn_goomba','🍄 Goomba!','#8B4513')"><span class="btn-emoji">🍄</span><span class="btn-name">Goomba</span><span class="btn-desc">Slow but relentless chaser</span></div>
+          <div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_boo','👻 3 Boos!','#aab')"><span class="btn-emoji">👻</span><span class="btn-name">Boo × 3</span><span class="btn-desc">Only moves when NOT looking at it</span></div>
+          <div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_chain_chomp','⛓️ Chomp!','#888')"><span class="btn-emoji">⛓️</span><span class="btn-name">Chain Chomp</span><span class="btn-desc">Black, hungry, jaw snaps</span></div>
+          <div class="cmd-btn" style="--btn-color:#555" onclick="send('spawn_bullet','💣 Bullet!','#777')"><span class="btn-emoji">💣</span><span class="btn-name">Bullet Bill</span><span class="btn-desc">Fires from above with trail</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_koopa','🐢 Koopa!','var(--orange)')"><span class="btn-emoji">🐢</span><span class="btn-name">Koopa Troopa</span><span class="btn-desc">Green shell chaser</span></div>
+          <div class="cmd-btn" style="--btn-color:#f80" onclick="send('spawn_hammer_bro','🔨 Hammer Bro!','#f80')"><span class="btn-emoji">🔨</span><span class="btn-name">Hammer Bro</span><span class="btn-desc">Throws real hammers in arcs</span></div>
         </div>
-
-        <div class="sub-label">SUNSHINE ENEMIES</div>
+        <div class="sub-label">SUNSHINE</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_shadow_mario','👤 Shadow Mario!','#ff6af0')">
-            <span class="btn-emoji">👤</span>
-            <span class="btn-name">Shadow Mario</span>
-            <span class="btn-desc">Your dark doppelganger. Mirrors movement.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#b060ff" onclick="send('spawn_piranha','🪴 Piranha Plant!','#b060ff')">
-            <span class="btn-emoji">🪴</span>
-            <span class="btn-name">Piranha Plant</span>
-            <span class="btn-desc">Pops out of floor pipes, snaps at you</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('spawn_blooper','🦑 Blooper!','var(--blue)')">
-            <span class="btn-emoji">🦑</span>
-            <span class="btn-name">Blooper</span>
-            <span class="btn-desc">Squid that squirts ink and charges</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_shadow_mario','👤 Shadow Mario!','#ff6af0')"><span class="btn-emoji">👤</span><span class="btn-name">Shadow Mario</span><span class="btn-desc">Dark doppelganger, glowing eyes</span></div>
+          <div class="cmd-btn" style="--btn-color:#b060ff" onclick="send('spawn_piranha','🪴 Piranha!','#b060ff')"><span class="btn-emoji">🪴</span><span class="btn-name">Piranha Plant</span><span class="btn-desc">Rises, snaps, sinks back</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('spawn_blooper','🦑 Blooper!','var(--blue)')"><span class="btn-emoji">🦑</span><span class="btn-name">Blooper</span><span class="btn-desc">Ink attack blacks the screen</span></div>
         </div>
-
+        <div class="sub-label">NEW ENEMIES</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_thwomp','🪨 Thwomp!','#888')"><span class="btn-emoji">🪨</span><span class="btn-name">Thwomp</span><span class="btn-desc">Drops from ceiling. Huge angry face.</span></div>
+          <div class="cmd-btn" style="--btn-color:#5af" onclick="send('spawn_lakitu','☁️ Lakitu!','#5af')"><span class="btn-emoji">☁️</span><span class="btn-name">Lakitu</span><span class="btn-desc">Floats above, rains Spinies down</span></div>
+          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('spawn_spiny','🔴 Spiny!','#f44')"><span class="btn-emoji">🔴</span><span class="btn-name">Spiny</span><span class="btn-desc">Spiky ball rolls at you fast</span></div>
+          <div class="cmd-btn" style="--btn-color:#aaa" onclick="send('spawn_whomp','🟫 Whomp!','#aaa')"><span class="btn-emoji">🟫</span><span class="btn-name">Whomp</span><span class="btn-desc">Big wall that tries to fall on you</span></div>
+          <div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_king_boo','👑 King Boo!','#dde')"><span class="btn-emoji">👑</span><span class="btn-name">King Boo</span><span class="btn-desc">Giant Boo with crown</span></div>
+          <div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_shy_guy','😶 Shy Guy!','#f00')"><span class="btn-emoji">😶</span><span class="btn-name">Shy Guy</span><span class="btn-desc">Masked runner, comes in packs</span></div>
+          <div class="cmd-btn" style="--btn-color:#333" onclick="send('spawn_bobomb','💣 Bob-omb!','#333')"><span class="btn-emoji">💣</span><span class="btn-name">Bob-omb</span><span class="btn-desc">Walks toward you → flashes → BOOM</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('spawn_wiggler','🐛 Wiggler!','var(--green)')"><span class="btn-emoji">🐛</span><span class="btn-name">Wiggler</span><span class="btn-desc">Segments. Turns red when hit.</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('spawn_petey','🌺 Petey!','var(--red)')"><span class="btn-emoji">🌺</span><span class="btn-name">Petey Piranha</span><span class="btn-desc">Giant piranha plant boss. Flies.</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_kamek','🧙 Kamek!','var(--purple)')"><span class="btn-emoji">🧙</span><span class="btn-name">Kamek</span><span class="btn-desc">Flies on broomstick, casts spells</span></div>
+          <div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_doopliss','🎭 Doopliss!','#ff6af0')"><span class="btn-emoji">🎭</span><span class="btn-name">Doopliss</span><span class="btn-desc">Shapeshifts into YOUR silhouette</span></div>
+          <div class="cmd-btn" style="--btn-color:#222" onclick="send('spawn_shadow_queen','🖤 Shadow Queen!','#222')"><span class="btn-emoji">🖤</span><span class="btn-name">Shadow Queen</span><span class="btn-desc">Paper Mario final boss. Pure darkness.</span></div>
+          <div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_mega_chomp','⛓️⛓️ MEGA CHOMP!','#555')"><span class="btn-emoji">⛓️⛓️</span><span class="btn-name">Chain Chomp MEGA</span><span class="btn-desc">Rolls through everything. Unstoppable.</span></div>
+        </div>
         <div class="sub-label">HORDES</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_swarm','🐟 SWARM × 10!','var(--orange)')">
-            <span class="btn-emoji">🌊</span>
-            <span class="btn-name">Swarm Attack</span>
-            <span class="btn-desc">10 tiny enemies from all directions</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_goomba_army','🍄🍄🍄 ARMY!','#4f0')">
-            <span class="btn-emoji">🍄🍄</span>
-            <span class="btn-name">Goomba Army</span>
-            <span class="btn-desc">5 goombas from different directions</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_boss','👾 THE BOSS!','var(--purple)')" style="grid-column:span 2">
-            <span class="btn-emoji">💀</span>
-            <span class="btn-name">SPAWN BOSS</span>
-            <span class="btn-desc">The big purple cube. 3 red eyes. Circles and lunges. Good luck.</span>
-            <span class="btn-hotkey">B</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_swarm','🌊 SWARM!','var(--orange)')"><span class="btn-emoji">🌊</span><span class="btn-name">Swarm × 10</span><span class="btn-desc">10 enemies from all directions</span></div>
+          <div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_goomba_army','🍄🍄 ARMY!','#4f0')"><span class="btn-emoji">🍄🍄</span><span class="btn-name">Goomba Army</span><span class="btn-desc">5 goombas from different directions</span></div>
+          <div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_shy_guy_army','😶😶 Shy Army!','#f00')"><span class="btn-emoji">😶😶</span><span class="btn-name">Shy Guy Army</span><span class="btn-desc">8 Shy Guys surrounding the player</span></div>
+        </div>
+        <div class="sub-label">BOSSES</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_boss','💀 BOWSER!','var(--purple)')"><span class="btn-emoji">💀</span><span class="btn-name">SPAWN BOWSER</span><span class="btn-desc">Full Bowser. Circles, lunges, glowing eyes.</span><span class="btn-hotkey">B</span></div>
+          <div class="cmd-btn" style="--btn-color:#ff4400" onclick="send('spawn_bowser_x','🔥 BOWSER X!','#ff4400')"><span class="btn-emoji">🔥</span><span class="btn-name">BOWSER X</span><span class="btn-desc">Multi-phase. Gets faster each hit.</span></div>
         </div>
       </div>
 
-      <!-- ══ WEATHER ════════════════════════════════════════════ -->
+      <!-- WEATHER -->
       <div class="section" id="section-weather">
-        <div class="section-header">
-          <span class="section-icon">⛅</span>
-          <div>
-            <div class="section-title">WEATHER CONTROL</div>
-            <div class="section-desc">Dad controls the forecast. Always has.</div>
-          </div>
-        </div>
+        <div class="section-header"><span class="section-icon">⛅</span><div><div class="section-title">WEATHER CONTROL</div><div class="section-desc">Dad controls the forecast. Fog thickens gradually. Particles fill the map.</div></div></div>
+        <div class="sub-label">CLEAR</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('weather_sunny','☀️ Clear Skies!','var(--yellow)')">
-            <span class="btn-emoji">☀️</span>
-            <span class="btn-name">Clear Skies</span>
-            <span class="btn-desc">Remove all weather effects</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#aac" onclick="send('weather_fog','🌫️ Fog rolling in...','#aac')">
-            <span class="btn-emoji">🌫️</span>
-            <span class="btn-name">Dense Fog</span>
-            <span class="btn-desc">Gradual visibility loss</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('weather_rain','🌧️ Rain!','var(--blue)')">
-            <span class="btn-emoji">🌧️</span>
-            <span class="btn-name">Rain</span>
-            <span class="btn-desc">Physics rain drops + blue tint</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#668" onclick="send('weather_storm','⚡ Storm!','#668')">
-            <span class="btn-emoji">⛈️</span>
-            <span class="btn-name">Full Storm</span>
-            <span class="btn-desc">8 lightning strikes + heavy rain</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('fire_zone','🔥 Fire Zone!','var(--orange)')">
-            <span class="btn-emoji">🔥</span>
-            <span class="btn-name">Fire Zone</span>
-            <span class="btn-desc">Ring of 16 fire pillars + 8 random spots</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#5af" onclick="send('flood_water','🌊 Flood!','#5af')">
-            <span class="btn-emoji">🌊</span>
-            <span class="btn-name">Flood</span>
-            <span class="btn-desc">Water rises slowly over 10s then drains</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#fff4" onclick="send('weather_blizzard','❄️ Blizzard!','#adf')">
-            <span class="btn-emoji">❄️</span>
-            <span class="btn-name">Blizzard</span>
-            <span class="btn-desc">Snow + white fog + frozen floor patches</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#f90" onclick="send('weather_sandstorm','🏜️ Sandstorm!','#f90')">
-            <span class="btn-emoji">🏜️</span>
-            <span class="btn-name">Sandstorm</span>
-            <span class="btn-desc">Orange fog + debris particles</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('weather_sunny','☀️ Clear!','var(--yellow)')"><span class="btn-emoji">☀️</span><span class="btn-name">Clear Skies</span><span class="btn-desc">Remove all weather effects</span></div>
+        </div>
+        <div class="sub-label">EXISTING STORMS</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#aac" onclick="send('weather_fog','🌫️ Fog!','#aac')"><span class="btn-emoji">🌫️</span><span class="btn-name">Dense Fog</span><span class="btn-desc">Gradual visibility loss</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('weather_rain','🌧️ Rain!','var(--blue)')"><span class="btn-emoji">🌧️</span><span class="btn-name">Rain</span><span class="btn-desc">Map-wide rain + blue tint</span></div>
+          <div class="cmd-btn" style="--btn-color:#668" onclick="send('weather_storm','⛈️ Storm!','#668')"><span class="btn-emoji">⛈️</span><span class="btn-name">Full Storm</span><span class="btn-desc">Lightning + heavy rain, varied sizes</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('fire_zone','🔥 Fire Zone!','var(--orange)')"><span class="btn-emoji">🔥</span><span class="btn-name">Fire Zone</span><span class="btn-desc">16 fire pillars + random spots</span></div>
+          <div class="cmd-btn" style="--btn-color:#5af" onclick="send('flood_water','🌊 Flood!','#5af')"><span class="btn-emoji">🌊</span><span class="btn-name">Flood</span><span class="btn-desc">Water rises over 30s then drains</span></div>
+          <div class="cmd-btn" style="--btn-color:#adf" onclick="send('weather_blizzard','❄️ Blizzard!','#adf')"><span class="btn-emoji">❄️</span><span class="btn-name">Blizzard</span><span class="btn-desc">Dense varied snow + white fog</span></div>
+          <div class="cmd-btn" style="--btn-color:#f90" onclick="send('weather_sandstorm','🏜️ Sandstorm!','#f90')"><span class="btn-emoji">🏜️</span><span class="btn-name">Sandstorm</span><span class="btn-desc">Orange fog + varied debris</span></div>
+        </div>
+        <div class="sub-label">NEW WEATHER</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#888" onclick="send('weather_ash','🌋 Ash!','#888')"><span class="btn-emoji">🌋</span><span class="btn-name">Ash Fall</span><span class="btn-desc">Dark gray flakes + orange volcanic fog</span></div>
+          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('weather_mud','💧 Mud!','#8B4513')"><span class="btn-emoji">💧</span><span class="btn-name">Mud Rain</span><span class="btn-desc">Brown heavy drops + thick brown fog</span></div>
+          <div class="cmd-btn" style="--btn-color:#900" onclick="send('weather_blood','🩸 Blood!','#900')"><span class="btn-emoji">🩸</span><span class="btn-name">Blood Rain</span><span class="btn-desc">Deep red particles + crimson fog</span></div>
+          <div class="cmd-btn" style="--btn-color:#ff0" onclick="send('weather_pollen','🌼 Pollen!','#ff0')"><span class="btn-emoji">🌼</span><span class="btn-name">Pollen Storm</span><span class="btn-desc">Bright yellow particles + golden haze</span></div>
+          <div class="cmd-btn" style="--btn-color:#0f0" onclick="send('weather_toxic','☢️ Toxic!','#0f0')"><span class="btn-emoji">☢️</span><span class="btn-name">Toxic Gas</span><span class="btn-desc">Sickly green fog thickens slowly</span></div>
+          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('weather_rainbow','🌈 Rainbow!','#f0f')"><span class="btn-emoji">🌈</span><span class="btn-name">Rainbow Storm</span><span class="btn-desc">All-color particles + prismatic fog</span></div>
+          <div class="cmd-btn" style="--btn-color:#8df" onclick="send('weather_ice_crystals','💠 Ice Crystals!','#8df')"><span class="btn-emoji">💠</span><span class="btn-name">Ice Crystal Storm</span><span class="btn-desc">Sharp blue/white shards at angles</span></div>
+          <div class="cmd-btn" style="--btn-color:#444" onclick="send('weather_void','⚫ Void!','#444')"><span class="btn-emoji">⚫</span><span class="btn-name">Void Storm</span><span class="btn-desc">Black particles. Darkness closes in.</span></div>
+          <div class="cmd-btn" style="--btn-color:#f60" onclick="send('weather_ember','✨ Embers!','#f60')"><span class="btn-emoji">✨</span><span class="btn-name">Ember Storm</span><span class="btn-desc">Glowing orange embers float upward</span></div>
+          <div class="cmd-btn" style="--btn-color:#a0f" onclick="send('weather_cosmic','🌌 Cosmic!','#a0f')"><span class="btn-emoji">🌌</span><span class="btn-name">Cosmic Dust</span><span class="btn-desc">Purple/pink particles + deep space fog</span></div>
+          <div class="cmd-btn" style="--btn-color:#ffb7c5" onclick="send('weather_blossom','🌸 Blossom!','#ffb7c5')"><span class="btn-emoji">🌸</span><span class="btn-name">Cherry Blossom</span><span class="btn-desc">Peaceful petals... then enemies spawn</span></div>
+          <div class="cmd-btn" style="--btn-color:#0a0" onclick="send('weather_ground_fog','🌫️ Ground Fog!','#0a0')"><span class="btn-emoji">🌫️</span><span class="btn-name">Ground Fog</span><span class="btn-desc">Fog hugs the floor. Can see above it.</span></div>
+          <div class="cmd-btn" style="--btn-color:#06f" onclick="send('weather_mist','💧 Mist!','#06f')"><span class="btn-emoji">💧</span><span class="btn-name">Rising Mist</span><span class="btn-desc">Starts at ground, climbs to head height</span></div>
+          <div class="cmd-btn" style="--btn-color:#f30" onclick="send('flood_lava','🌋 LAVA!','#f30')"><span class="btn-emoji">🌋</span><span class="btn-name">Lava Flood</span><span class="btn-desc">Glowing lava rises instead of water</span></div>
         </div>
       </div>
 
-      <!-- ══ MAP ════════════════════════════════════════════════ -->
+      <!-- MAP -->
       <div class="section" id="section-map">
-        <div class="section-header">
-          <span class="section-icon">🗺️</span>
-          <div>
-            <div class="section-title">MAP CONTROL</div>
-            <div class="section-desc">Reshape Delfino Plaza to your will.</div>
-          </div>
-        </div>
+        <div class="section-header"><span class="section-icon">🗺️</span><div><div class="section-title">MAP CONTROL</div><div class="section-desc">Reshape Delfino Plaza to your will.</div></div></div>
+        <div class="sub-label">EXISTING</div>
         <div class="btn-grid btn-grid-3">
-          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('block_path','🧱 Wall spawned!','#8B4513')">
-            <span class="btn-emoji">🧱</span>
-            <span class="btn-name">Block Path</span>
-            <span class="btn-desc">Spawns a wall in front of the player. Dad built it.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('open_path','🚪 Path cleared!','var(--green)')">
-            <span class="btn-emoji">🚪</span>
-            <span class="btn-name">Open Path</span>
-            <span class="btn-desc">Removes all walls AND clears enemies</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#aaa" onclick="send('platform_vanish','💨 Platforms gone!','#aaa')">
-            <span class="btn-emoji">💨</span>
-            <span class="btn-name">Vanish Platforms</span>
-            <span class="btn-desc">Any tagged Platform objects flicker and disappear</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('platform_appear','✨ Platforms back!','var(--yellow)')">
-            <span class="btn-emoji">✨</span>
-            <span class="btn-name">Restore Platforms</span>
-            <span class="btn-desc">Platforms flicker back into existence</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('block_path','🧱 Wall!','#8B4513')"><span class="btn-emoji">🧱</span><span class="btn-name">Block Path</span><span class="btn-desc">Spawns a wall in front of player</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('open_path','🚪 Cleared!','var(--green)')"><span class="btn-emoji">🚪</span><span class="btn-name">Open Path</span><span class="btn-desc">Removes walls AND clears enemies</span></div>
+          <div class="cmd-btn" style="--btn-color:#aaa" onclick="send('platform_vanish','💨 Gone!','#aaa')"><span class="btn-emoji">💨</span><span class="btn-name">Vanish Platforms</span><span class="btn-desc">Tagged platforms flicker and disappear</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('platform_appear','✨ Back!','var(--yellow)')"><span class="btn-emoji">✨</span><span class="btn-name">Restore Platforms</span><span class="btn-desc">Platforms flicker back</span></div>
+        </div>
+        <div class="sub-label">NEW MAP</div>
+        <div class="btn-grid btn-grid-3">
+          <div class="cmd-btn" style="--btn-color:#f90" onclick="send('bouncy_floor','🏀 Bouncy!','#f90')"><span class="btn-emoji">🏀</span><span class="btn-name">Bouncy Floor</span><span class="btn-desc">Bouncy patches scattered around Mason</span></div>
+          <div class="cmd-btn" style="--btn-color:#a30" onclick="send('spawn_boulder','🪨 BOULDER!','#a30')"><span class="btn-emoji">🪨</span><span class="btn-name">Rolling Boulder</span><span class="btn-desc">Giant boulder chases Mason across the map</span></div>
+          <div class="cmd-btn" style="--btn-color:#556" onclick="send('spawn_maze','🧩 Maze!','#556')"><span class="btn-emoji">🧩</span><span class="btn-name">Spawn Maze</span><span class="btn-desc">Walls form a maze around the player</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('moving_platform','🟦 Platform!','var(--blue)')"><span class="btn-emoji">🟦</span><span class="btn-name">Moving Platform</span><span class="btn-desc">One moving platform — only safe spot</span></div>
+          <div class="cmd-btn" style="--btn-color:#06a" onclick="send('tilt_map','⛵ Tilting!','#06a')"><span class="btn-emoji">⛵</span><span class="btn-name">Tilt Map</span><span class="btn-desc">The map tilts like a boat in waves</span></div>
+          <div class="cmd-btn" style="--btn-color:#333" onclick="send('floor_holes','🕳️ Holes!','#333')"><span class="btn-emoji">🕳️</span><span class="btn-name">Floor Holes</span><span class="btn-desc">Random patches vanish beneath his feet</span></div>
         </div>
       </div>
 
-      <!-- ══ POWER-UPS ══════════════════════════════════════════ -->
+      <!-- POWER-UPS -->
       <div class="section" id="section-powerups">
-        <div class="section-header">
-          <span class="section-icon">⭐</span>
-          <div>
-            <div class="section-title">POWER-UPS</div>
-            <div class="section-desc">Sometimes dad is generous. Sometimes he takes it all away.</div>
-          </div>
-        </div>
+        <div class="section-header"><span class="section-icon">⭐</span><div><div class="section-title">POWER-UPS</div><div class="section-desc">Give or take. Dad's choice.</div></div></div>
+        <div class="sub-label">EXISTING</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('drop_star','⭐ Star Power!','var(--yellow)')">
-            <span class="btn-emoji">⭐</span>
-            <span class="btn-name">Star Power</span>
-            <span class="btn-desc">Rainbow lights + coin shower bonus</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#ffd700" onclick="send('drop_coin','🪙 Coins!','#ffd700')">
-            <span class="btn-emoji">🪙</span>
-            <span class="btn-name">Coin Shower</span>
-            <span class="btn-desc">25 physics coins rain down with spin</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('drop_mushroom','🍄 Mushroom!','var(--green)')">
-            <span class="btn-emoji">🍄</span>
-            <span class="btn-name">1-Up Mushroom</span>
-            <span class="btn-desc">Dad feeling generous. Briefly.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('make_tiny','🔻 Shrinking!','#f44')">
-            <span class="btn-emoji">🔻</span>
-            <span class="btn-name">Make Tiny</span>
-            <span class="btn-desc">Player shrinks to 18% size for 15s</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('make_giant','🔺 GIANT!','var(--orange)')">
-            <span class="btn-emoji">🔺</span>
-            <span class="btn-name">Make Giant</span>
-            <span class="btn-desc">Player grows to 3.5× for 15s</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('take_item','💀 Stolen!','var(--red)')">
-            <span class="btn-emoji">💀</span>
-            <span class="btn-name">Take Everything</span>
-            <span class="btn-desc">Resets size + destroys all power-ups</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('drop_star','⭐ Star!','var(--yellow)')"><span class="btn-emoji">⭐</span><span class="btn-name">Star Power</span><span class="btn-desc">Rainbow lights + coin shower</span></div>
+          <div class="cmd-btn" style="--btn-color:#ffd700" onclick="send('drop_coin','🪙 Coins!','#ffd700')"><span class="btn-emoji">🪙</span><span class="btn-name">Coin Shower</span><span class="btn-desc">25 physics coins with spin</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('drop_mushroom','🍄 Mushroom!','var(--green)')"><span class="btn-emoji">🍄</span><span class="btn-name">1-Up Mushroom</span><span class="btn-desc">Dad feeling generous. Briefly.</span></div>
+          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('make_tiny','🔻 Tiny!','#f44')"><span class="btn-emoji">🔻</span><span class="btn-name">Make Tiny</span><span class="btn-desc">Shrinks to 18% for 15s</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('make_giant','🔺 GIANT!','var(--orange)')"><span class="btn-emoji">🔺</span><span class="btn-name">Make Giant</span><span class="btn-desc">Grows to 3.5× for 15s</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('take_item','💀 Stolen!','var(--red)')"><span class="btn-emoji">💀</span><span class="btn-name">Take Everything</span><span class="btn-desc">Resets size + destroys power-ups</span></div>
+        </div>
+        <div class="sub-label">NEW POWER-UPS</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:#0ff" onclick="send('power_speed','💨 Speed!','#0ff')"><span class="btn-emoji">💨</span><span class="btn-name">Super Speed</span><span class="btn-desc">Insane speed for 10s</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('power_infinite_jump','🦘 Jump!','var(--purple)')"><span class="btn-emoji">🦘</span><span class="btn-name">Infinite Jump</span><span class="btn-desc">Jump as many times as you want for 30s</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('power_star_follow','🌟 Star!','var(--yellow)')"><span class="btn-emoji">🌟</span><span class="btn-name">Giant Star</span><span class="btn-desc">Glowing star follows Mason around</span></div>
+          <div class="cmd-btn" style="--btn-color:#88f" onclick="send('power_freeze','🕐 Freeze!','#88f')"><span class="btn-emoji">🕐</span><span class="btn-name">Freeze Enemies</span><span class="btn-desc">Clock freezes all enemies for 30s</span></div>
+          <div class="cmd-btn" style="--btn-color:#666" onclick="send('power_tunnel_vision','👁️ Tunnel!','#666')"><span class="btn-emoji">👁️</span><span class="btn-name">Tunnel Vision</span><span class="btn-desc">Removes peripheral vision</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('power_good_job_trophy','🏆 Trophy!','var(--green)')"><span class="btn-emoji">🏆</span><span class="btn-name">Trophy Drop</span><span class="btn-desc">Trophy spawns → explodes into power-ups + confetti</span></div>
         </div>
       </div>
 
-      <!-- ══ MESSAGES ═══════════════════════════════════════════ -->
+      <!-- MESSAGES -->
       <div class="section" id="section-messages">
-        <div class="section-header">
-          <span class="section-icon">📢</span>
-          <div>
-            <div class="section-title">MESSAGES & EVENTS</div>
-            <div class="section-desc">Taunt, motivate, terrorize. You have options.</div>
-          </div>
-        </div>
+        <div class="section-header"><span class="section-icon">📢</span><div><div class="section-title">MESSAGES & EVENTS</div><div class="section-desc">Taunt, motivate, terrorize.</div></div></div>
+        <div class="sub-label">EXISTING</div>
         <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_good_job','✅ Good Job sent!','var(--green)')">
-            <span class="btn-emoji">✅</span>
-            <span class="btn-name">Good Job!</span>
-            <span class="btn-desc">Coins + clear all enemies. Dad is proud.</span>
-            <span class="btn-hotkey">G</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_warning','⚠️ Warning sent!','var(--red)')">
-            <span class="btn-emoji">⚠️</span>
-            <span class="btn-name">WARNING</span>
-            <span class="btn-desc">Alarm + flash + random enemy follows</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('msg_countdown','⏱️ Countdown started!','var(--orange)')">
-            <span class="btn-emoji">⏱️</span>
-            <span class="btn-name">60s Countdown</span>
-            <span class="btn-desc">Escalating panic + swarm on time's up</span>
-            <span class="btn-hotkey">C</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('msg_dad_watching','👁️ Watching...','#f0f')">
-            <span class="btn-emoji">👁️</span>
-            <span class="btn-name">Dad is Watching</span>
-            <span class="btn-desc">Creepy message. Ambient flicker.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('msg_nice_try','😏 Nice Try...','var(--blue)')">
-            <span class="btn-emoji">😏</span>
-            <span class="btn-name">Nice Try</span>
-            <span class="btn-desc">When he almost makes it out alive</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_good_job','✅ Good Job!','var(--green)')"><span class="btn-emoji">✅</span><span class="btn-name">Good Job!</span><span class="btn-desc">Coins + trophy. Enemies stay.</span><span class="btn-hotkey">G</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_warning','⚠️ Warning!','var(--red)')"><span class="btn-emoji">⚠️</span><span class="btn-name">WARNING</span><span class="btn-desc">Alarm + flash + random enemy</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('msg_countdown','⏱️ Countdown!','var(--orange)')"><span class="btn-emoji">⏱️</span><span class="btn-name">60s Countdown</span><span class="btn-desc">Escalating panic + swarm at end</span><span class="btn-hotkey">C</span></div>
+          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('msg_dad_watching','👁️ Watching!','#f0f')"><span class="btn-emoji">👁️</span><span class="btn-name">Dad is Watching</span><span class="btn-desc">Creepy message. Ambient flicker.</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('msg_nice_try','😏 Nice Try!','var(--blue)')"><span class="btn-emoji">😏</span><span class="btn-name">Nice Try</span><span class="btn-desc">When he almost makes it out</span></div>
         </div>
-
-        <div class="sub-label">CUSTOM MESSAGE</div>
+        <div class="sub-label">NEW MESSAGES</div>
+        <div class="btn-grid">
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_red_warning','🚨 RED WARNING!','var(--red)')"><span class="btn-emoji">🚨</span><span class="btn-name">RED WARNING</span><span class="btn-desc">Giant red WARNING + hidden countdown</span></div>
+          <div class="cmd-btn" style="--btn-color:#333" onclick="send('msg_behind_you','👣 Behind You!','#555')"><span class="btn-emoji">👣</span><span class="btn-name">I'm Behind You</span><span class="btn-desc">Just those words. No context.</span></div>
+          <div class="cmd-btn" style="--btn-color:#0f0" onclick="send('msg_fake_error','💾 Error!','#0f0')"><span class="btn-emoji">💾</span><span class="btn-name">Fake Error</span><span class="btn-desc">Game looks corrupted for 3 seconds</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('msg_mason_name','👤 MASON!','var(--yellow)')"><span class="btn-emoji">👤</span><span class="btn-name">MASON!</span><span class="btn-desc">His name huge on screen with evil sound</span></div>
+          <div class="cmd-btn" style="--btn-color:#888" onclick="send('msg_six_seven','🎯 6-7','#888')"><span class="btn-emoji">🎯</span><span class="btn-name">6-7</span><span class="btn-desc">Mason's personal rating. He'll know.</span></div>
+          <div class="cmd-btn" style="--btn-color:#777" onclick="send('msg_bad_jump','🦘 Bad Jump!','#777')"><span class="btn-emoji">🦘</span><span class="btn-name">You Call That Jumping?</span><span class="btn-desc">Dad has seen better. From a Goomba.</span></div>
+          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('msg_dad_rating','📊 Rating!','#f44')"><span class="btn-emoji">📊</span><span class="btn-name">Dad Rating: 2/10</span><span class="btn-desc">Harsh but fair. Try harder.</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_goomba_better','🍄 Goomba Better!','var(--green)')"><span class="btn-emoji">🍄</span><span class="btn-name">Goomba Does Better</span><span class="btn-desc">Specifically. A Goomba.</span></div>
+        </div>
+        <div class="sub-label">CUSTOM COMMAND</div>
         <div class="custom-row">
-          <input class="custom-input" id="custom-cmd" placeholder="type a command key..." />
+          <input class="custom-input" id="custom-cmd" placeholder="type a command key..."/>
           <button class="custom-send" onclick="sendCustom()">SEND ▶</button>
         </div>
-        <div class="kb-hint">e.g. <kbd class="kbd">spawn_goomba</kbd> or any command from the list</div>
+        <div class="kb-hint">e.g. <kbd class="kbd">spawn_goomba</kbd> or any command key</div>
       </div>
 
-      <!-- ══ COMBOS ═════════════════════════════════════════════ -->
+      <!-- COMBOS -->
       <div class="section" id="section-combos">
-        <div class="section-header">
-          <span class="section-icon">🔥</span>
-          <div>
-            <div class="section-title">COMBO ATTACKS</div>
-            <div class="section-desc">Multi-command sequences. Maximum chaos delivery.</div>
-          </div>
-        </div>
+        <div class="section-header"><span class="section-icon">🔥</span><div><div class="section-title">COMBO ATTACKS</div><div class="section-desc">Multi-command sequences. Maximum chaos delivery.</div></div></div>
         <div class="btn-grid btn-grid-3">
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="sendCombo(['earthquake','spawn_swarm','fire_zone'], 600, 'THE WORKS sent 🌋🐟🔥')">
-            <span class="btn-emoji">🌋🐟🔥</span>
-            <span class="btn-name">THE WORKS</span>
-            <span class="btn-desc">Earthquake → Swarm → Fire Zone in rapid succession. No escape.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:#446" onclick="sendCombo(['lights_out','spawn_boo','spawn_boo'], 800, 'NIGHTMARE MODE 🌑👻👻')">
-            <span class="btn-emoji">🌑👻</span>
-            <span class="btn-name">Nightmare Mode</span>
-            <span class="btn-desc">Lights Out + 6 Boos in total darkness. Truly evil.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['make_tiny','spawn_swarm','spawn_chain_chomp'], 700, 'TINY PROBLEM 🔻👾⛓️')">
-            <span class="btn-emoji">🔻⛓️</span>
-            <span class="btn-name">Tiny Problem</span>
-            <span class="btn-desc">Shrink the player → release the swarm → drop a Chain Chomp. Rude.</span>
-          </div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['weather_storm','spawn_boss','earthquake'], 1000, 'APOCALYPSE ⛈️👾🌋')">
-            <span class="btn-emoji">⛈️💀</span>
-            <span class="btn-name">APOCALYPSE</span>
-            <span class="btn-desc">Storm → Boss spawns → Earthquake. The final form of dad.</span>
-          </div>
+          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="sendCombo(['earthquake','spawn_swarm','fire_zone'],600,'THE WORKS 🌋🐟🔥')"><span class="btn-emoji">🌋🐟🔥</span><span class="btn-name">THE WORKS</span><span class="btn-desc">Earthquake → Swarm → Fire Zone. No escape.</span></div>
+          <div class="cmd-btn" style="--btn-color:#446" onclick="sendCombo(['lights_out','spawn_boo','spawn_boo'],800,'NIGHTMARE 🌑👻')"><span class="btn-emoji">🌑👻</span><span class="btn-name">Nightmare Mode</span><span class="btn-desc">Lights Out + 6 Boos in total darkness.</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['make_tiny','spawn_swarm','spawn_chain_chomp'],700,'TINY PROBLEM 🔻⛓️')"><span class="btn-emoji">🔻⛓️</span><span class="btn-name">Tiny Problem</span><span class="btn-desc">Shrink → Swarm → Chain Chomp. Very rude.</span></div>
+          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['weather_storm','spawn_boss','earthquake'],1000,'APOCALYPSE ⛈️💀🌋')"><span class="btn-emoji">⛈️💀</span><span class="btn-name">APOCALYPSE</span><span class="btn-desc">Storm → Boss → Earthquake. Final form of dad.</span></div>
+          <div class="cmd-btn reckoning-btn" onclick="triggerReckoning()"><span class="btn-emoji">💀🔥</span><span class="btn-name" style="color:var(--red)">THE RECKONING</span><span class="btn-desc">Dark + invisible enemies + gravity + 60s countdown + Bowser X at 30s + lava flood at the end.</span><span class="btn-hotkey">R</span></div>
         </div>
       </div>
 
-      <!-- ══ LOG ════════════════════════════════════════════════ -->
+      <!-- LOG -->
       <div class="section" id="section-log">
-        <div class="section-header">
-          <span class="section-icon">📋</span>
-          <div>
-            <div class="section-title">COMMAND LOG</div>
-            <div class="section-desc">Your history of devastation.</div>
-          </div>
-        </div>
-        <div class="cmd-log" id="cmd-log">
-          <div class="log-entry" style="color:var(--muted);font-style:italic">— no commands sent yet —</div>
-        </div>
-        <div style="margin-top:16px;display:flex;gap:10px;">
+        <div class="section-header"><span class="section-icon">📋</span><div><div class="section-title">COMMAND LOG</div><div class="section-desc">Your history of devastation.</div></div></div>
+        <div class="cmd-log" id="cmd-log"><div class="log-entry" style="color:var(--muted);font-style:italic">— no commands sent yet —</div></div>
+        <div style="margin-top:16px;">
           <button class="custom-send" onclick="clearLog()" style="background:rgba(255,255,255,0.08);color:white;font-size:9px;">CLEAR LOG</button>
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
+    </div>
+  </div>
+</div>
 
-<!-- TOASTS -->
 <div id="toast-container"></div>
 
 <script>
-// ══ CONFIG ══════════════════════════════════════════════════════
-const PASSWORD     = "delfino2024";          // ← change this
-const SECRET       = "dad2026_";             // prefix Unity checks for
+const PASSWORD     = "delfino2024";
+const SECRET       = "dad2026_";
 const FIREBASE_URL = "https://mario-commander-default-rtdb.firebaseio.com/commands/current.json";
 const API_KEY      = "AIzaSyC-pcUZd0WYIyi53j14CX1FXoNz3pTc5NE";
-
-// ══ STATE ════════════════════════════════════════════════════════
 let cmdCount = 0;
-let logEntries = [];
 
-// ══ STARS ════════════════════════════════════════════════════════
-(function spawnStars() {
-  const container = document.getElementById('stars');
-  for (let i = 0; i < 120; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 2.5 + 0.5;
-    s.style.cssText = `
-      left:${Math.random()*100}%;top:${Math.random()*100}%;
-      width:${size}px;height:${size}px;
-      --d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;
-      opacity:${Math.random()*0.6+0.1};
-    `;
-    container.appendChild(s);
+// Stars
+(function(){
+  const c = document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;opacity:${Math.random()*0.6+0.1};`;
+    c.appendChild(s);
   }
 })();
 
-// ══ LOGIN ════════════════════════════════════════════════════════
-document.getElementById('pw-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') tryLogin();
-});
-
-function tryLogin() {
-  const val = document.getElementById('pw-input').value;
-  if (val === PASSWORD) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+// Login
+document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
+function tryLogin(){
+  if(document.getElementById('pw-input').value===PASSWORD){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
     initFirebase();
   } else {
-    const err = document.getElementById('login-error');
-    err.textContent = '❌ WRONG PASSWORD. DAD DOES NOT FORGET.';
-    err.style.animation = 'none';
-    requestAnimationFrame(() => err.style.animation = 'shake 0.4s ease');
-    document.getElementById('pw-input').value = '';
-    document.getElementById('pw-input').focus();
+    const err=document.getElementById('login-error');
+    err.textContent='❌ WRONG PASSWORD. DAD DOES NOT FORGET.';
+    err.style.animation='none';
+    requestAnimationFrame(()=>err.style.animation='shake 0.4s ease');
+    document.getElementById('pw-input').value='';
   }
 }
 
-// ══ NAVIGATION ═══════════════════════════════════════════════════
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
+// Nav
+function showSection(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  if(el)el.classList.add('active');
 }
 
-// ══ FIREBASE ═════════════════════════════════════════════════════
-function initFirebase() {
+// Firebase
+function initFirebase(){
   setStatus('connecting...');
-  // Quick test write
-  sendCommand('ping').then(() => setStatus('connected', true)).catch(() => setStatus('error', false, true));
+  sendCommand('ping').then(()=>setStatus('connected',true)).catch(()=>setStatus('error',false,true));
 }
-
-function setStatus(text, on = false, err = false) {
-  document.getElementById('status-text').textContent = text;
-  const dot = document.getElementById('status-dot');
-  dot.className = 'status-dot' + (on ? ' on' : err ? ' err' : '');
+function setStatus(text,on=false,err=false){
+  document.getElementById('status-text').textContent=text;
+  const dot=document.getElementById('status-dot');
+  dot.className='status-dot'+(on?' on':err?' err':'');
 }
-
-async function sendCommand(command) {
-  const url = `${FIREBASE_URL}?auth=${API_KEY}`;
-  const payload = {
-    command: SECRET + command,
-    timestamp: Date.now().toString(),
-    executed: false
-  };
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  if (!res.ok) throw new Error('Firebase error ' + res.status);
+async function sendCommand(command){
+  const url=`${FIREBASE_URL}?auth=${API_KEY}`;
+  const payload={command:SECRET+command,timestamp:Date.now().toString(),executed:false};
+  const res=await fetch(url,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!res.ok)throw new Error('Firebase error '+res.status);
   return res;
 }
 
-// ══ SEND ═════════════════════════════════════════════════════════
-async function send(command, label, color = 'var(--yellow)') {
-  const btn = event?.currentTarget;
-  try {
+async function send(command,label,color='var(--yellow)'){
+  const btn=event?.currentTarget;
+  try{
     await sendCommand(command);
     cmdCount++;
-    document.getElementById('cmd-num').textContent = cmdCount;
-    setStatus('connected', true);
-    if (btn) {
-      btn.classList.add('fired');
-      setTimeout(() => btn.classList.remove('fired'), 600);
-    }
-    showToast('▶ ' + label, color);
-    addLog(command, label);
-  } catch (e) {
-    setStatus('error', false, true);
-    showToast('❌ Send failed: ' + e.message, 'var(--red)');
+    document.getElementById('cmd-num').textContent=cmdCount;
+    setStatus('connected',true);
+    if(btn){btn.classList.add('fired');setTimeout(()=>btn.classList.remove('fired'),600);}
+    showToast('▶ '+label,color);
+    addLog(command,label);
+  }catch(e){
+    setStatus('error',false,true);
+    showToast('❌ Send failed: '+e.message,'var(--red)');
   }
 }
 
-async function sendCombo(commands, delayMs, label) {
-  showToast('🔥 COMBO: ' + label, '#ff69b4');
-  for (let i = 0; i < commands.length; i++) {
-    await new Promise(r => setTimeout(r, i === 0 ? 0 : delayMs));
-    try {
+async function sendCombo(commands,delayMs,label){
+  showToast('🔥 COMBO: '+label,'var(--pink,#ff69b4)');
+  for(let i=0;i<commands.length;i++){
+    await new Promise(r=>setTimeout(r,i===0?0:delayMs));
+    try{
       await sendCommand(commands[i]);
       cmdCount++;
-      document.getElementById('cmd-num').textContent = cmdCount;
-      addLog(commands[i], commands[i]);
-    } catch(e) {
-      setStatus('error', false, true);
-    }
+      document.getElementById('cmd-num').textContent=cmdCount;
+      addLog(commands[i],commands[i]);
+    }catch(e){setStatus('error',false,true);}
   }
 }
 
-function sendCustom() {
-  const val = document.getElementById('custom-cmd').value.trim();
-  if (!val) return;
-  send(val, '📡 Custom: ' + val, 'var(--muted)');
-  document.getElementById('custom-cmd').value = '';
+async function triggerReckoning(){
+  showToast('💀 THE RECKONING BEGINS...','var(--red)');
+  const steps=[
+    {cmd:'dark_mode',       wait:0},
+    {cmd:'gravity_random',  wait:2000},
+    {cmd:'msg_countdown',   wait:3000},
+    {cmd:'weather_blood',   wait:5000},
+    {cmd:'spawn_swarm',     wait:8000},
+    {cmd:'spawn_bowser_x',  wait:30000},
+    {cmd:'weather_void',    wait:35000},
+    {cmd:'earthquake',      wait:55000},
+    {cmd:'flood_lava',      wait:58000},
+  ];
+  let prev=0;
+  for(const step of steps){
+    await new Promise(r=>setTimeout(r,step.wait-prev));
+    prev=step.wait;
+    try{
+      await sendCommand(step.cmd);
+      cmdCount++;
+      document.getElementById('cmd-num').textContent=cmdCount;
+      addLog(step.cmd,'THE RECKONING: '+step.cmd);
+    }catch(e){}
+  }
 }
 
-document.getElementById && document.addEventListener('keydown', e => {
-  if (document.getElementById('login-screen').style.display === 'none') {
-    switch(e.key.toLowerCase()) {
-      case 'q': send('earthquake','🌋 Earthquake!','var(--red)'); break;
-      case 'l': send('lights_out','🌑 Lights Out!','#555'); break;
-      case 'b': send('spawn_boss','👾 BOSS!','var(--purple)'); break;
-      case 'g': send('msg_good_job','✅ Good Job!','var(--green)'); break;
-      case 'c': send('msg_countdown','⏱️ Countdown!','var(--orange)'); break;
-      case 'e': {
-        const enemies = ['spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_swarm'];
-        const r = enemies[Math.floor(Math.random()*enemies.length)];
-        send(r, '👾 Random enemy: '+r, 'var(--orange)');
-        break;
-      }
+function sendCustom(){
+  const val=document.getElementById('custom-cmd').value.trim();
+  if(!val)return;
+  send(val,'📡 Custom: '+val,'var(--muted)');
+  document.getElementById('custom-cmd').value='';
+}
+
+// Hotkeys
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('login-screen').style.display!=='none')return;
+  if(document.activeElement?.tagName==='INPUT')return;
+  switch(e.key.toLowerCase()){
+    case 'q': send('earthquake','🌋 Earthquake!','var(--red)'); break;
+    case 'l': send('lights_out','🌑 Lights Out!','#555'); break;
+    case 'b': send('spawn_boss','👾 BOSS!','var(--purple)'); break;
+    case 'g': send('msg_good_job','✅ Good Job!','var(--green)'); break;
+    case 'c': send('msg_countdown','⏱️ Countdown!','var(--orange)'); break;
+    case 'r': triggerReckoning(); break;
+    case 'w':{
+      const wx=['weather_fog','weather_rain','weather_storm','weather_blizzard','weather_sandstorm','weather_ash','weather_blood','weather_toxic','weather_ember','weather_cosmic','weather_void','weather_rainbow'];
+      const r=wx[Math.floor(Math.random()*wx.length)];
+      send(r,'⛅ Random weather: '+r,'var(--blue)'); break;
+    }
+    case 'e':{
+      const ex=['spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_swarm','spawn_thwomp','spawn_bobomb','spawn_shy_guy','spawn_king_boo','spawn_wiggler','spawn_spiny'];
+      const r=ex[Math.floor(Math.random()*ex.length)];
+      send(r,'👾 Random enemy: '+r,'var(--orange)'); break;
     }
   }
 });
 
-// ══ TOAST ════════════════════════════════════════════════════════
-function showToast(msg, color = 'var(--yellow)') {
-  const c = document.getElementById('toast-container');
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.style.setProperty('--toast-color', color);
-  t.textContent = msg;
-  c.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
+// Toast
+function showToast(msg,color='var(--yellow)'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className='toast'; t.style.setProperty('--toast-color',color); t.textContent=msg;
+  c.appendChild(t); setTimeout(()=>t.remove(),3000);
 }
 
-// ══ LOG ══════════════════════════════════════════════════════════
-function addLog(command, label) {
-  const log = document.getElementById('cmd-log');
-  const time = new Date().toLocaleTimeString();
-  if (log.querySelector('em, i') || log.children[0]?.style?.fontStyle === 'italic') {
-    log.innerHTML = '';
-  }
-  const entry = document.createElement('div');
-  entry.className = 'log-entry';
-  entry.innerHTML = `<span class="log-time">${time}</span><span>${command}</span> — ${label}`;
+// Log
+function addLog(command,label){
+  const log=document.getElementById('cmd-log');
+  const first=log.children[0];
+  if(first&&first.style.fontStyle==='italic')log.innerHTML='';
+  const entry=document.createElement('div');
+  entry.className='log-entry';
+  entry.innerHTML=`<span class="log-time">${new Date().toLocaleTimeString()}</span><span>${command}</span> — ${label}`;
   log.prepend(entry);
-  while (log.children.length > 50) log.removeChild(log.lastChild);
+  while(log.children.length>50)log.removeChild(log.lastChild);
 }
-
-function clearLog() {
-  document.getElementById('cmd-log').innerHTML = '<div class="log-entry" style="color:var(--muted);font-style:italic">— log cleared —</div>';
+function clearLog(){
+  document.getElementById('cmd-log').innerHTML='<div class="log-entry" style="color:var(--muted);font-style:italic">— log cleared —</div>';
 }
-
-// Custom input enter key
-document.getElementById('custom-cmd') && document.getElementById('custom-cmd').addEventListener('keydown', e => {
-  if (e.key === 'Enter') sendCustom();
-});
+document.getElementById('custom-cmd').addEventListener('keydown',e=>{if(e.key==='Enter')sendCustom();});
 </script>
 </body>
 </html>
