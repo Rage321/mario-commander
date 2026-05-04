@@ -35,7 +35,7 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
 
 /* RESET BAR */
-.reset-bar { display:flex; align-items:center; gap:12px; padding:10px 32px; background:rgba(229,37,33,0.08); border-bottom:1px solid rgba(229,37,33,0.25); position:sticky; top:0; z-index:200; }
+.reset-bar { display:flex; align-items:center; gap:12px; padding:10px 32px; background:rgba(9,9,15,0.98); border-bottom:1px solid rgba(229,37,33,0.25); position:sticky; top:0; z-index:300; backdrop-filter:blur(12px); }
 .reset-btn { display:flex; align-items:center; gap:8px; padding:9px 22px; background:linear-gradient(135deg,rgba(229,37,33,0.9),rgba(180,20,10,0.9)); border:1px solid rgba(229,37,33,0.6); border-radius:10px; cursor:pointer; font-family:var(--fp); font-size:8px; color:white; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; }
 .reset-btn:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(229,37,33,0.5); }
 .reset-btn:active { transform:scale(0.97); }
@@ -47,7 +47,7 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
 
 /* HEADER */
 #app { display:none; position:relative; z-index:1; }
-.header { display:flex; align-items:center; justify-content:space-between; padding:12px 32px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.4); backdrop-filter:blur(10px); position:sticky; top:44px; z-index:100; }
+.header { display:flex; align-items:center; justify-content:space-between; padding:12px 32px; border-bottom:1px solid var(--border); background:rgba(9,9,15,0.98); backdrop-filter:blur(12px); position:sticky; top:44px; z-index:200; }
 .header-title { font-family:var(--fp); font-size:10px; color:var(--yellow); text-shadow:0 0 20px rgba(251,208,0,0.4); line-height:1.8; }
 .header-sub { font-size:12px; color:var(--muted); font-family:var(--fp); }
 .status-pill { display:flex; align-items:center; gap:8px; padding:8px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:100px; }
@@ -59,7 +59,7 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
 
 /* LAYOUT */
 .main { display:grid; grid-template-columns:220px 1fr; min-height:calc(100vh - 108px); }
-.sidebar { border-right:1px solid var(--border); padding:20px 0; background:rgba(0,0,0,0.2); position:sticky; top:108px; height:calc(100vh - 108px); overflow-y:auto; }
+.sidebar { border-right:1px solid var(--border); padding:20px 0; background:rgba(9,9,15,0.95); position:sticky; top:108px; height:calc(100vh - 108px); overflow-y:auto; }
 .sidebar-label { font-family:var(--fp); font-size:7px; color:var(--muted); letter-spacing:2px; padding:6px 20px 10px; text-transform:uppercase; }
 .nav-item { display:flex; align-items:center; gap:12px; padding:11px 20px; cursor:pointer; transition:all 0.15s; font-size:15px; font-weight:600; color:var(--muted); border-left:3px solid transparent; user-select:none; }
 .nav-item:hover { background:rgba(255,255,255,0.04); color:white; }
@@ -136,6 +136,7 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
   <div class="reset-bar">
     <button class="reset-btn" onclick="resetAll()">🚨 RESET EVERYTHING</button>
     <span class="reset-label">Clears enemies · weather · effects · gravity · fog · size · lights</span>
+    <button class="reset-btn" onclick="randomEffect()" style="background:linear-gradient(135deg,rgba(0,212,170,0.9),rgba(0,160,120,0.9));border-color:rgba(0,212,170,0.6);">🎲 RANDOM</button>
     <div class="reset-sub-btns">
       <div class="reset-sub" onclick="quickReset('clear_enemies')">👾 Clear Enemies</div>
       <div class="reset-sub" onclick="quickReset('weather_sunny')">☀️ Clear Weather</div>
@@ -510,6 +511,28 @@ async function triggerReckoning(){
   for(const s of steps){await new Promise(r=>setTimeout(r,s.w-prev));prev=s.w;try{await sendCommand(s.cmd);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;addLog(s.cmd,'RECKONING: '+s.cmd);}catch(e){}}
 }
 
+function randomEffect(){
+  const all=[
+    'earthquake','lights_out','reverse_controls','slippery_floor','gravity_flip','disco_mode','screen_shake','warp_speed',
+    'bouncy_world','spinning_map','dark_mode','gravity_random','fake_game_over','random_teleport','giant_foot',
+    'spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_hammer_bro',
+    'spawn_thwomp','spawn_lakitu','spawn_spiny','spawn_whomp','spawn_king_boo','spawn_shy_guy',
+    'spawn_bobomb','spawn_wiggler','spawn_petey','spawn_kamek','spawn_doopliss',
+    'weather_fog','weather_rain','weather_storm','weather_blizzard','weather_sandstorm',
+    'weather_ash','weather_mud','weather_blood','weather_pollen','weather_toxic',
+    'weather_rainbow','weather_ice_crystals','weather_void','weather_ember','weather_cosmic',
+    'weather_blossom','weather_ground_fog','weather_mist',
+    'drop_star','drop_coin','make_tiny','make_giant',
+    'power_speed','power_infinite_jump','power_star_follow','power_freeze','power_tunnel_vision',
+    'msg_warning','msg_dad_watching','msg_red_warning','msg_behind_you','msg_fake_error',
+    'msg_mason_name','msg_six_seven','msg_bad_jump','msg_dad_rating','msg_goomba_better',
+    'bouncy_floor','spawn_boulder','spawn_maze','moving_platform','tilt_map','floor_holes',
+    'spawn_tower','spawn_castle_wall','spawn_question_blocks','coin_explosion','spawn_lava_pillars',
+    'slow_motion','freeze_frame','enemy_rage','lightning_strike'
+  ];
+  const pick = all[Math.floor(Math.random()*all.length)];
+  send(pick,'🎲 Random: '+pick,'var(--teal)');
+}
 function sendCustom(){const v=document.getElementById('custom-cmd').value.trim();if(!v)return;send(v,'📡 '+v,'var(--muted)');document.getElementById('custom-cmd').value='';}
 
 // Hotkeys
