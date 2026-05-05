@@ -6,119 +6,102 @@
 <title>🎮 Dad Commander — Ultimate Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --red:#E52521; --blue:#049CD8; --yellow:#FBD000; --green:#43B047;
-  --purple:#9B30FF; --orange:#FF6B00; --pink:#ff69b4; --teal:#00d4aa;
-  --dark:#09090f; --panel:rgba(255,255,255,0.04); --border:rgba(255,255,255,0.08);
-  --text:rgba(255,255,255,0.88); --muted:rgba(255,255,255,0.35);
-  --fp:'Press Start 2P',monospace; --fu:'Rajdhani',sans-serif;
-}
-body { background:var(--dark); font-family:var(--fu); color:var(--text); min-height:100vh; overflow-x:hidden;
-  background-image:radial-gradient(ellipse 80% 50% at 15% 10%,rgba(4,156,216,0.06) 0%,transparent 60%),
-  radial-gradient(ellipse 60% 40% at 85% 90%,rgba(229,37,33,0.06) 0%,transparent 60%); }
-body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px); pointer-events:none; z-index:9999; }
-#stars { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-.star { position:absolute; border-radius:50%; animation:twinkle var(--d,3s) var(--delay,0s) infinite; }
-@keyframes twinkle { 0%,100%{opacity:.15} 50%{opacity:1} }
-
-/* LOGIN */
-#login-screen { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; background:var(--dark); }
-.login-box { text-align:center; padding:48px 56px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:20px; backdrop-filter:blur(20px); max-width:420px; width:90%; }
-.login-logo { font-family:var(--fp); font-size:11px; color:var(--yellow); text-shadow:0 0 30px rgba(251,208,0,0.5); line-height:2; margin-bottom:8px; }
-.login-sub { font-size:12px; color:var(--muted); margin-bottom:36px; font-family:var(--fp); }
-.login-box input { width:100%; padding:14px 20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:white; font-size:20px; font-family:var(--fu); font-weight:700; letter-spacing:6px; text-align:center; outline:none; transition:all 0.2s; margin-bottom:16px; }
-.login-box input:focus { border-color:var(--yellow); box-shadow:0 0 0 3px rgba(251,208,0,0.15); }
-.login-btn { width:100%; padding:14px; background:var(--yellow); color:#1a1000; font-family:var(--fp); font-size:10px; border:none; border-radius:10px; cursor:pointer; transition:all 0.2s; }
-.login-btn:hover { background:#ffe033; transform:translateY(-2px); }
-.login-error { margin-top:14px; color:var(--red); font-size:13px; font-family:var(--fp); min-height:20px; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-
-/* RESET BAR */
-.reset-bar { display:flex; align-items:center; gap:12px; padding:10px 32px; background:rgba(9,9,15,0.98); border-bottom:1px solid rgba(229,37,33,0.25); position:sticky; top:0; z-index:300; backdrop-filter:blur(12px); }
-.reset-btn { display:flex; align-items:center; gap:8px; padding:9px 22px; background:linear-gradient(135deg,rgba(229,37,33,0.9),rgba(180,20,10,0.9)); border:1px solid rgba(229,37,33,0.6); border-radius:10px; cursor:pointer; font-family:var(--fp); font-size:8px; color:white; letter-spacing:1px; transition:all 0.2s; white-space:nowrap; }
-.reset-btn:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(229,37,33,0.5); }
-.reset-btn:active { transform:scale(0.97); }
-@keyframes resetPulse { 0%{box-shadow:0 0 0 0 rgba(229,37,33,0.8)} 100%{box-shadow:0 0 0 20px rgba(229,37,33,0)} }
-.reset-label { font-size:12px; color:rgba(255,150,150,0.65); font-weight:600; flex:1; }
-.reset-sub-btns { display:flex; gap:8px; }
-.reset-sub { padding:7px 14px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:12px; font-weight:700; color:var(--muted); transition:all 0.15s; white-space:nowrap; }
-.reset-sub:hover { background:rgba(255,255,255,0.1); color:white; }
-
-/* HEADER */
-#app { display:none; position:relative; z-index:1; }
-.header { display:flex; align-items:center; justify-content:space-between; padding:12px 32px; border-bottom:1px solid var(--border); background:rgba(9,9,15,0.98); backdrop-filter:blur(12px); position:sticky; top:44px; z-index:200; }
-.header-title { font-family:var(--fp); font-size:10px; color:var(--yellow); text-shadow:0 0 20px rgba(251,208,0,0.4); line-height:1.8; }
-.header-sub { font-size:12px; color:var(--muted); font-family:var(--fp); }
-.status-pill { display:flex; align-items:center; gap:8px; padding:8px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:100px; }
-.status-dot { width:8px; height:8px; border-radius:50%; background:#555; transition:all 0.3s; }
-.status-dot.on { background:var(--green); box-shadow:0 0 10px rgba(67,176,71,0.6); animation:pulse 2s infinite; }
-.status-dot.err { background:var(--red); }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-.cmd-count { font-family:var(--fp); font-size:9px; color:var(--muted); text-align:right; line-height:2; }
-
-/* LAYOUT */
-.main { display:grid; grid-template-columns:220px 1fr; min-height:calc(100vh - 108px); }
-.sidebar { border-right:1px solid var(--border); padding:20px 0; background:rgba(9,9,15,0.95); position:sticky; top:108px; height:calc(100vh - 108px); overflow-y:auto; }
-.sidebar-label { font-family:var(--fp); font-size:7px; color:var(--muted); letter-spacing:2px; padding:6px 20px 10px; text-transform:uppercase; }
-.nav-item { display:flex; align-items:center; gap:12px; padding:11px 20px; cursor:pointer; transition:all 0.15s; font-size:15px; font-weight:600; color:var(--muted); border-left:3px solid transparent; user-select:none; }
-.nav-item:hover { background:rgba(255,255,255,0.04); color:white; }
-.nav-item.active { color:white; border-left-color:var(--cat-color,var(--yellow)); background:rgba(255,255,255,0.06); }
-.nav-icon { font-size:18px; width:24px; text-align:center; }
-.nav-badge { margin-left:auto; font-family:var(--fp); font-size:7px; color:var(--muted); }
-.content { padding:28px 32px; overflow-y:auto; }
-.section { display:none; }
-.section.active { display:block; }
-.section-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
-.section-icon { font-size:28px; }
-.section-title { font-family:var(--fp); font-size:11px; color:white; line-height:1.8; }
-.section-desc { font-size:14px; color:var(--muted); margin-top:2px; }
-
-/* BUTTONS */
-.btn-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:11px; margin-bottom:28px; }
-.btn-grid-wide { grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
-.cmd-btn { position:relative; padding:16px 15px; background:var(--panel); border:1px solid var(--border); border-radius:14px; cursor:pointer; transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1); text-align:left; overflow:hidden; user-select:none; }
-.cmd-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--btn-color,#fff) 0%,transparent 60%); opacity:0; transition:opacity 0.2s; border-radius:inherit; }
-.cmd-btn:hover { transform:translateY(-3px) scale(1.02); border-color:var(--btn-color,rgba(255,255,255,0.2)); box-shadow:0 8px 24px rgba(0,0,0,0.4),0 0 0 1px var(--btn-color,transparent); }
-.cmd-btn:hover::before { opacity:0.06; }
-.cmd-btn:active { transform:translateY(0) scale(0.98); }
-.cmd-btn.fired { animation:btnFire 0.4s ease; border-color:var(--btn-color,var(--yellow)); box-shadow:0 0 20px var(--btn-color,var(--yellow)); }
-@keyframes btnFire { 0%{transform:scale(1)} 30%{transform:scale(0.94)} 60%{transform:scale(1.04)} 100%{transform:scale(1)} }
-.btn-emoji { font-size:24px; display:block; margin-bottom:8px; line-height:1; }
-.btn-name { font-size:14px; font-weight:700; display:block; margin-bottom:3px; color:white; }
-.btn-desc { font-size:11px; color:var(--muted); line-height:1.4; }
-.btn-hotkey { position:absolute; top:9px; right:9px; font-family:var(--fp); font-size:7px; color:var(--muted); background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:4px; padding:3px 6px; }
-.reckoning-btn { background:linear-gradient(135deg,rgba(229,37,33,0.15),rgba(155,48,255,0.15)); border-color:rgba(229,37,33,0.4); }
-.reckoning-btn:hover { box-shadow:0 0 40px rgba(229,37,33,0.4); }
-.sub-label { font-family:var(--fp); font-size:8px; color:var(--muted); letter-spacing:2px; margin:20px 0 12px; display:flex; align-items:center; gap:10px; }
-.sub-label::after { content:''; flex:1; height:1px; background:var(--border); }
-.span2 { grid-column:span 2; }
-
-/* TOAST + LOG */
-#toast-container { position:fixed; bottom:28px; right:28px; z-index:9000; display:flex; flex-direction:column-reverse; gap:10px; pointer-events:none; }
-.toast { padding:13px 18px; background:rgba(15,15,25,0.95); border:1px solid rgba(255,255,255,0.12); border-left:3px solid var(--toast-color,var(--yellow)); border-radius:10px; font-size:13px; font-weight:600; backdrop-filter:blur(20px); animation:toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1),toastOut 0.3s ease 2.5s forwards; box-shadow:0 8px 32px rgba(0,0,0,0.5); max-width:300px; }
-@keyframes toastIn  { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-@keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateX(20px)} }
-.cmd-log { background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:12px; padding:16px; font-family:'Courier New',monospace; font-size:12px; max-height:240px; overflow-y:auto; margin-top:20px; }
-.log-entry { padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--muted); }
-.log-entry span { color:var(--yellow); }
-.log-time { color:rgba(255,255,255,0.2); margin-right:8px; }
-.custom-row { display:flex; gap:10px; align-items:center; margin-top:20px; }
-.custom-input { flex:1; padding:12px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; color:white; font-size:14px; font-family:var(--fu); outline:none; }
-.custom-input:focus { border-color:var(--yellow); }
-.send-btn { padding:12px 20px; background:var(--yellow); color:#1a1000; font-family:var(--fp); font-size:8px; border:none; border-radius:10px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-.send-btn:hover { background:#ffe033; }
-.kb-hint { font-size:12px; color:var(--muted); margin-top:8px; }
-.kbd { display:inline-block; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:4px; padding:1px 6px; font-family:monospace; font-size:11px; }
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:2px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#E52521;--blue:#049CD8;--yellow:#FBD000;--green:#43B047;--purple:#9B30FF;--orange:#FF6B00;--pink:#ff69b4;--teal:#00d4aa;--dark:#09090f;--panel:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--text:rgba(255,255,255,0.88);--muted:rgba(255,255,255,0.35);--fp:'Press Start 2P',monospace;--fu:'Rajdhani',sans-serif}
+body{background:var(--dark);font-family:var(--fu);color:var(--text);min-height:100vh;overflow-x:hidden;background-image:radial-gradient(ellipse 80% 50% at 15% 10%,rgba(4,156,216,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 85% 90%,rgba(229,37,33,0.06) 0%,transparent 60%)}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:9999}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;border-radius:50%;animation:twinkle var(--d,3s) var(--delay,0s) infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:1}}
+#login-screen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--dark)}
+.login-box{text-align:center;padding:48px 56px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:20px;backdrop-filter:blur(20px);max-width:420px;width:90%}
+.login-logo{font-family:var(--fp);font-size:11px;color:var(--yellow);text-shadow:0 0 30px rgba(251,208,0,0.5);line-height:2;margin-bottom:8px}
+.login-sub{font-size:12px;color:var(--muted);margin-bottom:36px;font-family:var(--fp)}
+.login-box input{width:100%;padding:14px 20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:white;font-size:20px;font-family:var(--fu);font-weight:700;letter-spacing:6px;text-align:center;outline:none;transition:all 0.2s;margin-bottom:16px}
+.login-box input:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(251,208,0,0.15)}
+.login-btn{width:100%;padding:14px;background:var(--yellow);color:#1a1000;font-family:var(--fp);font-size:10px;border:none;border-radius:10px;cursor:pointer;transition:all 0.2s}
+.login-btn:hover{background:#ffe033;transform:translateY(-2px)}
+.login-error{margin-top:14px;color:var(--red);font-size:13px;font-family:var(--fp);min-height:20px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.reset-bar{display:flex;align-items:center;gap:12px;padding:10px 32px;background:rgba(9,9,15,0.98);border-bottom:1px solid rgba(229,37,33,0.25);position:sticky;top:0;z-index:300;backdrop-filter:blur(12px);flex-wrap:wrap}
+.reset-btn{display:flex;align-items:center;gap:8px;padding:9px 22px;background:linear-gradient(135deg,rgba(229,37,33,0.9),rgba(180,20,10,0.9));border:1px solid rgba(229,37,33,0.6);border-radius:10px;cursor:pointer;font-family:var(--fp);font-size:8px;color:white;letter-spacing:1px;transition:all 0.2s;white-space:nowrap}
+.reset-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(229,37,33,0.5)}
+.reset-btn:active{transform:scale(0.97)}
+.reset-label{font-size:12px;color:rgba(255,150,150,0.65);font-weight:600;flex:1}
+.reset-sub-btns{display:flex;gap:8px;flex-wrap:wrap}
+.reset-sub{padding:7px 14px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);transition:all 0.15s;white-space:nowrap}
+.reset-sub:hover{background:rgba(255,255,255,0.1);color:white}
+#app{display:none;position:relative;z-index:1}
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;border-bottom:1px solid var(--border);background:rgba(9,9,15,0.98);backdrop-filter:blur(12px);position:sticky;top:44px;z-index:200}
+.header-title{font-family:var(--fp);font-size:10px;color:var(--yellow);text-shadow:0 0 20px rgba(251,208,0,0.4);line-height:1.8}
+.header-sub{font-size:12px;color:var(--muted);font-family:var(--fp)}
+.status-pill{display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:100px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#555;transition:all 0.3s}
+.status-dot.on{background:var(--green);box-shadow:0 0 10px rgba(67,176,71,0.6);animation:pulse 2s infinite}
+.status-dot.err{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.cmd-count{font-family:var(--fp);font-size:9px;color:var(--muted);text-align:right;line-height:2}
+.main{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 108px)}
+.sidebar{border-right:1px solid var(--border);padding:20px 0;background:rgba(9,9,15,0.95);position:sticky;top:108px;height:calc(100vh - 108px);overflow-y:auto}
+.sidebar-label{font-family:var(--fp);font-size:7px;color:var(--muted);letter-spacing:2px;padding:6px 20px 10px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 20px;cursor:pointer;transition:all 0.15s;font-size:15px;font-weight:600;color:var(--muted);border-left:3px solid transparent;user-select:none}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:white}
+.nav-item.active{color:white;border-left-color:var(--cat-color,var(--yellow));background:rgba(255,255,255,0.06)}
+.nav-icon{font-size:18px;width:24px;text-align:center}
+.nav-badge{margin-left:auto;font-family:var(--fp);font-size:7px;color:var(--muted)}
+.content{padding:28px 32px;overflow-y:auto}
+.section{display:none}
+.section.active{display:block}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.section-icon{font-size:28px}
+.section-title{font-family:var(--fp);font-size:11px;color:white;line-height:1.8}
+.section-desc{font-size:14px;color:var(--muted);margin-top:2px}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:11px;margin-bottom:28px}
+.btn-grid-wide{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.btn-grid-narrow{grid-template-columns:repeat(auto-fill,minmax(155px,1fr))}
+.cmd-btn{position:relative;padding:16px 15px;background:var(--panel);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);text-align:left;overflow:hidden;user-select:none}
+.cmd-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--btn-color,#fff) 0%,transparent 60%);opacity:0;transition:opacity 0.2s;border-radius:inherit}
+.cmd-btn:hover{transform:translateY(-3px) scale(1.02);border-color:var(--btn-color,rgba(255,255,255,0.2));box-shadow:0 8px 24px rgba(0,0,0,0.4),0 0 0 1px var(--btn-color,transparent)}
+.cmd-btn:hover::before{opacity:0.06}
+.cmd-btn:active{transform:translateY(0) scale(0.98)}
+.cmd-btn.fired{animation:btnFire 0.4s ease;border-color:var(--btn-color,var(--yellow));box-shadow:0 0 20px var(--btn-color,var(--yellow))}
+@keyframes btnFire{0%{transform:scale(1)}30%{transform:scale(0.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+.btn-emoji{font-size:24px;display:block;margin-bottom:8px;line-height:1}
+.btn-name{font-size:14px;font-weight:700;display:block;margin-bottom:3px;color:white}
+.btn-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.btn-hotkey{position:absolute;top:9px;right:9px;font-family:var(--fp);font-size:7px;color:var(--muted);background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:4px;padding:3px 6px}
+.reckoning-btn{background:linear-gradient(135deg,rgba(229,37,33,0.15),rgba(155,48,255,0.15));border-color:rgba(229,37,33,0.4)}
+.reckoning-btn:hover{box-shadow:0 0 40px rgba(229,37,33,0.4)}
+.sub-label{font-family:var(--fp);font-size:8px;color:var(--muted);letter-spacing:2px;margin:20px 0 12px;display:flex;align-items:center;gap:10px}
+.sub-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.span2{grid-column:span 2}
+#toast-container{position:fixed;bottom:28px;right:28px;z-index:9000;display:flex;flex-direction:column-reverse;gap:10px;pointer-events:none}
+.toast{padding:13px 18px;background:rgba(15,15,25,0.95);border:1px solid rgba(255,255,255,0.12);border-left:3px solid var(--toast-color,var(--yellow));border-radius:10px;font-size:13px;font-weight:600;backdrop-filter:blur(20px);animation:toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1),toastOut 0.3s ease 2.5s forwards;box-shadow:0 8px 32px rgba(0,0,0,0.5);max-width:300px}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
+.cmd-log{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:12px;max-height:240px;overflow-y:auto;margin-top:20px}
+.log-entry{padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+.log-entry span{color:var(--yellow)}
+.log-time{color:rgba(255,255,255,0.2);margin-right:8px}
+.msg-builder{background:rgba(155,48,255,0.08);border:1px solid rgba(155,48,255,0.25);border-radius:14px;padding:20px;margin-bottom:24px}
+.msg-builder-title{font-family:var(--fp);font-size:9px;color:var(--purple);margin-bottom:14px;letter-spacing:1px}
+.msg-text-input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(155,48,255,0.3);border-radius:10px;color:white;font-size:18px;font-family:var(--fu);font-weight:700;outline:none;transition:all 0.2s;margin-bottom:10px}
+.msg-text-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(155,48,255,0.15)}
+.msg-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.msg-select{padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:white;font-family:var(--fu);font-size:14px;outline:none;cursor:pointer}
+.msg-select option{background:#1a1a2e}
+.send-btn{padding:12px 20px;background:var(--yellow);color:#1a1000;font-family:var(--fp);font-size:8px;border:none;border-radius:10px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.send-btn:hover{background:#ffe033}
+.send-btn.purple{background:var(--purple);color:white}
+.send-btn.purple:hover{background:#b050ff}
+.kbd{display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:11px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
 </style>
 </head>
 <body>
 <div id="stars"></div>
-
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">DAD<br>COMMANDER</div>
@@ -128,23 +111,19 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
     <div class="login-error" id="login-error"></div>
   </div>
 </div>
-
-<!-- APP -->
 <div id="app">
-
-  <!-- RESET BAR — always visible -->
   <div class="reset-bar">
     <button class="reset-btn" onclick="resetAll()">🚨 RESET EVERYTHING</button>
-    <span class="reset-label">Clears enemies · weather · effects · gravity · fog · size · lights</span>
+    <span class="reset-label">Clears enemies · weather · effects · gravity · fog · size · lights · structures</span>
     <button class="reset-btn" onclick="randomEffect()" style="background:linear-gradient(135deg,rgba(0,212,170,0.9),rgba(0,160,120,0.9));border-color:rgba(0,212,170,0.6);">🎲 RANDOM</button>
     <button class="reset-btn" onclick="send('reset_spawn','🏠 Back to spawn!','var(--green)')" style="background:linear-gradient(135deg,rgba(67,176,71,0.9),rgba(40,130,44,0.9));border-color:rgba(67,176,71,0.6);">🏠 SPAWN POINT</button>
     <div class="reset-sub-btns">
       <div class="reset-sub" onclick="quickReset('clear_enemies')">👾 Clear Enemies</div>
       <div class="reset-sub" onclick="quickReset('weather_sunny')">☀️ Clear Weather</div>
       <div class="reset-sub" onclick="quickReset('clear_effects')">💡 Clear Effects</div>
+      <div class="reset-sub" onclick="quickReset('clear_structures')">🏰 Clear Structures</div>
     </div>
   </div>
-
   <div class="header">
     <div style="display:flex;align-items:center;gap:16px;">
       <div>
@@ -160,17 +139,16 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
       </div>
     </div>
   </div>
-
   <div class="main">
     <div class="sidebar">
       <div class="sidebar-label">CATEGORIES</div>
-      <div class="nav-item active" onclick="nav('chaos',this)" style="--cat-color:var(--red)"><span class="nav-icon">💥</span>Chaos<span class="nav-badge">20</span></div>
-      <div class="nav-item" onclick="nav('enemies',this)" style="--cat-color:var(--orange)"><span class="nav-icon">👾</span>Enemies<span class="nav-badge">26</span></div>
-      <div class="nav-item" onclick="nav('weather',this)" style="--cat-color:var(--blue)"><span class="nav-icon">⛅</span>Weather<span class="nav-badge">22</span></div>
-      <div class="nav-item" onclick="nav('map',this)" style="--cat-color:var(--green)"><span class="nav-icon">🗺️</span>Map<span class="nav-badge">15</span></div>
-      <div class="nav-item" onclick="nav('powerups',this)" style="--cat-color:var(--yellow)"><span class="nav-icon">⭐</span>Power-Ups<span class="nav-badge">13</span></div>
+      <div class="nav-item active" onclick="nav('chaos',this)" style="--cat-color:var(--red)"><span class="nav-icon">💥</span>Chaos<span class="nav-badge">46</span></div>
+      <div class="nav-item" onclick="nav('enemies',this)" style="--cat-color:var(--orange)"><span class="nav-icon">👾</span>Enemies<span class="nav-badge">46</span></div>
+      <div class="nav-item" onclick="nav('weather',this)" style="--cat-color:var(--blue)"><span class="nav-icon">⛅</span>Weather<span class="nav-badge">25</span></div>
+      <div class="nav-item" onclick="nav('map',this)" style="--cat-color:var(--green)"><span class="nav-icon">🗺️</span>Map<span class="nav-badge">32</span></div>
+      <div class="nav-item" onclick="nav('powerups',this)" style="--cat-color:var(--yellow)"><span class="nav-icon">⭐</span>Power-Ups<span class="nav-badge">34</span></div>
       <div class="nav-item" onclick="nav('messages',this)" style="--cat-color:var(--purple)"><span class="nav-icon">📢</span>Messages<span class="nav-badge">15</span></div>
-      <div class="nav-item" onclick="nav('combos',this)" style="--cat-color:var(--pink)"><span class="nav-icon">🔥</span>Combos<span class="nav-badge">7</span></div>
+      <div class="nav-item" onclick="nav('combos',this)" style="--cat-color:var(--pink)"><span class="nav-icon">🔥</span>Combos<span class="nav-badge">12</span></div>
       <div class="nav-item" onclick="nav('log',this)" style="--cat-color:var(--muted)"><span class="nav-icon">📋</span>Log</div>
       <div style="padding:16px 20px;margin-top:8px;border-top:1px solid var(--border);">
         <div class="sidebar-label" style="margin-bottom:10px;">HOTKEYS</div>
@@ -183,400 +161,447 @@ body::after { content:''; position:fixed; inset:0; background:repeating-linear-g
           <kbd class="kbd">C</kbd> Countdown<br>
           <kbd class="kbd">E</kbd> Random Enemy<br>
           <kbd class="kbd">W</kbd> Random Weather<br>
+          <kbd class="kbd">F</kbd> Moon Jump<br>
           <kbd class="kbd">R</kbd> THE RECKONING
         </div>
       </div>
     </div>
-
     <div class="content">
 
-      <!-- ══ CHAOS ══ -->
-      <div class="section active" id="section-chaos">
-        <div class="section-header"><span class="section-icon">💥</span><div><div class="section-title">CHAOS & TROLLING</div><div class="section-desc">Make his life difficult. You're the dad.</div></div></div>
-        <div class="sub-label">CLASSICS</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('earthquake','🌋 Earthquake!','var(--red)')"><span class="btn-emoji">🌋</span><span class="btn-name">Earthquake</span><span class="btn-desc">Shockwave + camera shake 4s</span><span class="btn-hotkey">Q</span></div>
-          <div class="cmd-btn" style="--btn-color:#222" onclick="send('lights_out','🌑 Lights Out!','#555')"><span class="btn-emoji">🌑</span><span class="btn-name">Lights Out</span><span class="btn-desc">Total darkness for 10s</span><span class="btn-hotkey">L</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('reverse_controls','🔄 Flipped!','var(--blue)')"><span class="btn-emoji">🔄</span><span class="btn-name">Flip Controls</span><span class="btn-desc">Camera spin + 8s confusion</span></div>
-          <div class="cmd-btn" style="--btn-color:#aef" onclick="send('slippery_floor','🧊 Icy!','#aef')"><span class="btn-emoji">🧊</span><span class="btn-name">Icy Floor</span><span class="btn-desc">Slippery ice patches everywhere</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_flip','🙃 Flip!','var(--orange)')"><span class="btn-emoji">🙃</span><span class="btn-name">Gravity Flip</span><span class="btn-desc">Camera upside down for 8s</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('disco_mode','🪩 Disco!','var(--purple)')"><span class="btn-emoji">🪩</span><span class="btn-name">Disco Mode</span><span class="btn-desc">Strobing rainbow lights 12s</span></div>
-          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('screen_shake','😵 Shake!','#f0f')"><span class="btn-emoji">😵</span><span class="btn-name">Shake It</span><span class="btn-desc">Constant mild camera shake 6s</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff8" onclick="send('warp_speed','⚡ Warp!','#ff8')"><span class="btn-emoji">⚡</span><span class="btn-name">Warp Speed</span><span class="btn-desc">All enemy speed ×3 for 10s</span></div>
-        </div>
-        <div class="sub-label">NEW CHAOS</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#0ff" onclick="send('bouncy_world','🏀 Bouncy!','#0ff')"><span class="btn-emoji">🏀</span><span class="btn-name">Bouncy World</span><span class="btn-desc">Everything he touches launches him</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('spinning_map','🌀 Spinning!','var(--green)')"><span class="btn-emoji">🌀</span><span class="btn-name">Spinning Map</span><span class="btn-desc">Delfino Plaza slowly rotates</span></div>
-          <div class="cmd-btn" style="--btn-color:#334" onclick="send('dark_mode','🕶️ Dark!','#446')"><span class="btn-emoji">🕶️</span><span class="btn-name">Dark Mode</span><span class="btn-desc">Darkness + invisible enemies</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_random','🎲 Gravity!','var(--orange)')"><span class="btn-emoji">🎲</span><span class="btn-name">Random Gravity</span><span class="btn-desc">Flips every ~10s for 60s</span></div>
-          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('fake_game_over','💀 GAME OVER!','#f44')"><span class="btn-emoji">💀</span><span class="btn-name">Fake Game Over</span><span class="btn-desc">Screen flashes then disappears</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('random_teleport','🌀 Teleport!','var(--purple)')"><span class="btn-emoji">🌀</span><span class="btn-name">Random Teleport</span><span class="btn-desc">Sends Mason somewhere on the map</span></div>
-          <div class="cmd-btn" style="--btn-color:#888" onclick="send('giant_foot','🦶 STOMP!','#888')"><span class="btn-emoji">🦶</span><span class="btn-name">Giant Foot</span><span class="btn-desc">Foot descends from sky to stomp him</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('slow_motion','🐌 Slow Mo!','var(--teal)')"><span class="btn-emoji">🐌</span><span class="btn-name">Slow Motion</span><span class="btn-desc">Everything slows to 30% speed for 8s</span></div>
-          <div class="cmd-btn" style="--btn-color:#fa0" onclick="send('freeze_frame','⏸️ Freeze!','#fa0')"><span class="btn-emoji">⏸️</span><span class="btn-name">Freeze Frame</span><span class="btn-desc">Everything freezes for 3 seconds</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('enemy_rage','😡 RAGE!','var(--red)')"><span class="btn-emoji">😡</span><span class="btn-name">Enemy Rage</span><span class="btn-desc">All active enemies double speed NOW</span></div>
-          <div class="cmd-btn" style="--btn-color:#f55" onclick="send('lightning_strike','⚡ ZAP!','#f55')"><span class="btn-emoji">⚡</span><span class="btn-name">Lightning Strike</span><span class="btn-desc">Lightning bolt hits Mason directly</span></div>
-          <div class="cmd-btn" style="--btn-color:#f88" onclick="send('dad_face_sky','👨 DAD FACE!','#f88')"><span class="btn-emoji">👨</span><span class="btn-name">Dad Face Sky</span><span class="btn-desc">Dad's giant face appears in the sky staring at him</span></div>
-        </div>
-        <div class="sub-label">NUCLEAR</div>
-        <div class="btn-grid">
-          <div class="cmd-btn reckoning-btn span2" onclick="triggerReckoning()"><span class="btn-emoji">💀</span><span class="btn-name" style="color:var(--red);font-size:15px;">THE RECKONING</span><span class="btn-desc">Dark + invisible enemies + gravity flips + 60s countdown + Bowser X at 30s + lava at the end. No survivors.</span><span class="btn-hotkey">R</span></div>
-        </div>
-      </div>
+<!-- CHAOS -->
+<div class="section active" id="section-chaos">
+<div class="section-header"><span class="section-icon">💥</span><div><div class="section-title">CHAOS</div><div class="section-desc">Make his life difficult. You're the dad. You're also the engine.</div></div></div>
+<div class="sub-label">SHAKE & SHOCK</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('earthquake','🌋 Earthquake!','var(--red)')"><span class="btn-emoji">🌋</span><span class="btn-name">Earthquake</span><span class="btn-desc">Shockwave + camera shake 4s + rumble SFX</span><span class="btn-hotkey">Q</span></div>
+<div class="cmd-btn" style="--btn-color:#222" onclick="send('lights_out','🌑 Lights Out!','#555')"><span class="btn-emoji">🌑</span><span class="btn-name">Lights Out</span><span class="btn-desc">Total darkness for 10s</span><span class="btn-hotkey">L</span></div>
+<div class="cmd-btn" style="--btn-color:#f0f" onclick="send('screen_shake','😵 Shake!','#f0f')"><span class="btn-emoji">😵</span><span class="btn-name">Shake It</span><span class="btn-desc">Constant mild camera shake 6s</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('cam_perlin_shake','🌀 Perlin!','var(--orange)')"><span class="btn-emoji">🌀</span><span class="btn-name">Perlin Shake</span><span class="btn-desc">Continuous noise-based camera shake 8s</span></div>
+<div class="cmd-btn" style="--btn-color:#0ff" onclick="send('zoom_punch','👊 Punch!','#0ff')"><span class="btn-emoji">👊</span><span class="btn-name">Zoom Punch</span><span class="btn-desc">FOV snaps 90→130→90 in 0.3s — hit impact feel</span></div>
+<div class="cmd-btn" style="--btn-color:#f55" onclick="send('lightning_strike','⚡ ZAP!','#f55')"><span class="btn-emoji">⚡</span><span class="btn-name">Lightning Strike</span><span class="btn-desc">Lightning bolt hits Mason directly + crack SFX</span></div>
+</div>
+<div class="sub-label">GRAVITY</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_flip','🙃 Flip!','var(--orange)')"><span class="btn-emoji">🙃</span><span class="btn-name">Gravity Flip</span><span class="btn-desc">Camera upside down for 8s</span></div>
+<div class="cmd-btn" style="--btn-color:#aef" onclick="send('gravity_zero','🫧 Float!','#aef')"><span class="btn-emoji">🫧</span><span class="btn-name">Zero Gravity</span><span class="btn-desc">Near-zero g — Mason drifts like an astronaut</span></div>
+<div class="cmd-btn" style="--btn-color:#f55" onclick="send('gravity_super','🏋️ Heavy!','#f55')"><span class="btn-emoji">🏋️</span><span class="btn-name">Super Gravity</span><span class="btn-desc">Gravity x5 — every jump is a struggle</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('gravity_sideways','➡️ Sideways!','var(--purple)')"><span class="btn-emoji">➡️</span><span class="btn-name">Sideways Gravity</span><span class="btn-desc">Pulls Mason into the wall</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('gravity_random','🎲 G Chaos!','var(--orange)')"><span class="btn-emoji">🎲</span><span class="btn-name">Gravity Roulette</span><span class="btn-desc">Direction randomizes every 8s for 60s</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="send('moon_jump','🌙 Moon!','#fa0')"><span class="btn-emoji">🌙</span><span class="btn-name">Moon Jump</span><span class="btn-desc">Jump velocity x8 — Mason flies into the sky</span><span class="btn-hotkey">F</span></div>
+</div>
+<div class="sub-label">PHYSICS</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#aef" onclick="send('slippery_floor','🧊 Icy!','#aef')"><span class="btn-emoji">🧊</span><span class="btn-name">Icy Floor</span><span class="btn-desc">Slippery ice patches everywhere + slide SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('super_bounce','🏀 Boing!','var(--green)')"><span class="btn-emoji">🏀</span><span class="btn-name">Super Bounce</span><span class="btn-desc">Bounciness = 1.5 on all surfaces + spring SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#adf" onclick="send('space_physics','🚀 Space!','#adf')"><span class="btn-emoji">🚀</span><span class="btn-name">Space Physics</span><span class="btn-desc">No drag, no friction — slides and drifts forever</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('wind_blast','🌬️ Wind!','var(--orange)')"><span class="btn-emoji">🌬️</span><span class="btn-name">Wind Blast</span><span class="btn-desc">WindZone turbulence pushes Mason around</span></div>
+<div class="cmd-btn" style="--btn-color:#4af" onclick="send('explosion_yeet','💥 YEET!','#4af')"><span class="btn-emoji">💥</span><span class="btn-name">Explosion Yeet</span><span class="btn-desc">Force blast launches Mason skyward + boom SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('rigidbody_feather','🪶 Feather!','var(--red)')"><span class="btn-emoji">🪶</span><span class="btn-name">Feather Mass</span><span class="btn-desc">Rigidbody.mass = 0.01 — everything pushes him</span></div>
+</div>
+<div class="sub-label">CAMERA</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('reverse_controls','🔄 Flipped!','var(--blue)')"><span class="btn-emoji">🔄</span><span class="btn-name">Flip Controls</span><span class="btn-desc">Camera spin + 8s confusion</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('fov_fisheye','🐟 Fisheye!','var(--blue)')"><span class="btn-emoji">🐟</span><span class="btn-name">Fisheye Lens</span><span class="btn-desc">FOV 140° — bulging VR wide-angle warp</span></div>
+<div class="cmd-btn" style="--btn-color:#88f" onclick="send('fov_telephoto','🔭 Zoom!','#88f')"><span class="btn-emoji">🔭</span><span class="btn-name">Telephoto</span><span class="btn-desc">FOV 20° — everything looks far away</span></div>
+<div class="cmd-btn" style="--btn-color:#f0f" onclick="send('cam_dutch_tilt','📐 Tilt!','#f0f')"><span class="btn-emoji">📐</span><span class="btn-name">Dutch Tilt</span><span class="btn-desc">Camera rolls 45° — villain movie angle</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('cam_orbit','🌀 Orbit!','var(--purple)')"><span class="btn-emoji">🌀</span><span class="btn-name">Orbit Camera</span><span class="btn-desc">Camera slowly orbits Mason — dizzy VR fun</span></div>
+</div>
+<div class="sub-label">RENDERING</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('disco_mode','🪩 Disco!','var(--purple)')"><span class="btn-emoji">🪩</span><span class="btn-name">Disco Mode</span><span class="btn-desc">Strobing rainbow lights 12s + funky SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f4f" onclick="send('post_invert','🌈 Invert!','#f4f')"><span class="btn-emoji">🌈</span><span class="btn-name">Invert Colors</span><span class="btn-desc">Post-process invert — reality goes photonegative</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('post_grayscale','🎞️ B&W!','#888')"><span class="btn-emoji">🎞️</span><span class="btn-name">Desaturate</span><span class="btn-desc">Saturation -100 — full black and white world</span></div>
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('bloom_max','✨ Bloom!','var(--yellow)')"><span class="btn-emoji">✨</span><span class="btn-name">God Rays</span><span class="btn-desc">Bloom intensity x50 — everything bleeds light</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('chromatic_aberration','🔴 RGB Split!','var(--red)')"><span class="btn-emoji">🔴</span><span class="btn-name">Chromatic Aberration</span><span class="btn-desc">RGB fringing on every edge — trippy VR effect</span></div>
+<div class="cmd-btn" style="--btn-color:#a0f" onclick="send('hue_shift','🎨 Hue!','#a0f')"><span class="btn-emoji">🎨</span><span class="btn-name">Hue Shift</span><span class="btn-desc">World colour slowly rotates through full spectrum</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('wireframe_mode','🕸️ Wire!','var(--teal)')"><span class="btn-emoji">🕸️</span><span class="btn-name">Wireframe Mode</span><span class="btn-desc">Full wireframe — world becomes a mesh skeleton</span></div>
+</div>
+<div class="sub-label">TIME & SPEED</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('warp_speed','⚡ Warp!','#ff8')"><span class="btn-emoji">⚡</span><span class="btn-name">Warp Speed</span><span class="btn-desc">All enemy speed x3 for 10s</span></div>
+<div class="cmd-btn" style="--btn-color:#5af" onclick="send('slow_motion','🐌 Slow Mo!','#5af')"><span class="btn-emoji">🐌</span><span class="btn-name">Slow Motion</span><span class="btn-desc">Time.timeScale = 0.1 — dreamy slow everything</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('fast_forward','⚡ Fast!','var(--red)')"><span class="btn-emoji">⚡</span><span class="btn-name">Fast Forward</span><span class="btn-desc">Time.timeScale = 3.0 — chaotic high speed</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('time_chaos','⏱️ T-Chaos!','var(--orange)')"><span class="btn-emoji">⏱️</span><span class="btn-name">Time Chaos</span><span class="btn-desc">Oscillates 0.1x to 3x every 2s for 30s</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="send('freeze_frame','⏸️ FREEZE!','#fa0')"><span class="btn-emoji">⏸️</span><span class="btn-name">Hard Freeze</span><span class="btn-desc">Time.timeScale = 0 for 3s — full stop, snap back</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('enemy_rage','😡 RAGE!','var(--teal)')"><span class="btn-emoji">😡</span><span class="btn-name">Enemy Rage</span><span class="btn-desc">All active enemies double speed NOW + roar SFX</span></div>
+</div>
+<div class="sub-label">TRICKS</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#0ff" onclick="send('bouncy_world','🏀 Bouncy!','#0ff')"><span class="btn-emoji">🏀</span><span class="btn-name">Bouncy World</span><span class="btn-desc">Everything he touches launches him + boing SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('spinning_map','🌀 Spinning!','var(--green)')"><span class="btn-emoji">🌀</span><span class="btn-name">Spinning Map</span><span class="btn-desc">Delfino Plaza slowly rotates (safety floor active)</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('spinning_map_safe','⛵ Tilt!','var(--teal)')"><span class="btn-emoji">⛵</span><span class="btn-name">Tilt Map</span><span class="btn-desc">Map tilts like a boat — safety floor prevents falling through</span></div>
+<div class="cmd-btn" style="--btn-color:#334" onclick="send('dark_mode','🕶️ Dark!','#446')"><span class="btn-emoji">🕶️</span><span class="btn-name">Dark Mode</span><span class="btn-desc">Darkness + invisible enemies</span></div>
+<div class="cmd-btn" style="--btn-color:#f44" onclick="send('fake_game_over','💀 GAME OVER!','#f44')"><span class="btn-emoji">💀</span><span class="btn-name">Fake Game Over</span><span class="btn-desc">Screen flashes GAME OVER then disappears</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('random_teleport','🌀 Teleport!','var(--purple)')"><span class="btn-emoji">🌀</span><span class="btn-name">Random Teleport</span><span class="btn-desc">Sends Mason somewhere on the map + warp SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('giant_foot','🦶 STOMP!','#888')"><span class="btn-emoji">🦶</span><span class="btn-name">Giant Foot</span><span class="btn-desc">Foot descends from sky to stomp him + boom SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f88" onclick="send('dad_face_sky','👨 DAD FACE!','#f88')"><span class="btn-emoji">👨</span><span class="btn-name">Dad Face Sky</span><span class="btn-desc">Dad's giant face appears in the sky staring at him</span></div>
+</div>
+<div class="sub-label">NUCLEAR</div>
+<div class="btn-grid">
+<div class="cmd-btn reckoning-btn span2" onclick="triggerReckoning()"><span class="btn-emoji">💀</span><span class="btn-name" style="color:var(--red);font-size:15px;">THE RECKONING</span><span class="btn-desc">Zero G → every horde → time chaos → Bowser X at 30s → void storm → lava flood → THE END. No survivors.</span><span class="btn-hotkey">R</span></div>
+</div>
+</div>
 
-      <!-- ══ ENEMIES ══ -->
-      <div class="section" id="section-enemies">
-        <div class="section-header"><span class="section-icon">👾</span><div><div class="section-title">ENEMY SPAWNER</div><div class="section-desc">Punch to kill · Kills explode + drop coins · Enemies chase Mason's real position</div></div></div>
-        <div class="sub-label">CLASSIC MARIO</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('spawn_goomba','🍄 Goomba!','#8B4513')"><span class="btn-emoji">🍄</span><span class="btn-name">Goomba</span><span class="btn-desc">Angry walker. Glowing red eyes. Walks toward Mason.</span></div>
-          <div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_boo','👻 3 Boos!','#aab')"><span class="btn-emoji">👻</span><span class="btn-name">Boo × 3</span><span class="btn-desc">Only moves when NOT looking at it</span></div>
-          <div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_chain_chomp','⛓️ Chomp!','#888')"><span class="btn-emoji">⛓️</span><span class="btn-name">Chain Chomp</span><span class="btn-desc">Black, hungry, jaw snaps loudly</span></div>
-          <div class="cmd-btn" style="--btn-color:#555" onclick="send('spawn_bullet','💣 Bullet!','#777')"><span class="btn-emoji">💣</span><span class="btn-name">Bullet Bill</span><span class="btn-desc">Fires from above with exhaust trail</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_koopa','🐢 Koopa!','var(--orange)')"><span class="btn-emoji">🐢</span><span class="btn-name">Koopa Troopa</span><span class="btn-desc">Green shell chaser</span></div>
-          <div class="cmd-btn" style="--btn-color:#f80" onclick="send('spawn_hammer_bro','🔨 Hammer!','#f80')"><span class="btn-emoji">🔨</span><span class="btn-name">Hammer Bro</span><span class="btn-desc">Throws hammers in arcs</span></div>
-        </div>
-        <div class="sub-label">SUNSHINE ENEMIES</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_shadow_mario','👤 Shadow!','#ff6af0')"><span class="btn-emoji">👤</span><span class="btn-name">Shadow Mario</span><span class="btn-desc">Dark doppelganger, glowing eyes</span></div>
-          <div class="cmd-btn" style="--btn-color:#b060ff" onclick="send('spawn_piranha','🪴 Piranha!','#b060ff')"><span class="btn-emoji">🪴</span><span class="btn-name">Piranha Plant</span><span class="btn-desc">Rises from floor, snaps, sinks back</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('spawn_blooper','🦑 Blooper!','var(--blue)')"><span class="btn-emoji">🦑</span><span class="btn-name">Blooper</span><span class="btn-desc">Ink attack blacks the screen</span></div>
-        </div>
-        <div class="sub-label">NEW ENEMIES</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_thwomp','🪨 Thwomp!','#888')"><span class="btn-emoji">🪨</span><span class="btn-name">Thwomp</span><span class="btn-desc">Drops from ceiling, huge angry face</span></div>
-          <div class="cmd-btn" style="--btn-color:#5af" onclick="send('spawn_lakitu','☁️ Lakitu!','#5af')"><span class="btn-emoji">☁️</span><span class="btn-name">Lakitu</span><span class="btn-desc">Floats above, rains Spinies down</span></div>
-          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('spawn_spiny','🔴 Spiny!','#f44')"><span class="btn-emoji">🔴</span><span class="btn-name">Spiny</span><span class="btn-desc">Spiky ball rolls at Mason fast</span></div>
-          <div class="cmd-btn" style="--btn-color:#aaa" onclick="send('spawn_whomp','🟫 Whomp!','#aaa')"><span class="btn-emoji">🟫</span><span class="btn-name">Whomp</span><span class="btn-desc">Big walking wall that falls on you</span></div>
-          <div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_king_boo','👑 King Boo!','#dde')"><span class="btn-emoji">👑</span><span class="btn-name">King Boo</span><span class="btn-desc">Giant Boo with crown. Much scarier.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_shy_guy','😶 Shy Guy!','#f00')"><span class="btn-emoji">😶</span><span class="btn-name">Shy Guy</span><span class="btn-desc">Masked runners, come in packs</span></div>
-          <div class="cmd-btn" style="--btn-color:#333" onclick="send('spawn_bobomb','💣 Bob-omb!','#333')"><span class="btn-emoji">💣</span><span class="btn-name">Bob-omb</span><span class="btn-desc">Walks toward Mason → flashes → BOOM</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('spawn_wiggler','🐛 Wiggler!','var(--green)')"><span class="btn-emoji">🐛</span><span class="btn-name">Wiggler</span><span class="btn-desc">Turns red and faster when hit</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('spawn_petey','🌺 Petey!','var(--red)')"><span class="btn-emoji">🌺</span><span class="btn-name">Petey Piranha</span><span class="btn-desc">Giant piranha boss. Flies.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_kamek','🧙 Kamek!','var(--purple)')"><span class="btn-emoji">🧙</span><span class="btn-name">Kamek</span><span class="btn-desc">Broomstick wizard, casts spells</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_doopliss','🎭 Doopliss!','#ff6af0')"><span class="btn-emoji">🎭</span><span class="btn-name">Doopliss</span><span class="btn-desc">Shapeshifts into Mason's silhouette</span></div>
-          <div class="cmd-btn" style="--btn-color:#222" onclick="send('spawn_shadow_queen','🖤 Shadow Queen!','#222')"><span class="btn-emoji">🖤</span><span class="btn-name">Shadow Queen</span><span class="btn-desc">Paper Mario final boss. Pure darkness.</span></div>
-          <div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_mega_chomp','⛓️⛓️ MEGA!','#555')"><span class="btn-emoji">⛓️⛓️</span><span class="btn-name">Chain Chomp MEGA</span><span class="btn-desc">Rolls through everything. Unstoppable.</span></div>
-        </div>
-        <div class="sub-label">HORDES</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_swarm','🌊 SWARM!','var(--orange)')"><span class="btn-emoji">🌊</span><span class="btn-name">Swarm × 10</span><span class="btn-desc">10 enemies from all directions</span></div>
-          <div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_goomba_army','🍄🍄 ARMY!','#4f0')"><span class="btn-emoji">🍄🍄</span><span class="btn-name">Goomba Army</span><span class="btn-desc">5 goombas from all sides</span></div>
-          <div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_shy_guy_army','😶😶 Shy Army!','#f00')"><span class="btn-emoji">😶😶</span><span class="btn-name">Shy Guy Army</span><span class="btn-desc">8 Shy Guys surrounding Mason</span></div>
-        </div>
-        <div class="sub-label">BOSSES</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_boss','💀 BOWSER!','var(--purple)')"><span class="btn-emoji">💀</span><span class="btn-name">SPAWN BOWSER</span><span class="btn-desc">Full Bowser. Circles, lunges, glowing eyes.</span><span class="btn-hotkey">B</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff4400" onclick="send('spawn_bowser_x','🔥 BOWSER X!','#ff4400')"><span class="btn-emoji">🔥</span><span class="btn-name">BOWSER X</span><span class="btn-desc">Multi-phase. Gets faster each hit.</span></div>
-        </div>
-      </div>
+<!-- ENEMIES -->
+<div class="section" id="section-enemies">
+<div class="section-header"><span class="section-icon">👾</span><div><div class="section-title">ENEMIES</div><div class="section-desc">Punch to kill · Kills explode + drop coins · All chase Mason's real position</div></div></div>
+<div class="sub-label">MARIO</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('spawn_goomba','🍄 Goomba!','#8B4513')"><span class="btn-emoji">🍄</span><span class="btn-name">Goomba</span><span class="btn-desc">Angry walker, glowing red eyes + stompy SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_boo','👻 3 Boos!','#aab')"><span class="btn-emoji">👻</span><span class="btn-name">Boo x 3</span><span class="btn-desc">Only moves when NOT looking at it + spooky laugh</span></div>
+<div class="cmd-btn" style="--btn-color:#111" onclick="send('spawn_chain_chomp','⛓️ Chomp!','#888')"><span class="btn-emoji">⛓️</span><span class="btn-name">Chain Chomp</span><span class="btn-desc">Black hungry jaw, snaps loudly on approach</span></div>
+<div class="cmd-btn" style="--btn-color:#555" onclick="send('spawn_bullet','💣 Bullet!','#777')"><span class="btn-emoji">💣</span><span class="btn-name">Bullet Bill</span><span class="btn-desc">Fires from above with exhaust trail + whistle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_koopa','🐢 Koopa!','var(--orange)')"><span class="btn-emoji">🐢</span><span class="btn-name">Koopa Troopa</span><span class="btn-desc">Green shell chaser, sliding shell ricochet</span></div>
+<div class="cmd-btn" style="--btn-color:#f80" onclick="send('spawn_hammer_bro','🔨 Hammer!','#f80')"><span class="btn-emoji">🔨</span><span class="btn-name">Hammer Bro</span><span class="btn-desc">Throws hammer arcs with clanging SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_thwomp','🪨 Thwomp!','#888')"><span class="btn-emoji">🪨</span><span class="btn-name">Thwomp</span><span class="btn-desc">Drops from ceiling, huge angry face + slam SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#5af" onclick="send('spawn_lakitu','☁️ Lakitu!','#5af')"><span class="btn-emoji">☁️</span><span class="btn-name">Lakitu</span><span class="btn-desc">Floats above, rains Spinies down + cackle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f44" onclick="send('spawn_spiny','🔴 Spiny!','#f44')"><span class="btn-emoji">🔴</span><span class="btn-name">Spiny</span><span class="btn-desc">Spiky ball rolls at Mason fast + rolling SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#aaa" onclick="send('spawn_whomp','🟫 Whomp!','#aaa')"><span class="btn-emoji">🟫</span><span class="btn-name">Whomp</span><span class="btn-desc">Big walking wall that falls on you + bonk SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#dde" onclick="send('spawn_king_boo','👑 King Boo!','#dde')"><span class="btn-emoji">👑</span><span class="btn-name">King Boo</span><span class="btn-desc">Giant crown Boo, much scarier + deep laugh SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_shy_guy','😶 Shy Guy!','#f00')"><span class="btn-emoji">😶</span><span class="btn-name">Shy Guy</span><span class="btn-desc">Masked runners in packs + pitter-patter SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#333" onclick="send('spawn_bobomb','💣 Bob-omb!','#333')"><span class="btn-emoji">💣</span><span class="btn-name">Bob-omb</span><span class="btn-desc">Walks toward Mason — flashes — BOOM + blast wave</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('spawn_wiggler','🐛 Wiggler!','var(--green)')"><span class="btn-emoji">🐛</span><span class="btn-name">Wiggler</span><span class="btn-desc">Turns red and faster when hit + angry SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_kamek','🧙 Kamek!','var(--purple)')"><span class="btn-emoji">🧙</span><span class="btn-name">Kamek</span><span class="btn-desc">Broomstick wizard casts spells + cackle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_doopliss','🎭 Doopliss!','#ff6af0')"><span class="btn-emoji">🎭</span><span class="btn-name">Doopliss</span><span class="btn-desc">Shapeshifts into Mason's silhouette + eerie echo SFX</span></div>
+</div>
+<div class="sub-label">SUNSHINE</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#ff6af0" onclick="send('spawn_shadow_mario','👤 Shadow!','#ff6af0')"><span class="btn-emoji">👤</span><span class="btn-name">Shadow Mario</span><span class="btn-desc">Dark doppelganger, glowing eyes, mirrors moves</span></div>
+<div class="cmd-btn" style="--btn-color:#b060ff" onclick="send('spawn_piranha','🪴 Piranha!','#b060ff')"><span class="btn-emoji">🪴</span><span class="btn-name">Piranha Plant</span><span class="btn-desc">Rises from floor, snaps, sinks back + chomp SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('spawn_blooper','🦑 Blooper!','var(--blue)')"><span class="btn-emoji">🦑</span><span class="btn-name">Blooper</span><span class="btn-desc">Ink attack blacks the screen + splat SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('spawn_petey','🌺 Petey!','var(--red)')"><span class="btn-emoji">🌺</span><span class="btn-name">Petey Piranha</span><span class="btn-desc">Giant flying piranha boss + roar SFX</span></div>
+</div>
+<div class="sub-label">CROSSOVER</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#00b4d8" onclick="send('spawn_slime','🟩 Slime!','#00b4d8')"><span class="btn-emoji">🟩</span><span class="btn-name">Slime (DQ)</span><span class="btn-desc">Dragon Quest slime bounces and splits into 2 when hit</span></div>
+<div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_creeper','💚 Creeper!','#4f0')"><span class="btn-emoji">💚</span><span class="btn-name">Creeper</span><span class="btn-desc">Walks silently then BOOM + Minecraft hiss SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff0" onclick="send('spawn_pikachu','⚡ Pikachu!','#ff0')"><span class="btn-emoji">⚡</span><span class="btn-name">Evil Pikachu</span><span class="btn-desc">Charges Mason with thunderbolt + Pika screech SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#444" onclick="send('spawn_sans','💀 Sans!','#444')"><span class="btn-emoji">💀</span><span class="btn-name">Sans (Undertale)</span><span class="btn-desc">Teleports randomly, bone attacks + ba-dum SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f60" onclick="send('spawn_knuckles','👊 Knuckles!','#f60')"><span class="btn-emoji">👊</span><span class="btn-name">Knuckles</span><span class="btn-desc">Charges fists-first + punch SFX, bounces off walls</span></div>
+<div class="cmd-btn" style="--btn-color:#a00" onclick="send('spawn_mega_goomba','🍄💀 MEGA!','#a00')"><span class="btn-emoji">🍄💀</span><span class="btn-name">Mega Goomba</span><span class="btn-desc">10x size, screen-shaking footsteps + deep stomp SFX</span></div>
+</div>
+<div class="sub-label">HORDES</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_swarm','🌊 SWARM!','var(--orange)')"><span class="btn-emoji">🌊</span><span class="btn-name">Swarm x 10</span><span class="btn-desc">10 enemies from all directions at once</span></div>
+<div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_goomba_army','🍄🍄 ARMY!','#4f0')"><span class="btn-emoji">🍄🍄</span><span class="btn-name">Goomba Army</span><span class="btn-desc">5 goombas from all sides + marching SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_shy_guy_army','😶😶 Shy Army!','#f00')"><span class="btn-emoji">😶😶</span><span class="btn-name">Shy Guy Army</span><span class="btn-desc">8 Shy Guys surrounding Mason + stampede SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#5af" onclick="send('spawn_boo_swarm','👻👻 Boo Horde!','#5af')"><span class="btn-emoji">👻👻</span><span class="btn-name">Boo Horde</span><span class="btn-desc">10 Boos all around. Don't look at any of them.</span></div>
+<div class="cmd-btn" style="--btn-color:#333" onclick="send('spawn_bobomb_squad','💣💣 Bob-omb Squad!','#333')"><span class="btn-emoji">💣💣</span><span class="btn-name">Bob-omb Squad</span><span class="btn-desc">6 Bob-ombs on staggered timers + chain explosions</span></div>
+<div class="cmd-btn" style="--btn-color:#f80" onclick="send('spawn_bullet_barrage','🚀🚀 Barrage!','#f80')"><span class="btn-emoji">🚀🚀</span><span class="btn-name">Bullet Barrage</span><span class="btn-desc">8 Bullet Bills from every compass direction</span></div>
+</div>
+<div class="sub-label">BOSSES</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('spawn_boss','💀 BOWSER!','var(--purple)')"><span class="btn-emoji">💀</span><span class="btn-name">BOWSER</span><span class="btn-desc">Full Bowser. Circles, lunges, glowing eyes + roar SFX</span><span class="btn-hotkey">B</span></div>
+<div class="cmd-btn" style="--btn-color:#ff4400" onclick="send('spawn_bowser_x','🔥 BOWSER X!','#ff4400')"><span class="btn-emoji">🔥</span><span class="btn-name">BOWSER X</span><span class="btn-desc">Multi-phase, gets faster each hit + fire breath SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#222" onclick="send('spawn_shadow_queen','🖤 Shadow Queen!','#222')"><span class="btn-emoji">🖤</span><span class="btn-name">Shadow Queen</span><span class="btn-desc">Paper Mario final boss. Pure darkness + organ SFX.</span></div>
+<div class="cmd-btn" style="--btn-color:#555" onclick="send('spawn_mega_chomp','⛓️⛓️ MEGA Chomp!','#555')"><span class="btn-emoji">⛓️⛓️</span><span class="btn-name">Chain Chomp MEGA</span><span class="btn-desc">Rolls through everything. Unstoppable. Crashing SFX.</span></div>
+</div>
+</div>
 
-      <!-- ══ WEATHER ══ -->
-      <div class="section" id="section-weather">
-        <div class="section-header"><span class="section-icon">⛅</span><div><div class="section-title">WEATHER CONTROL</div><div class="section-desc">Fog thickens gradually. Particles fall from the sky around Mason.</div></div></div>
-        <div class="sub-label">CLEAR</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('weather_sunny','☀️ Cleared!','var(--yellow)')"><span class="btn-emoji">☀️</span><span class="btn-name">Clear Skies</span><span class="btn-desc">Remove ALL weather effects instantly</span></div>
-        </div>
-        <div class="sub-label">EXISTING STORMS</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#aac" onclick="send('weather_fog','🌫️ Fog!','#aac')"><span class="btn-emoji">🌫️</span><span class="btn-name">Dense Fog</span><span class="btn-desc">Gradual visibility loss</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('weather_rain','🌧️ Rain!','var(--blue)')"><span class="btn-emoji">🌧️</span><span class="btn-name">Rain</span><span class="btn-desc">Map-wide rain + blue tint</span></div>
-          <div class="cmd-btn" style="--btn-color:#668" onclick="send('weather_storm','⛈️ Storm!','#668')"><span class="btn-emoji">⛈️</span><span class="btn-name">Full Storm</span><span class="btn-desc">Lightning + heavy rain, varied sizes</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('fire_zone','🔥 Fire!','var(--orange)')"><span class="btn-emoji">🔥</span><span class="btn-name">Fire Zone</span><span class="btn-desc">16 fire pillars + random spots</span></div>
-          <div class="cmd-btn" style="--btn-color:#5af" onclick="send('flood_water','🌊 Flood!','#5af')"><span class="btn-emoji">🌊</span><span class="btn-name">Flood</span><span class="btn-desc">Water rises over 30s then drains</span></div>
-          <div class="cmd-btn" style="--btn-color:#adf" onclick="send('weather_blizzard','❄️ Blizzard!','#adf')"><span class="btn-emoji">❄️</span><span class="btn-name">Blizzard</span><span class="btn-desc">Dense varied snow + white fog</span></div>
-          <div class="cmd-btn" style="--btn-color:#f90" onclick="send('weather_sandstorm','🏜️ Sandstorm!','#f90')"><span class="btn-emoji">🏜️</span><span class="btn-name">Sandstorm</span><span class="btn-desc">Orange fog + varied debris</span></div>
-        </div>
-        <div class="sub-label">NEW WEATHER</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#888" onclick="send('weather_ash','🌋 Ash!','#888')"><span class="btn-emoji">🌋</span><span class="btn-name">Ash Fall</span><span class="btn-desc">Dark flakes + volcanic orange fog</span></div>
-          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('weather_mud','💧 Mud!','#8B4513')"><span class="btn-emoji">💧</span><span class="btn-name">Mud Rain</span><span class="btn-desc">Brown drops + thick fog</span></div>
-          <div class="cmd-btn" style="--btn-color:#900" onclick="send('weather_blood','🩸 Blood!','#900')"><span class="btn-emoji">🩸</span><span class="btn-name">Blood Rain</span><span class="btn-desc">Red drops falling from the sky</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff0" onclick="send('weather_pollen','🌼 Pollen!','#ff0')"><span class="btn-emoji">🌼</span><span class="btn-name">Pollen Storm</span><span class="btn-desc">Yellow particles + golden haze</span></div>
-          <div class="cmd-btn" style="--btn-color:#0f0" onclick="send('weather_toxic','☢️ Toxic!','#0f0')"><span class="btn-emoji">☢️</span><span class="btn-name">Toxic Gas</span><span class="btn-desc">Green fog thickens slowly</span></div>
-          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('weather_rainbow','🌈 Rainbow!','#f0f')"><span class="btn-emoji">🌈</span><span class="btn-name">Rainbow Storm</span><span class="btn-desc">All-color particles + prismatic fog</span></div>
-          <div class="cmd-btn" style="--btn-color:#8df" onclick="send('weather_ice_crystals','💠 Ice!','#8df')"><span class="btn-emoji">💠</span><span class="btn-name">Ice Crystal Storm</span><span class="btn-desc">Sharp blue/white shards at angles</span></div>
-          <div class="cmd-btn" style="--btn-color:#444" onclick="send('weather_void','⚫ Void!','#444')"><span class="btn-emoji">⚫</span><span class="btn-name">Void Storm</span><span class="btn-desc">Black particles. Darkness closes in.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f60" onclick="send('weather_ember','✨ Embers!','#f60')"><span class="btn-emoji">✨</span><span class="btn-name">Ember Storm</span><span class="btn-desc">Glowing orange embers float upward</span></div>
-          <div class="cmd-btn" style="--btn-color:#a0f" onclick="send('weather_cosmic','🌌 Cosmic!','#a0f')"><span class="btn-emoji">🌌</span><span class="btn-name">Cosmic Dust</span><span class="btn-desc">Purple/pink particles + deep space fog</span></div>
-          <div class="cmd-btn" style="--btn-color:#ffb7c5" onclick="send('weather_blossom','🌸 Blossom!','#ffb7c5')"><span class="btn-emoji">🌸</span><span class="btn-name">Cherry Blossom</span><span class="btn-desc">Peaceful petals... then enemies spawn</span></div>
-          <div class="cmd-btn" style="--btn-color:#0a0" onclick="send('weather_ground_fog','🌫️ Ground Fog!','#0a0')"><span class="btn-emoji">🌫️</span><span class="btn-name">Ground Fog</span><span class="btn-desc">Fog hugs the floor only</span></div>
-          <div class="cmd-btn" style="--btn-color:#06f" onclick="send('weather_mist','💧 Mist!','#06f')"><span class="btn-emoji">💧</span><span class="btn-name">Rising Mist</span><span class="btn-desc">Starts at ground, climbs to head height</span></div>
-          <div class="cmd-btn" style="--btn-color:#f30" onclick="send('flood_lava','🌋 LAVA!','#f30')"><span class="btn-emoji">🌋</span><span class="btn-name">Lava Flood</span><span class="btn-desc">Glowing lava rises instead of water</span></div>
-        </div>
-      </div>
+<!-- WEATHER -->
+<div class="section" id="section-weather">
+<div class="section-header"><span class="section-icon">⛅</span><div><div class="section-title">WEATHER</div><div class="section-desc">Fog thickens gradually. Particles fall from the sky around Mason.</div></div></div>
+<div class="sub-label">CLEAR</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('weather_sunny','☀️ Cleared!','var(--yellow)')"><span class="btn-emoji">☀️</span><span class="btn-name">Clear Skies</span><span class="btn-desc">Remove ALL weather effects instantly</span></div>
+</div>
+<div class="sub-label">STORMS</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#aac" onclick="send('weather_fog','🌫️ Fog!','#aac')"><span class="btn-emoji">🌫️</span><span class="btn-name">Dense Fog</span><span class="btn-desc">Gradual visibility loss + foghorn ambience</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('weather_rain','🌧️ Rain!','var(--blue)')"><span class="btn-emoji">🌧️</span><span class="btn-name">Rain</span><span class="btn-desc">Map-wide rain + blue tint + rain SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#668" onclick="send('weather_storm','⛈️ Storm!','#668')"><span class="btn-emoji">⛈️</span><span class="btn-name">Full Storm</span><span class="btn-desc">Lightning + heavy rain + thunder crack SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('fire_zone','🔥 Fire!','var(--orange)')"><span class="btn-emoji">🔥</span><span class="btn-name">Fire Zone</span><span class="btn-desc">16 fire pillars + random spots + roar SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#5af" onclick="send('flood_water','🌊 Flood!','#5af')"><span class="btn-emoji">🌊</span><span class="btn-name">Flood</span><span class="btn-desc">Water rises over 30s then drains + gurgle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#adf" onclick="send('weather_blizzard','❄️ Blizzard!','#adf')"><span class="btn-emoji">❄️</span><span class="btn-name">Blizzard</span><span class="btn-desc">Dense varied snow + white fog + howl SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f90" onclick="send('weather_sandstorm','🏜️ Sandstorm!','#f90')"><span class="btn-emoji">🏜️</span><span class="btn-name">Sandstorm</span><span class="btn-desc">Orange fog + varied debris + wind SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f30" onclick="send('flood_lava','🌋 LAVA!','#f30')"><span class="btn-emoji">🌋</span><span class="btn-name">Lava Flood</span><span class="btn-desc">Glowing lava rises + bubbling SFX</span></div>
+</div>
+<div class="sub-label">SPECIAL</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('weather_ash','🌋 Ash!','#888')"><span class="btn-emoji">🌋</span><span class="btn-name">Ash Fall</span><span class="btn-desc">Dark flakes + volcanic orange fog + rumble SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('weather_mud','💧 Mud!','#8B4513')"><span class="btn-emoji">💧</span><span class="btn-name">Mud Rain</span><span class="btn-desc">Brown drops + thick fog + splat SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#900" onclick="send('weather_blood','🩸 Blood!','#900')"><span class="btn-emoji">🩸</span><span class="btn-name">Blood Rain</span><span class="btn-desc">Red drops falling from the sky + drip SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff0" onclick="send('weather_pollen','🌼 Pollen!','#ff0')"><span class="btn-emoji">🌼</span><span class="btn-name">Pollen Storm</span><span class="btn-desc">Yellow particles + golden haze + buzz SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#0f0" onclick="send('weather_toxic','☢️ Toxic!','#0f0')"><span class="btn-emoji">☢️</span><span class="btn-name">Toxic Gas</span><span class="btn-desc">Green fog thickens slowly + hiss SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f0f" onclick="send('weather_rainbow','🌈 Rainbow!','#f0f')"><span class="btn-emoji">🌈</span><span class="btn-name">Rainbow Storm</span><span class="btn-desc">All-color particles + prismatic fog + chime SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#8df" onclick="send('weather_ice_crystals','💠 Ice!','#8df')"><span class="btn-emoji">💠</span><span class="btn-name">Ice Crystal Storm</span><span class="btn-desc">Sharp blue/white shards at angles + tinkle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#444" onclick="send('weather_void','⚫ Void!','#444')"><span class="btn-emoji">⚫</span><span class="btn-name">Void Storm</span><span class="btn-desc">Black particles. Darkness closes in. Deep drone SFX.</span></div>
+<div class="cmd-btn" style="--btn-color:#f60" onclick="send('weather_ember','✨ Embers!','#f60')"><span class="btn-emoji">✨</span><span class="btn-name">Ember Storm</span><span class="btn-desc">Glowing orange embers float upward + crackle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#a0f" onclick="send('weather_cosmic','🌌 Cosmic!','#a0f')"><span class="btn-emoji">🌌</span><span class="btn-name">Cosmic Dust</span><span class="btn-desc">Purple/pink particles + deep space fog + whoosh SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ffb7c5" onclick="send('weather_blossom','🌸 Blossom!','#ffb7c5')"><span class="btn-emoji">🌸</span><span class="btn-name">Cherry Blossom</span><span class="btn-desc">Peaceful petals... then enemies spawn. SFX turns sinister.</span></div>
+<div class="cmd-btn" style="--btn-color:#0a0" onclick="send('weather_ground_fog','🌫️ Ground Fog!','#0a0')"><span class="btn-emoji">🌫️</span><span class="btn-name">Ground Fog</span><span class="btn-desc">Fog hugs the floor only + creep SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#06f" onclick="send('weather_mist','💧 Mist!','#06f')"><span class="btn-emoji">💧</span><span class="btn-name">Rising Mist</span><span class="btn-desc">Starts at ground, climbs to head height + whisper SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff0" onclick="send('skybox_swap','🌌 Skybox!','#ff0')"><span class="btn-emoji">🌌</span><span class="btn-name">Skybox Swap</span><span class="btn-desc">Swaps to space / underwater / volcano sky</span></div>
+<div class="cmd-btn" style="--btn-color:#6cf" onclick="send('ambient_color_shift','💡 Ambient!','#6cf')"><span class="btn-emoji">💡</span><span class="btn-name">Ambient Shift</span><span class="btn-desc">World ambient light shifts to red / green / purple</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('strobe_light','⚡ Strobe!','#ff8')"><span class="btn-emoji">⚡</span><span class="btn-name">Strobe Light</span><span class="btn-desc">Light intensity 0 to 5 rapidly toggling + click SFX</span></div>
+</div>
+</div>
 
-      <!-- ══ MAP ══ -->
-      <div class="section" id="section-map">
-        <div class="section-header"><span class="section-icon">🗺️</span><div><div class="section-title">MAP CONTROL</div><div class="section-desc">Reshape Delfino Plaza to your will.</div></div></div>
-        <div class="sub-label">EXISTING</div>
-        <div class="btn-grid btn-grid-wide">
-          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('block_path','🧱 Wall!','#8B4513')"><span class="btn-emoji">🧱</span><span class="btn-name">Block Path</span><span class="btn-desc">Spawns a wall in front of Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('open_path','🚪 Cleared!','var(--green)')"><span class="btn-emoji">🚪</span><span class="btn-name">Open Path</span><span class="btn-desc">Removes walls AND clears enemies</span></div>
-          <div class="cmd-btn" style="--btn-color:#aaa" onclick="send('platform_vanish','💨 Gone!','#aaa')"><span class="btn-emoji">💨</span><span class="btn-name">Vanish Platforms</span><span class="btn-desc">Tagged platforms disappear</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('platform_appear','✨ Back!','var(--yellow)')"><span class="btn-emoji">✨</span><span class="btn-name">Restore Platforms</span><span class="btn-desc">Platforms flicker back</span></div>
-        </div>
-        <div class="sub-label">NEW MAP CONTROLS</div>
-        <div class="btn-grid btn-grid-wide">
-          <div class="cmd-btn" style="--btn-color:#f90" onclick="send('bouncy_floor','🏀 Bouncy!','#f90')"><span class="btn-emoji">🏀</span><span class="btn-name">Bouncy Floor</span><span class="btn-desc">Spring patches scattered around Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#a30" onclick="send('spawn_boulder','🪨 BOULDER!','#a30')"><span class="btn-emoji">🪨</span><span class="btn-name">Rolling Boulder</span><span class="btn-desc">Giant boulder chases Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#556" onclick="send('spawn_maze','🧩 Maze!','#556')"><span class="btn-emoji">🧩</span><span class="btn-name">Spawn Maze</span><span class="btn-desc">Walls form a maze around Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('moving_platform','🟦 Platform!','var(--blue)')"><span class="btn-emoji">🟦</span><span class="btn-name">Moving Platform</span><span class="btn-desc">One moving platform — only safe spot</span></div>
-          <div class="cmd-btn" style="--btn-color:#06a" onclick="send('tilt_map','⛵ Tilt!','#06a')"><span class="btn-emoji">⛵</span><span class="btn-name">Tilt Map</span><span class="btn-desc">Map tilts like a boat in waves</span></div>
-          <div class="cmd-btn" style="--btn-color:#333" onclick="send('floor_holes','🕳️ Holes!','#333')"><span class="btn-emoji">🕳️</span><span class="btn-name">Floor Holes</span><span class="btn-desc">Patches vanish beneath his feet</span></div>
-        </div>
-        <div class="sub-label">NEW STRUCTURES</div>
-        <div class="btn-grid btn-grid-wide">
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_tower','🏰 TOWER!','var(--orange)')"><span class="btn-emoji">🏰</span><span class="btn-name">Spawn Tower</span><span class="btn-desc">Giant tower rises in front of Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_castle_wall','🏯 Castle!','#888')"><span class="btn-emoji">🏯</span><span class="btn-name">Castle Walls</span><span class="btn-desc">Ring of castle walls surrounds Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#fa0" onclick="send('spawn_question_blocks','❓ Blocks!','#fa0')"><span class="btn-emoji">❓</span><span class="btn-name">Question Blocks</span><span class="btn-desc">10 floating ? blocks appear around Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff0" onclick="send('coin_explosion','🪙 COINS!','#ff0')"><span class="btn-emoji">🪙</span><span class="btn-name">Coin Explosion</span><span class="btn-desc">100 coins burst out around Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#f55" onclick="send('spawn_lava_pillars','🌋 Pillars!','#f55')"><span class="btn-emoji">🌋</span><span class="btn-name">Lava Pillars</span><span class="btn-desc">5 erupting lava pillars burst from the ground</span></div>
-        </div>
-      </div>
+<!-- MAP -->
+<div class="section" id="section-map">
+<div class="section-header"><span class="section-icon">🗺️</span><div><div class="section-title">MAP</div><div class="section-desc">Reshape Delfino Plaza. All towers and castles are climbable with gorilla rig.</div></div></div>
+<div class="sub-label">TERRAIN</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('block_path','🧱 Wall!','#8B4513')"><span class="btn-emoji">🧱</span><span class="btn-name">Block Path</span><span class="btn-desc">Spawns a wall directly in front of Mason</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('open_path','🚪 Cleared!','var(--green)')"><span class="btn-emoji">🚪</span><span class="btn-name">Open Path</span><span class="btn-desc">Removes walls AND clears enemies</span></div>
+<div class="cmd-btn" style="--btn-color:#aaa" onclick="send('platform_vanish','💨 Gone!','#aaa')"><span class="btn-emoji">💨</span><span class="btn-name">Vanish Platforms</span><span class="btn-desc">Tagged platforms disappear + whoosh SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('platform_appear','✨ Back!','var(--yellow)')"><span class="btn-emoji">✨</span><span class="btn-name">Restore Platforms</span><span class="btn-desc">Platforms flicker back + chime SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f90" onclick="send('bouncy_floor','🏀 Bouncy!','#f90')"><span class="btn-emoji">🏀</span><span class="btn-name">Bouncy Floor</span><span class="btn-desc">Spring patches scattered + boing SFX per bounce</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('moving_platform','🟦 Platform!','var(--blue)')"><span class="btn-emoji">🟦</span><span class="btn-name">Moving Platform</span><span class="btn-desc">One moving platform — only safe spot</span></div>
+<div class="cmd-btn" style="--btn-color:#333" onclick="send('floor_holes','🕳️ Holes!','#333')"><span class="btn-emoji">🕳️</span><span class="btn-name">Floor Holes</span><span class="btn-desc">Patches vanish beneath feet + whoosh SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#556" onclick="send('spawn_maze','🧩 Maze!','#556')"><span class="btn-emoji">🧩</span><span class="btn-name">Spawn Maze</span><span class="btn-desc">Walls form a maze around Mason + build SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#a30" onclick="send('spawn_boulder','🪨 BOULDER!','#a30')"><span class="btn-emoji">🪨</span><span class="btn-name">Rolling Boulder</span><span class="btn-desc">Giant boulder chases Mason + rumble SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="send('spawn_question_blocks','❓ Blocks!','#fa0')"><span class="btn-emoji">❓</span><span class="btn-name">Question Blocks</span><span class="btn-desc">10 floating ? blocks + classic bump SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff0" onclick="send('coin_explosion','🪙 COINS!','#ff0')"><span class="btn-emoji">🪙</span><span class="btn-name">Coin Explosion</span><span class="btn-desc">100 coins burst out around Mason + jingle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f55" onclick="send('spawn_lava_pillars','🌋 Pillars!','#f55')"><span class="btn-emoji">🌋</span><span class="btn-name">Lava Pillars</span><span class="btn-desc">5 erupting pillars burst from ground + whoosh SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#06a" onclick="send('tilt_map','⛵ Tilt!','#06a')"><span class="btn-emoji">⛵</span><span class="btn-name">Tilt Map</span><span class="btn-desc">Map tilts like a boat in waves</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_tower','🏰 TOWER!','var(--orange)')"><span class="btn-emoji">🏰</span><span class="btn-name">Spawn Tower</span><span class="btn-desc">Giant tower rises in front of Mason</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_castle_wall','🏯 Castle!','#888')"><span class="btn-emoji">🏯</span><span class="btn-name">Castle Walls</span><span class="btn-desc">Ring of castle walls surrounds Mason</span></div>
+</div>
+<div class="sub-label">TOWERS</div>
+<div class="btn-grid btn-grid-narrow">
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('spawn_tower_stone','🏯 Stone','var(--orange)')"><span class="btn-emoji">🏯</span><span class="btn-name">Stone Tower</span><span class="btn-desc">Classic rough stone spire, medium height, fully climbable</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="send('spawn_tower_gold','🥇 Gold','#fa0')"><span class="btn-emoji">🥇</span><span class="btn-name">Gold Tower</span><span class="btn-desc">Gleaming golden pillar + shimmer SFX on climb</span></div>
+<div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_tower_lava','🌋 Lava','#f00')"><span class="btn-emoji">🌋</span><span class="btn-name">Lava Tower</span><span class="btn-desc">Obsidian with lava veins + heat shimmer VFX</span></div>
+<div class="cmd-btn" style="--btn-color:#adf" onclick="send('spawn_tower_ice','❄️ Ice','#adf')"><span class="btn-emoji">❄️</span><span class="btn-name">Ice Tower</span><span class="btn-desc">Crystal-clear ice spire + glassy tinkle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_tower_vine','🌿 Vine','#4f0')"><span class="btn-emoji">🌿</span><span class="btn-name">Vine Tower</span><span class="btn-desc">Giant beanstalk-style with leaves to grab</span></div>
+<div class="cmd-btn" style="--btn-color:#a0f" onclick="send('spawn_tower_crystal','💎 Crystal','#a0f')"><span class="btn-emoji">💎</span><span class="btn-name">Crystal Tower</span><span class="btn-desc">Purple glowing spire + hum gets louder near top</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_tower_ruined','🗿 Ruined','#888')"><span class="btn-emoji">🗿</span><span class="btn-name">Ruined Tower</span><span class="btn-desc">Crumbling broken tower, loose rubble physics</span></div>
+<div class="cmd-btn" style="--btn-color:#5af" onclick="send('spawn_tower_cloud','☁️ Cloud','#5af')"><span class="btn-emoji">☁️</span><span class="btn-name">Cloud Tower</span><span class="btn-desc">Sky-high fluffy cloud stacks, bouncy top platform</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('spawn_tower_star','⭐ Star','#ff8')"><span class="btn-emoji">⭐</span><span class="btn-name">Star Tower</span><span class="btn-desc">Ringed with spinning stars, coin shower at summit</span></div>
+<div class="cmd-btn" style="--btn-color:#f44" onclick="send('spawn_tower_mega','🔴 MEGA','#f44')"><span class="btn-emoji">🔴</span><span class="btn-name">Mega Tower</span><span class="btn-desc">Tallest possible — takes 60s to fully climb</span></div>
+</div>
+<div class="sub-label">CASTLES</div>
+<div class="btn-grid btn-grid-narrow">
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('spawn_castle_bowser','🏰 Bowser','#888')"><span class="btn-emoji">🏰</span><span class="btn-name">Bowser's Castle</span><span class="btn-desc">Dark spires, lava moat, drawbridge + iconic theme SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#adf" onclick="send('spawn_castle_peach','🌸 Peach','#adf')"><span class="btn-emoji">🌸</span><span class="btn-name">Peach's Castle</span><span class="btn-desc">Pink and white, gardens, glass windows + cheerful SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#5af" onclick="send('spawn_castle_ice','❄️ Ice','#5af')"><span class="btn-emoji">❄️</span><span class="btn-name">Ice Castle</span><span class="btn-desc">Frozen battlements, slippery floors inside + wind SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f60" onclick="send('spawn_castle_sand','🏜️ Desert','#f60')"><span class="btn-emoji">🏜️</span><span class="btn-name">Desert Fortress</span><span class="btn-desc">Sandstone walls, crenellations + dust particle SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#4f0" onclick="send('spawn_castle_jungle','🌿 Jungle','#4f0')"><span class="btn-emoji">🌿</span><span class="btn-name">Jungle Ruins</span><span class="btn-desc">Ancient overgrown castle, vines to swing on</span></div>
+<div class="cmd-btn" style="--btn-color:#a0f" onclick="send('spawn_castle_ghost','👻 Ghost','#a0f')"><span class="btn-emoji">👻</span><span class="btn-name">Ghost Mansion</span><span class="btn-desc">Big Boo's haunt style + creaking SFX, Boos inside</span></div>
+<div class="cmd-btn" style="--btn-color:#f00" onclick="send('spawn_castle_volcano','🌋 Volcano','#f00')"><span class="btn-emoji">🌋</span><span class="btn-name">Volcano Fortress</span><span class="btn-desc">Obsidian walls, lava channels + deep rumble SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('spawn_castle_sky','⭐ Sky','#ff8')"><span class="btn-emoji">⭐</span><span class="btn-name">Sky Castle</span><span class="btn-desc">Floating on clouds, rainbow bridge entrance</span></div>
+<div class="cmd-btn" style="--btn-color:#333" onclick="send('spawn_castle_dark','🌑 Shadow','#333')"><span class="btn-emoji">🌑</span><span class="btn-name">Shadow Castle</span><span class="btn-desc">Pitch black walls, glowing purple runes + organ SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="send('spawn_castle_mario64','🟥 SM64','#fa0')"><span class="btn-emoji">🟥</span><span class="btn-name">SM64 Castle</span><span class="btn-desc">Replica of Peach's Castle from SM64 + nostalgia SFX</span></div>
+</div>
+</div>
 
-      <!-- ══ POWER-UPS ══ -->
-      <div class="section" id="section-powerups">
-        <div class="section-header"><span class="section-icon">⭐</span><div><div class="section-title">POWER-UPS</div><div class="section-desc">Give or take. Dad's choice.</div></div></div>
-        <div class="sub-label">EXISTING</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('drop_star','⭐ Star!','var(--yellow)')"><span class="btn-emoji">⭐</span><span class="btn-name">Star Power</span><span class="btn-desc">Rainbow lights + coin shower</span></div>
-          <div class="cmd-btn" style="--btn-color:#ffd700" onclick="send('drop_coin','🪙 Coins!','#ffd700')"><span class="btn-emoji">🪙</span><span class="btn-name">Coin Shower</span><span class="btn-desc">25 physics coins with spin</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('drop_mushroom','🍄 Mushroom!','var(--green)')"><span class="btn-emoji">🍄</span><span class="btn-name">1-Up Mushroom</span><span class="btn-desc">Dad feeling generous. Briefly.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('make_tiny','🔻 Tiny!','#f44')"><span class="btn-emoji">🔻</span><span class="btn-name">Make Tiny</span><span class="btn-desc">Shrinks to 18% for 15s</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('make_giant','🔺 GIANT!','var(--orange)')"><span class="btn-emoji">🔺</span><span class="btn-name">Make Giant</span><span class="btn-desc">Grows to 3.5× for 15s</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('take_item','💀 Stolen!','var(--red)')"><span class="btn-emoji">💀</span><span class="btn-name">Take Everything</span><span class="btn-desc">Resets size + destroys power-ups</span></div>
-        </div>
-        <div class="sub-label">NEW POWER-UPS</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:#0ff" onclick="send('power_speed','💨 Speed!','#0ff')"><span class="btn-emoji">💨</span><span class="btn-name">Super Speed</span><span class="btn-desc">Insane movement speed for 10s</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('power_infinite_jump','🦘 Jump!','var(--purple)')"><span class="btn-emoji">🦘</span><span class="btn-name">Infinite Jump</span><span class="btn-desc">Jump as many times as you want for 30s</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('power_star_follow','🌟 Star!','var(--yellow)')"><span class="btn-emoji">🌟</span><span class="btn-name">Giant Star</span><span class="btn-desc">Glowing star orbits Mason</span></div>
-          <div class="cmd-btn" style="--btn-color:#88f" onclick="send('power_freeze','🕐 Freeze!','#88f')"><span class="btn-emoji">🕐</span><span class="btn-name">Freeze Enemies</span><span class="btn-desc">Clock freezes all enemies for 30s</span></div>
-          <div class="cmd-btn" style="--btn-color:#666" onclick="send('power_tunnel_vision','👁️ Tunnel!','#666')"><span class="btn-emoji">👁️</span><span class="btn-name">Tunnel Vision</span><span class="btn-desc">Removes peripheral vision — brutal</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('power_good_job_trophy','🏆 Trophy!','var(--green)')"><span class="btn-emoji">🏆</span><span class="btn-name">Trophy Drop</span><span class="btn-desc">Trophy → explodes into coins + confetti</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('power_shield','🛡️ Shield!','var(--teal)')"><span class="btn-emoji">🛡️</span><span class="btn-name">Shield Bubble</span><span class="btn-desc">Glowing bubble protects Mason for 20s</span></div>
-        </div>
-      </div>
+<!-- POWER-UPS -->
+<div class="section" id="section-powerups">
+<div class="section-header"><span class="section-icon">⭐</span><div><div class="section-title">POWER-UPS</div><div class="section-desc">Give or take. Dad's choice.</div></div></div>
+<div class="sub-label">MARIO</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('drop_star','⭐ Star!','var(--yellow)')"><span class="btn-emoji">⭐</span><span class="btn-name">Star Power</span><span class="btn-desc">Rainbow lights + coin shower + invincibility jingle</span></div>
+<div class="cmd-btn" style="--btn-color:#ffd700" onclick="send('drop_coin','🪙 Coins!','#ffd700')"><span class="btn-emoji">🪙</span><span class="btn-name">Coin Shower</span><span class="btn-desc">25 physics coins with spin + cha-ching SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('drop_mushroom','🍄 Mushroom!','var(--green)')"><span class="btn-emoji">🍄</span><span class="btn-name">1-Up Mushroom</span><span class="btn-desc">Dad feeling generous. Briefly. 1-up jingle SFX.</span></div>
+<div class="cmd-btn" style="--btn-color:#f44" onclick="send('make_tiny','🔻 Tiny!','#f44')"><span class="btn-emoji">🔻</span><span class="btn-name">Mini Mushroom</span><span class="btn-desc">Shrinks to 15%, floaty jump + high-pitched SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('make_giant','🔺 GIANT!','var(--orange)')"><span class="btn-emoji">🔺</span><span class="btn-name">Mega Mushroom</span><span class="btn-desc">Grows to 4x, screen-shaking footsteps + deep SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('power_fire_flower','🔥 Fire!','var(--red)')"><span class="btn-emoji">🔥</span><span class="btn-name">Fire Flower</span><span class="btn-desc">Shoot bouncing fireballs, enemies pop + drop coins</span></div>
+<div class="cmd-btn" style="--btn-color:#adf" onclick="send('power_ice_flower','🧊 Ice!','#adf')"><span class="btn-emoji">🧊</span><span class="btn-name">Ice Flower</span><span class="btn-desc">Freeze enemies solid + crack SFX, shatter for coins</span></div>
+<div class="cmd-btn" style="--btn-color:#8B4513" onclick="send('power_tanooki','🦝 Tanooki!','#8B4513')"><span class="btn-emoji">🦝</span><span class="btn-name">Tanooki Suit</span><span class="btn-desc">Glide + slow descent + tail swipe SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f90" onclick="send('power_propeller','🌀 Propeller!','#f90')"><span class="btn-emoji">🌀</span><span class="btn-name">Propeller Mushroom</span><span class="btn-desc">Spin launch upward + whirring SFX, slow spiral descent</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('power_cat_bell','🐱 Cat!','#ff8')"><span class="btn-emoji">🐱</span><span class="btn-name">Cat Bell</span><span class="btn-desc">Wall climbing + pounce attack + meow SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('power_boomerang','🪃 Boomerang!','var(--blue)')"><span class="btn-emoji">🪃</span><span class="btn-name">Boomerang Flower</span><span class="btn-desc">Throws returning boomerangs + whoosh-thwack SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#4f0" onclick="send('power_acorn','🌰 Acorn!','#4f0')"><span class="btn-emoji">🌰</span><span class="btn-name">Super Acorn</span><span class="btn-desc">Gliding + wall grab + flutter SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="send('power_gold_flower','🥇 Gold!','#fa0')"><span class="btn-emoji">🥇</span><span class="btn-name">Gold Flower</span><span class="btn-desc">Everything hit turns to coins + golden shimmer trail</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('power_infinite_jump','🦘 Inf Jump!','var(--teal)')"><span class="btn-emoji">🦘</span><span class="btn-name">Infinite Jump</span><span class="btn-desc">Jump as many times as you want for 30s</span></div>
+<div class="cmd-btn" style="--btn-color:#0ff" onclick="send('power_speed','💨 Speed!','#0ff')"><span class="btn-emoji">💨</span><span class="btn-name">Super Speed</span><span class="btn-desc">Insane movement speed for 10s</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('take_item','💀 Stolen!','var(--red)')"><span class="btn-emoji">💀</span><span class="btn-name">Take Everything</span><span class="btn-desc">Resets size + destroys all power-ups + sad trombone</span></div>
+</div>
+<div class="sub-label">CROSS-GAME</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:#0ff" onclick="send('power_elytra','🦋 Wings!','#0ff')"><span class="btn-emoji">🦋</span><span class="btn-name">Elytra Wings</span><span class="btn-desc">Minecraft gliding — full flight mode + wind rush SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('power_overshield','🛡️ Overshield!','var(--blue)')"><span class="btn-emoji">🛡️</span><span class="btn-name">Overshield (Halo)</span><span class="btn-desc">Blue bubble expands + recharge hum SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('power_sonic_speed','💨 Sonic!','var(--yellow)')"><span class="btn-emoji">💨</span><span class="btn-name">Sonic Speed</span><span class="btn-desc">Blur streaks + ring collect SFX on pickup</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('power_sonic_stars','🌟 Invincible!','#ff8')"><span class="btn-emoji">🌟</span><span class="btn-name">Sonic Invincibility</span><span class="btn-desc">Spinning stars orbit Mason + classic Sonic jingle</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('power_hookshot','🪝 Hookshot!','#888')"><span class="btn-emoji">🪝</span><span class="btn-name">Hookshot (Zelda)</span><span class="btn-desc">Launches Mason toward any surface + chain SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('power_spin_attack','⚔️ Spin!','var(--green)')"><span class="btn-emoji">⚔️</span><span class="btn-name">Spin Attack (Zelda)</span><span class="btn-desc">360 spin clears nearby enemies + LTTP sword SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f55" onclick="send('power_shockwave','💥 Shockwave!','#f55')"><span class="btn-emoji">💥</span><span class="btn-name">Shockwave (Fortnite)</span><span class="btn-desc">Launches Mason straight up + boom SFX, float back down</span></div>
+<div class="cmd-btn" style="--btn-color:#f90" onclick="send('power_rocket_boost','🚀 Boost!','#f90')"><span class="btn-emoji">🚀</span><span class="btn-name">Rocket Boost</span><span class="btn-desc">Rocket launch forward + exhaust trail + boost SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff6" onclick="send('power_big_yeetus','🔨 YEETUS!','#ff6')"><span class="btn-emoji">🔨</span><span class="btn-name">Big Yeetus (Fall Guys)</span><span class="btn-desc">Giant rotating hammer sends Mason flying + boing SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#a0f" onclick="send('power_pokemon_fly','🦅 FLY!','#a0f')"><span class="btn-emoji">🦅</span><span class="btn-name">Fly (Pokemon)</span><span class="btn-desc">Mounts Pidgeot, lifts into air + Pokemon cry SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('power_morph_ball','⚫ Morph!','#888')"><span class="btn-emoji">⚫</span><span class="btn-name">Morph Ball (Metroid)</span><span class="btn-desc">Curls into ball + rolls at speed + bomb SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('power_kirby_inhale','🌬️ Inhale!','var(--orange)')"><span class="btn-emoji">🌬️</span><span class="btn-name">Kirby Inhale</span><span class="btn-desc">Sucks nearby enemies in + Kirby SFX + coin burst</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="send('power_freeze_clock','🕐 Stop!','var(--purple)')"><span class="btn-emoji">🕐</span><span class="btn-name">Stop Watch</span><span class="btn-desc">Clock freezes all enemies for 30s + tick SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('power_shield_bubble','🫧 Bubble!','var(--teal)')"><span class="btn-emoji">🫧</span><span class="btn-name">Shield Bubble</span><span class="btn-desc">Glowing bubble protects Mason 20s + hum SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('power_neon_trail','✨ Trail!','var(--blue)')"><span class="btn-emoji">✨</span><span class="btn-name">Neon Trail</span><span class="btn-desc">TrailRenderer lights up everywhere Mason moves</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('power_ground_pound','💥 Pound!','var(--red)')"><span class="btn-emoji">💥</span><span class="btn-name">DK Ground Pound</span><span class="btn-desc">Slam sends shockwave ring out + everything bounces</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('power_trophy','🏆 Trophy!','var(--green)')"><span class="btn-emoji">🏆</span><span class="btn-name">Trophy Drop</span><span class="btn-desc">Trophy explodes into coins + confetti + fanfare SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('power_star_follow','🌟 Star Orbit!','#ff8')"><span class="btn-emoji">🌟</span><span class="btn-name">Giant Star Orbit</span><span class="btn-desc">Glowing star orbits Mason continuously + hum SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#88f" onclick="send('power_freeze','🕐 Freeze!','#88f')"><span class="btn-emoji">🕐</span><span class="btn-name">Freeze Enemies</span><span class="btn-desc">Clock freezes all enemies for 30s</span></div>
+<div class="cmd-btn" style="--btn-color:#666" onclick="send('power_tunnel_vision','👁️ Tunnel!','#666')"><span class="btn-emoji">👁️</span><span class="btn-name">Tunnel Vision</span><span class="btn-desc">Removes peripheral vision — brutal</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('power_good_job_trophy','🏆 GJ Trophy!','var(--green)')"><span class="btn-emoji">🏆</span><span class="btn-name">Good Job Trophy</span><span class="btn-desc">Trophy → explodes into coins + confetti</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('power_shield','🛡️ Shield!','var(--teal)')"><span class="btn-emoji">🛡️</span><span class="btn-name">Shield Bubble (Classic)</span><span class="btn-desc">Glowing bubble protects Mason for 20s</span></div>
+</div>
+</div>
 
-      <!-- ══ MESSAGES ══ -->
-      <div class="section" id="section-messages">
-        <div class="section-header"><span class="section-icon">📢</span><div><div class="section-title">MESSAGES & EVENTS</div><div class="section-desc">Taunt. Motivate. Terrorize.</div></div></div>
-        <div class="sub-label">EXISTING</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_good_job','✅ Good Job!','var(--green)')"><span class="btn-emoji">✅</span><span class="btn-name">Good Job!</span><span class="btn-desc">Coins + trophy. Enemies stay.</span><span class="btn-hotkey">G</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_warning','⚠️ Warning!','var(--red)')"><span class="btn-emoji">⚠️</span><span class="btn-name">WARNING</span><span class="btn-desc">Alarm + flash + random enemy</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('msg_countdown','⏱️ Countdown!','var(--orange)')"><span class="btn-emoji">⏱️</span><span class="btn-name">60s Countdown</span><span class="btn-desc">Escalating panic + swarm at end</span><span class="btn-hotkey">C</span></div>
-          <div class="cmd-btn" style="--btn-color:#f0f" onclick="send('msg_dad_watching','👁️ Watching!','#f0f')"><span class="btn-emoji">👁️</span><span class="btn-name">Dad is Watching</span><span class="btn-desc">Creepy ambient flicker</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('msg_nice_try','😏 Nice Try!','var(--blue)')"><span class="btn-emoji">😏</span><span class="btn-name">Nice Try</span><span class="btn-desc">When he almost makes it out</span></div>
-        </div>
-        <div class="sub-label">NEW MESSAGES</div>
-        <div class="btn-grid">
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_red_warning','🚨 RED WARNING!','var(--red)')"><span class="btn-emoji">🚨</span><span class="btn-name">RED WARNING</span><span class="btn-desc">Giant red WARNING + hidden countdown</span></div>
-          <div class="cmd-btn" style="--btn-color:#333" onclick="send('msg_behind_you','👣 Behind You!','#555')"><span class="btn-emoji">👣</span><span class="btn-name">I'm Behind You</span><span class="btn-desc">Just those words. No other context.</span></div>
-          <div class="cmd-btn" style="--btn-color:#0f0" onclick="send('msg_fake_error','💾 Error!','#0f0')"><span class="btn-emoji">💾</span><span class="btn-name">Fake Error</span><span class="btn-desc">Game looks corrupted for 3 seconds</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('msg_mason_name','👤 MASON!','var(--yellow)')"><span class="btn-emoji">👤</span><span class="btn-name">MASON!</span><span class="btn-desc">His name huge on screen with evil sound</span></div>
-          <div class="cmd-btn" style="--btn-color:#888" onclick="send('msg_six_seven','🎯 6-7','#888')"><span class="btn-emoji">🎯</span><span class="btn-name">6-7</span><span class="btn-desc">Mason's personal rating. He'll know.</span></div>
-          <div class="cmd-btn" style="--btn-color:#777" onclick="send('msg_bad_jump','🦘 Bad Jump!','#777')"><span class="btn-emoji">🦘</span><span class="btn-name">You Call That Jumping?</span><span class="btn-desc">Dad has seen better. From a Goomba.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f44" onclick="send('msg_dad_rating','📊 Rating!','#f44')"><span class="btn-emoji">📊</span><span class="btn-name">Dad Rating: 2/10</span><span class="btn-desc">Harsh but fair. Try harder.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_goomba_better','🍄 Goomba!','var(--green)')"><span class="btn-emoji">🍄</span><span class="btn-name">Goomba Does Better</span><span class="btn-desc">Specifically. A Goomba.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('msg_almost','🏃 Almost!','var(--teal)')"><span class="btn-emoji">🏃</span><span class="btn-name">Almost Had It</span><span class="btn-desc">Taunts when he barely survives</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff8" onclick="send('msg_too_easy','😴 Too Easy!','#ff8')"><span class="btn-emoji">😴</span><span class="btn-name">Too Easy</span><span class="btn-desc">Dad is unimpressed. Yawns.</span></div>
-        </div>
-        <div class="sub-label">CUSTOM COMMAND</div>
-        <div class="custom-row">
-          <input class="custom-input" id="custom-cmd" placeholder="type any command key..."/>
-          <button class="send-btn" onclick="sendCustom()">SEND ▶</button>
-        </div>
-        <div class="kb-hint">e.g. <kbd class="kbd">spawn_goomba</kbd> · <kbd class="kbd">weather_blood</kbd> · <kbd class="kbd">reset_all</kbd></div>
-      </div>
+<!-- MESSAGES -->
+<div class="section" id="section-messages">
+<div class="section-header"><span class="section-icon">📢</span><div><div class="section-title">MESSAGES</div><div class="section-desc">Taunt. Motivate. Terrorize. Or just say hi.</div></div></div>
+<div class="msg-builder">
+  <div class="msg-builder-title">📡 CUSTOM MESSAGE TO MASON</div>
+  <input class="msg-text-input" id="custom-msg-text" placeholder="Type what Mason will see in VR..." maxlength="80"/>
+  <div class="msg-controls">
+    <select class="msg-select" id="custom-msg-style">
+      <option value="normal">Normal</option>
+      <option value="big">Big &amp; Bold</option>
+      <option value="warning">Warning Style</option>
+      <option value="celebration">Celebration</option>
+      <option value="glitch">Glitch Effect</option>
+      <option value="floating">Floating Text</option>
+    </select>
+    <select class="msg-select" id="custom-msg-sound">
+      <option value="none">No Sound</option>
+      <option value="alarm">Alarm</option>
+      <option value="fanfare">Fanfare</option>
+      <option value="evil_laugh">Evil Laugh</option>
+      <option value="airhorn">Air Horn</option>
+      <option value="sad_trombone">Sad Trombone</option>
+      <option value="mario_jump">Mario Jump</option>
+    </select>
+    <button class="send-btn purple" onclick="sendCustomMessage()">📡 SEND TO MASON</button>
+  </div>
+</div>
+<div class="sub-label">DAD CLASSICS</div>
+<div class="btn-grid">
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_good_job','✅ Good Job!','var(--green)')"><span class="btn-emoji">✅</span><span class="btn-name">Good Job!</span><span class="btn-desc">Coins + trophy. Enemies stay. Fanfare SFX.</span><span class="btn-hotkey">G</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_warning','⚠️ Warning!','var(--red)')"><span class="btn-emoji">⚠️</span><span class="btn-name">WARNING</span><span class="btn-desc">Alarm + flash + random enemy spawn</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="send('msg_countdown','⏱️ Countdown!','var(--orange)')"><span class="btn-emoji">⏱️</span><span class="btn-name">60s Countdown</span><span class="btn-desc">Escalating panic + swarm at end + ticking SFX</span><span class="btn-hotkey">C</span></div>
+<div class="cmd-btn" style="--btn-color:#f0f" onclick="send('msg_dad_watching','👁️ Watching!','#f0f')"><span class="btn-emoji">👁️</span><span class="btn-name">Dad is Watching</span><span class="btn-desc">Creepy ambient flicker + breathing SFX</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="send('msg_nice_try','😏 Nice Try!','var(--blue)')"><span class="btn-emoji">😏</span><span class="btn-name">Nice Try</span><span class="btn-desc">When he almost makes it out</span></div>
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="send('msg_mason_name','👤 MASON!','var(--yellow)')"><span class="btn-emoji">👤</span><span class="btn-name">MASON!</span><span class="btn-desc">His name huge on screen + evil echo SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#888" onclick="send('msg_six_seven','🎯 6-7','#888')"><span class="btn-emoji">🎯</span><span class="btn-name">6 — 7</span><span class="btn-desc">Mason's personal rating. He'll know.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="send('msg_red_warning','🚨 RED ALERT!','var(--red)')"><span class="btn-emoji">🚨</span><span class="btn-name">RED ALERT</span><span class="btn-desc">Giant red WARNING + hidden countdown + siren SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#333" onclick="send('msg_behind_you','👣 Behind You!','#555')"><span class="btn-emoji">👣</span><span class="btn-name">I'm Behind You</span><span class="btn-desc">Just those words. No other context. Whisper SFX.</span></div>
+<div class="cmd-btn" style="--btn-color:#0f0" onclick="send('msg_fake_error','💾 Error!','#0f0')"><span class="btn-emoji">💾</span><span class="btn-name">Fake Error</span><span class="btn-desc">Game looks corrupted for 3 seconds + glitch SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#f44" onclick="send('msg_dad_rating','📊 Rating!','#f44')"><span class="btn-emoji">📊</span><span class="btn-name">Dad Rating: 2/10</span><span class="btn-desc">Harsh but fair. Try harder. Buzzer SFX.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="send('msg_goomba_better','🍄 Goomba!','var(--green)')"><span class="btn-emoji">🍄</span><span class="btn-name">Goomba Does Better</span><span class="btn-desc">Specifically. A Goomba. Sad trombone SFX.</span></div>
+<div class="cmd-btn" style="--btn-color:#777" onclick="send('msg_bad_jump','🦘 Bad Jump!','#777')"><span class="btn-emoji">🦘</span><span class="btn-name">You Call That Jumping?</span><span class="btn-desc">Dad has seen better. From a Goomba.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="send('msg_almost','🏃 Almost!','var(--teal)')"><span class="btn-emoji">🏃</span><span class="btn-name">Almost Had It</span><span class="btn-desc">Taunts when he barely survives + close-call SFX</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="send('msg_too_easy','😴 Too Easy!','#ff8')"><span class="btn-emoji">😴</span><span class="btn-name">Too Easy</span><span class="btn-desc">Dad is unimpressed. Yawn SFX.</span></div>
+</div>
+</div>
 
-      <!-- ══ COMBOS ══ -->
-      <div class="section" id="section-combos">
-        <div class="section-header"><span class="section-icon">🔥</span><div><div class="section-title">COMBO ATTACKS</div><div class="section-desc">Multi-command sequences. Sit back and enjoy.</div></div></div>
-        <div class="sub-label">CLASSICS</div>
-        <div class="btn-grid btn-grid-wide">
-          <div class="cmd-btn" style="--btn-color:var(--red)" onclick="sendCombo(['earthquake','spawn_swarm','fire_zone'],600,'THE WORKS')"><span class="btn-emoji">🌋🔥</span><span class="btn-name">The Works</span><span class="btn-desc">Earthquake → Swarm → Fire Zone.</span></div>
-          <div class="cmd-btn" style="--btn-color:#446" onclick="sendCombo(['lights_out','spawn_boo','spawn_boo'],800,'NIGHTMARE')"><span class="btn-emoji">🌑👻</span><span class="btn-name">Nightmare Mode</span><span class="btn-desc">Lights Out + 6 Boos in total darkness.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['make_tiny','spawn_swarm','spawn_chain_chomp'],700,'TINY PROBLEM')"><span class="btn-emoji">🔻⛓️</span><span class="btn-name">Tiny Problem</span><span class="btn-desc">Shrink → Swarm → Chain Chomp.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['weather_storm','spawn_boss','earthquake'],1000,'APOCALYPSE')"><span class="btn-emoji">⛈️💀</span><span class="btn-name">Apocalypse</span><span class="btn-desc">Storm → Boss → Earthquake.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--teal)" onclick="sendCombo(['spawn_tower','spawn_castle_wall','spawn_goomba_army','weather_blood'],800,'CASTLE SIEGE')"><span class="btn-emoji">🏰🩸</span><span class="btn-name">Castle Siege</span><span class="btn-desc">Tower + Walls + Army + Blood Rain.</span></div>
-          <div class="cmd-btn" style="--btn-color:#fa0" onclick="sendCombo(['coin_explosion','drop_star','power_speed','spawn_goomba_army'],500,'COIN CHAOS')"><span class="btn-emoji">🪙⭐</span><span class="btn-name">Coin Chaos</span><span class="btn-desc">100 coins + star + speed + goomba army.</span></div>
-        </div>
-        <div class="sub-label">NEW COMBOS</div>
-        <div class="btn-grid btn-grid-wide">
-          <div class="cmd-btn" style="--btn-color:var(--blue)" onclick="sendCombo(['weather_blizzard','spawn_king_boo','spawn_boo','power_tunnel_vision'],800,'FROZEN NIGHTMARE')"><span class="btn-emoji">❄️👑</span><span class="btn-name">Frozen Nightmare</span><span class="btn-desc">Blizzard + King Boo + 3 Boos + Tunnel Vision. Ice cold terror.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--green)" onclick="sendCombo(['make_tiny','spawn_thwomp','spawn_whomp','bouncy_world'],600,'TINY HELL')"><span class="btn-emoji">🔻🪨</span><span class="btn-name">Tiny Hell</span><span class="btn-desc">Shrink + Thwomp + Whomp + Bouncy World. Everything is trying to crush you.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f0f" onclick="sendCombo(['disco_mode','spawn_shy_guy_army','weather_rainbow'],700,'PARTY CRASHER')"><span class="btn-emoji">🪩😶🌈</span><span class="btn-name">Party Crasher</span><span class="btn-desc">Disco Mode + Shy Guy Army + Rainbow Storm. Uninvited guests.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f80" onclick="sendCombo(['make_giant','spawn_shadow_queen','weather_void'],1200,'TITAN VS DARKNESS')"><span class="btn-emoji">🔺🖤</span><span class="btn-name">Titan vs Darkness</span><span class="btn-desc">Make Giant + Shadow Queen + Void Storm. Big but can you beat her?</span></div>
-          <div class="cmd-btn" style="--btn-color:#900" onclick="sendCombo(['weather_blood','spawn_bowser_x','spawn_kamek','lightning_strike'],2000,'BLOOD MOON')"><span class="btn-emoji">🩸🔥🧙</span><span class="btn-name">Blood Moon</span><span class="btn-desc">Blood Rain + Bowser X + Kamek + Lightning. The red sky means danger.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['spawn_boulder','spawn_bowser_x','flood_lava','earthquake'],3000,'INDIANA BOWSER')"><span class="btn-emoji">🪨🔥🌋</span><span class="btn-name">Indiana Bowser</span><span class="btn-desc">Boulder + Bowser X + Lava + Earthquake. Run. Just run.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['spawn_doopliss','dark_mode','msg_behind_you','spawn_shadow_mario'],800,'IDENTITY CRISIS')"><span class="btn-emoji">🎭🕶️👤</span><span class="btn-name">Identity Crisis</span><span class="btn-desc">Doopliss + Dark Mode + Behind You + Shadow Mario. Who is real?</span></div>
-          <div class="cmd-btn" style="--btn-color:#adf" onclick="sendCombo(['weather_blizzard','power_tunnel_vision','spawn_spiny','spawn_lakitu'],800,'ARCTIC AMBUSH')"><span class="btn-emoji">❄️👁️🔴</span><span class="btn-name">Arctic Ambush</span><span class="btn-desc">Blizzard + Tunnel Vision + Spinies raining down. Can't see. Can't escape.</span></div>
-          <div class="cmd-btn" style="--btn-color:#8B4513" onclick="sendCombo(['weather_mud','spawn_wiggler','spawn_petey','tilt_map'],1000,'JUNGLE MADNESS')"><span class="btn-emoji">💧🐛🌺</span><span class="btn-name">Jungle Madness</span><span class="btn-desc">Mud Rain + Wiggler + Petey + Tilting Map. Nature is angry.</span></div>
-          <div class="cmd-btn" style="--btn-color:#ff0" onclick="sendCombo(['spawn_question_blocks','coin_explosion','spawn_goomba_army','warp_speed'],400,'MARIO MAKER')"><span class="btn-emoji">❓🪙🍄⚡</span><span class="btn-name">Mario Maker</span><span class="btn-desc">? Blocks + Coins + Goomba Army at warp speed. Dad made a level.</span></div>
-          <div class="cmd-btn" style="--btn-color:#222" onclick="sendCombo(['spawn_shadow_queen','weather_void','dark_mode','spawn_mega_chomp'],1500,'END OF DAYS')"><span class="btn-emoji">🖤⚫🕶️⛓️</span><span class="btn-name">End of Days</span><span class="btn-desc">Shadow Queen + Void Storm + Dark Mode + Mega Chomp. Total darkness.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--teal)" onclick="sendCombo(['power_speed','power_infinite_jump','spawn_bowser_x','msg_too_easy'],500,'SPEED RUN CHALLENGE')"><span class="btn-emoji">💨🦘🔥😴</span><span class="btn-name">Speed Run Challenge</span><span class="btn-desc">Super Speed + Infinite Jump + Bowser X. Dad dares you to finish fast.</span></div>
-          <div class="cmd-btn" style="--btn-color:#f88" onclick="sendCombo(['dad_face_sky','msg_mason_name','spawn_doopliss','msg_six_seven'],1000,'DAD SPECIAL')"><span class="btn-emoji">👨🎯🎭</span><span class="btn-name">Dad Special</span><span class="btn-desc">Dad Face + MASON! + Doopliss + 6-7. A personal greeting.</span></div>
-          <div class="cmd-btn" style="--btn-color:var(--pink)" onclick="sendCombo(['weather_blossom','spawn_tower','spawn_king_boo','power_star_follow'],1200,'SAKURA TOWER')"><span class="btn-emoji">🌸🏰👑🌟</span><span class="btn-name">Sakura Tower</span><span class="btn-desc">Cherry Blossom → Tower rises → King Boo + Star. Beautiful then terrifying.</span></div>
-        </div>
-        <div class="sub-label">NUCLEAR</div>
-        <div class="btn-grid btn-grid-wide">
-          <div class="cmd-btn reckoning-btn" onclick="triggerReckoning()"><span class="btn-emoji">💀🔥</span><span class="btn-name" style="color:var(--red)">THE RECKONING</span><span class="btn-desc">Dark + invisible enemies + gravity + 60s countdown + Bowser X + lava flood. No survivors.</span><span class="btn-hotkey">R</span></div>
-        </div>
-      </div>
+<!-- COMBOS -->
+<div class="section" id="section-combos">
+<div class="section-header"><span class="section-icon">🔥</span><div><div class="section-title">COMBOS</div><div class="section-desc">Sequenced multi-command events. Sit back. Enjoy.</div></div></div>
+<div class="btn-grid btn-grid-wide">
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="sendCombo(['earthquake','spawn_swarm','fire_zone'],600,'The Works')"><span class="btn-emoji">🌋🌊🔥</span><span class="btn-name">The Works</span><span class="btn-desc">Earthquake → Swarm → Fire Zone. The original.</span></div>
+<div class="cmd-btn" style="--btn-color:#446" onclick="sendCombo(['lights_out','spawn_boo','spawn_boo'],800,'Nightmare Mode')"><span class="btn-emoji">🌑👻</span><span class="btn-name">Nightmare Mode</span><span class="btn-desc">Lights out + 6 Boos in total darkness.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['make_tiny','spawn_swarm','spawn_chain_chomp'],700,'Tiny Problem')"><span class="btn-emoji">🔻⛓️</span><span class="btn-name">Tiny Problem</span><span class="btn-desc">Shrink → Swarm → Chain Chomp. He's tiny. Everything is huge.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['weather_storm','spawn_boss','earthquake'],1000,'Apocalypse')"><span class="btn-emoji">⛈️💀🌋</span><span class="btn-name">Apocalypse</span><span class="btn-desc">Storm → Boss → Earthquake. The final form of dad.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--yellow)" onclick="sendCombo(['gravity_zero','power_propeller','power_elytra','moon_jump','weather_cosmic'],500,'Zero G Zone')"><span class="btn-emoji">🫧🦋🌌</span><span class="btn-name">Zero G Zone</span><span class="btn-desc">Zero gravity → propeller launch → elytra wings → moon jump → cosmic dust. Mason lives up there now.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="sendCombo(['power_elytra','wind_blast','fov_fisheye','weather_cosmic'],600,'Dragon Mode')"><span class="btn-emoji">🦋💨🐟</span><span class="btn-name">Dragon Mode</span><span class="btn-desc">Elytra wings → wind blast → fisheye lens → cosmic storm. Full flying dragon VR experience.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['spawn_castle_bowser','spawn_boss','weather_storm','fire_zone'],800,'Bowser Invasion')"><span class="btn-emoji">🏰💀⛈️</span><span class="btn-name">Bowser Invasion</span><span class="btn-desc">Bowser's Castle rises → Bowser spawns → thunderstorm → fire zone ignites.</span></div>
+<div class="cmd-btn" style="--btn-color:#a0f" onclick="sendCombo(['spawn_tower_star','coin_explosion','drop_star','power_sonic_stars','msg_good_job'],500,'Star Celebration')"><span class="btn-emoji">⭐🪙🌟</span><span class="btn-name">Star Celebration</span><span class="btn-desc">Star tower rises → 100 coins → star power → sonic stars → Dad says Good Job. The one generous combo.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--pink)" onclick="sendCombo(['spawn_castle_ghost','spawn_king_boo','lights_out','weather_void','spawn_boo_swarm'],700,'Ghost House')"><span class="btn-emoji">👻🏰🌑</span><span class="btn-name">Ghost House</span><span class="btn-desc">Ghost Mansion rises → King Boo → lights out → void storm → 10 Boos appear. Total haunted darkness.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--red)" onclick="sendCombo(['spawn_castle_volcano','flood_lava','spawn_bobomb_squad','fire_zone','earthquake'],600,'Volcano Party')"><span class="btn-emoji">🌋💣🔥</span><span class="btn-name">Volcano Party</span><span class="btn-desc">Volcano fortress → lava floods → Bob-omb squad → fire zone → earthquake. Everything is on fire.</span></div>
+<div class="cmd-btn" style="--btn-color:#ff8" onclick="sendCombo(['spawn_goomba_army','spawn_shy_guy_army','spawn_boo_swarm','spawn_bobomb_squad','spawn_bullet_barrage','spawn_boss'],400,'The Army')"><span class="btn-emoji">🍄😶👻💣🚀💀</span><span class="btn-name">The Army</span><span class="btn-desc">Every horde fires in sequence, then Bowser shows up last. They were just the warm-up.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="sendCombo(['spawn_tower','spawn_castle_wall','spawn_goomba_army','weather_blood'],800,'Castle Siege')"><span class="btn-emoji">🏰🩸</span><span class="btn-name">Castle Siege</span><span class="btn-desc">Tower + Castle Walls + Goomba Army + Blood Rain.</span></div>
+<div class="cmd-btn" style="--btn-color:#fa0" onclick="sendCombo(['coin_explosion','drop_star','power_speed','spawn_goomba_army'],500,'Coin Chaos')"><span class="btn-emoji">🪙⭐</span><span class="btn-name">Coin Chaos</span><span class="btn-desc">100 coins + star power + speed + goomba army.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--blue)" onclick="sendCombo(['weather_blizzard','spawn_king_boo','spawn_boo','power_tunnel_vision'],800,'Frozen Nightmare')"><span class="btn-emoji">❄️👑</span><span class="btn-name">Frozen Nightmare</span><span class="btn-desc">Blizzard + King Boo + 3 Boos + Tunnel Vision. Ice cold terror.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--green)" onclick="sendCombo(['make_tiny','spawn_thwomp','spawn_whomp','bouncy_world'],600,'Tiny Hell')"><span class="btn-emoji">🔻🪨</span><span class="btn-name">Tiny Hell</span><span class="btn-desc">Shrink + Thwomp + Whomp + Bouncy World. Everything is trying to crush you.</span></div>
+<div class="cmd-btn" style="--btn-color:#f0f" onclick="sendCombo(['disco_mode','spawn_shy_guy_army','weather_rainbow'],700,'Party Crasher')"><span class="btn-emoji">🪩😶🌈</span><span class="btn-name">Party Crasher</span><span class="btn-desc">Disco Mode + Shy Guy Army + Rainbow Storm. Uninvited guests.</span></div>
+<div class="cmd-btn" style="--btn-color:#f80" onclick="sendCombo(['make_giant','spawn_shadow_queen','weather_void'],1200,'Titan vs Darkness')"><span class="btn-emoji">🔺🖤</span><span class="btn-name">Titan vs Darkness</span><span class="btn-desc">Make Giant + Shadow Queen + Void Storm. Big but can you beat her?</span></div>
+<div class="cmd-btn" style="--btn-color:#900" onclick="sendCombo(['weather_blood','spawn_bowser_x','spawn_kamek','lightning_strike'],2000,'Blood Moon')"><span class="btn-emoji">🩸🔥🧙</span><span class="btn-name">Blood Moon</span><span class="btn-desc">Blood Rain + Bowser X + Kamek + Lightning. The red sky means danger.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--orange)" onclick="sendCombo(['spawn_boulder','spawn_bowser_x','flood_lava','earthquake'],3000,'Indiana Bowser')"><span class="btn-emoji">🪨🔥🌋</span><span class="btn-name">Indiana Bowser</span><span class="btn-desc">Boulder + Bowser X + Lava + Earthquake. Run. Just run.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--purple)" onclick="sendCombo(['spawn_doopliss','dark_mode','msg_behind_you','spawn_shadow_mario'],800,'Identity Crisis')"><span class="btn-emoji">🎭🕶️👤</span><span class="btn-name">Identity Crisis</span><span class="btn-desc">Doopliss + Dark Mode + Behind You + Shadow Mario. Who is real?</span></div>
+<div class="cmd-btn" style="--btn-color:#adf" onclick="sendCombo(['weather_blizzard','power_tunnel_vision','spawn_spiny','spawn_lakitu'],800,'Arctic Ambush')"><span class="btn-emoji">❄️👁️🔴</span><span class="btn-name">Arctic Ambush</span><span class="btn-desc">Blizzard + Tunnel Vision + Spinies raining down. Can't see. Can't escape.</span></div>
+<div class="cmd-btn" style="--btn-color:#8B4513" onclick="sendCombo(['weather_mud','spawn_wiggler','spawn_petey','tilt_map'],1000,'Jungle Madness')"><span class="btn-emoji">💧🐛🌺</span><span class="btn-name">Jungle Madness</span><span class="btn-desc">Mud Rain + Wiggler + Petey + Tilting Map. Nature is angry.</span></div>
+<div class="cmd-btn" style="--btn-color:#ff0" onclick="sendCombo(['spawn_question_blocks','coin_explosion','spawn_goomba_army','warp_speed'],400,'Mario Maker')"><span class="btn-emoji">❓🪙🍄⚡</span><span class="btn-name">Mario Maker</span><span class="btn-desc">? Blocks + Coins + Goomba Army at warp speed. Dad made a level.</span></div>
+<div class="cmd-btn" style="--btn-color:#222" onclick="sendCombo(['spawn_shadow_queen','weather_void','dark_mode','spawn_mega_chomp'],1500,'End of Days')"><span class="btn-emoji">🖤⚫🕶️⛓️</span><span class="btn-name">End of Days</span><span class="btn-desc">Shadow Queen + Void Storm + Dark Mode + Mega Chomp. Total darkness.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--teal)" onclick="sendCombo(['power_speed','power_infinite_jump','spawn_bowser_x','msg_too_easy'],500,'Speed Run Challenge')"><span class="btn-emoji">💨🦘🔥😴</span><span class="btn-name">Speed Run Challenge</span><span class="btn-desc">Super Speed + Infinite Jump + Bowser X. Dad dares you to finish fast.</span></div>
+<div class="cmd-btn" style="--btn-color:#f88" onclick="sendCombo(['dad_face_sky','msg_mason_name','spawn_doopliss','msg_six_seven'],1000,'Dad Special')"><span class="btn-emoji">👨🎯🎭</span><span class="btn-name">Dad Special</span><span class="btn-desc">Dad Face + MASON! + Doopliss + 6-7. A personal greeting.</span></div>
+<div class="cmd-btn" style="--btn-color:var(--pink)" onclick="sendCombo(['weather_blossom','spawn_tower','spawn_king_boo','power_star_follow'],1200,'Sakura Tower')"><span class="btn-emoji">🌸🏰👑🌟</span><span class="btn-name">Sakura Tower</span><span class="btn-desc">Cherry Blossom → Tower rises → King Boo + Star. Beautiful then terrifying.</span></div>
+<div class="cmd-btn reckoning-btn" onclick="triggerReckoning()"><span class="btn-emoji">💀🔥</span><span class="btn-name" style="color:var(--red);">THE RECKONING</span><span class="btn-desc">Zero G → every horde → time chaos → Bowser X at 30s → void storm → earthquake → lava flood. No survivors.</span><span class="btn-hotkey">R</span></div>
+</div>
+</div>
 
-      <!-- ══ LOG ══ -->
-      <div class="section" id="section-log">
-        <div class="section-header"><span class="section-icon">📋</span><div><div class="section-title">COMMAND LOG</div><div class="section-desc">Your history of devastation.</div></div></div>
-        <div class="cmd-log" id="cmd-log"><div class="log-entry" style="color:var(--muted);font-style:italic">— no commands sent yet —</div></div>
-        <div style="margin-top:16px;display:flex;gap:10px;">
-          <button class="send-btn" onclick="clearLog()" style="background:rgba(255,255,255,0.08);color:white;font-size:9px;">CLEAR LOG</button>
-        </div>
-      </div>
+<!-- LOG -->
+<div class="section" id="section-log">
+<div class="section-header"><span class="section-icon">📋</span><div><div class="section-title">LOG</div><div class="section-desc">Your history of devastation.</div></div></div>
+<div class="cmd-log" id="cmd-log"><div class="log-entry" style="color:var(--muted);font-style:italic">— no commands sent yet —</div></div>
+<div style="margin-top:16px;">
+<button class="send-btn" onclick="clearLog()" style="background:rgba(255,255,255,0.08);color:white;font-size:9px;">CLEAR LOG</button>
+</div>
+</div>
 
     </div>
   </div>
 </div>
-
 <div id="toast-container"></div>
-
 <script>
-const PASSWORD='delfino2024', SECRET='dad2026_';
+const PASSWORD='delfino2024',SECRET='dad2026_';
 const FIREBASE_URL='https://mario-commander-default-rtdb.firebaseio.com/commands/current.json';
 const API_KEY='AIzaSyC-pcUZd0WYIyi53j14CX1FXoNz3pTc5NE';
 let cmdCount=0;
-
-// Stars
 (()=>{const c=document.getElementById('stars');for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2.5+0.5;s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;opacity:${Math.random()*0.6+0.1};`;c.appendChild(s);}})();
-
-// Login
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
 function tryLogin(){
-  if(document.getElementById('pw-input').value===PASSWORD){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='block';
-    initFirebase();
-  } else {
-    const err=document.getElementById('login-error');
-    err.textContent='❌ WRONG PASSWORD. DAD DOES NOT FORGET.';
-    err.style.animation='none';
-    requestAnimationFrame(()=>err.style.animation='shake 0.4s ease');
-    document.getElementById('pw-input').value='';
-  }
+  if(document.getElementById('pw-input').value===PASSWORD){document.getElementById('login-screen').style.display='none';document.getElementById('app').style.display='block';initFirebase();}
+  else{const err=document.getElementById('login-error');err.textContent='WRONG PASSWORD. DAD DOES NOT FORGET.';err.style.animation='none';requestAnimationFrame(()=>err.style.animation='shake 0.4s ease');document.getElementById('pw-input').value='';}
 }
-
-function nav(id,el){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('section-'+id).classList.add('active');
-  if(el)el.classList.add('active');
-}
-
-// Firebase
+function nav(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('section-'+id).classList.add('active');if(el)el.classList.add('active');}
 function initFirebase(){setStatus('connecting...');sendCommand('ping').then(()=>setStatus('connected',true)).catch(()=>setStatus('error',false,true));}
 function setStatus(text,on=false,err=false){document.getElementById('status-text').textContent=text;document.getElementById('status-dot').className='status-dot'+(on?' on':err?' err':'');}
-async function sendCommand(cmd){
-  const res=await fetch(`${FIREBASE_URL}?auth=${API_KEY}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:SECRET+cmd,timestamp:Date.now().toString(),executed:false})});
+async function sendCommand(cmd,payload={}){
+  const body={command:SECRET+cmd,timestamp:Date.now().toString(),executed:false,...payload};
+  const res=await fetch(`${FIREBASE_URL}?auth=${API_KEY}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!res.ok)throw new Error('Firebase '+res.status);
   return res;
 }
-
 async function send(command,label,color='var(--yellow)'){
   const btn=event?.currentTarget;
-  try{
-    await sendCommand(command);
-    cmdCount++;
-    document.getElementById('cmd-num').textContent=cmdCount;
-    setStatus('connected',true);
-    if(btn){btn.classList.add('fired');setTimeout(()=>btn.classList.remove('fired'),600);}
-    showToast('▶ '+label,color);
-    addLog(command,label);
-  }catch(e){setStatus('error',false,true);showToast('❌ '+e.message,'var(--red)');}
+  try{await sendCommand(command);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;setStatus('connected',true);if(btn){btn.classList.add('fired');setTimeout(()=>btn.classList.remove('fired'),600);}showToast('▶ '+label,color);addLog(command,label);}
+  catch(e){setStatus('error',false,true);showToast('❌ '+e.message,'var(--red)');}
 }
-
-// RESET ALL
+async function sendCustomMessage(){
+  const text=document.getElementById('custom-msg-text').value.trim();
+  if(!text){showToast('⚠️ Type something first!','var(--orange)');return;}
+  const style=document.getElementById('custom-msg-style').value;
+  const sound=document.getElementById('custom-msg-sound').value;
+  try{await sendCommand('custom_message',{message_text:text,message_style:style,message_sound:sound});cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;setStatus('connected',true);showToast('📡 Sent: "'+text.substring(0,30)+(text.length>30?'...':'')+'"','var(--purple)');addLog('custom_message','"'+text+'" ['+style+'] ['+sound+']');}
+  catch(e){setStatus('error',false,true);showToast('❌ '+e.message,'var(--red)');}
+}
 async function resetAll(){
-  showToast('🚨 RESETTING EVERYTHING...','var(--red)');
-  addLog('reset_all','🚨 RESET ALL');
-  const resets=['clear_enemies','weather_sunny','clear_effects','take_item'];
+  showToast('🚨 RESETTING EVERYTHING...','var(--red)');addLog('reset_all','🚨 RESET ALL');
+  const resets=['clear_enemies','weather_sunny','clear_effects','take_item','clear_structures'];
   for(const cmd of resets){try{await sendCommand(cmd);await new Promise(r=>setTimeout(r,200));}catch(e){}}
-  cmdCount++;
-  document.getElementById('cmd-num').textContent=cmdCount;
-  showToast('✅ Field cleared. Mason is safe. For now.','var(--green)');
+  cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;showToast('✅ Field cleared. Mason is safe. For now.','var(--green)');
 }
-
-async function quickReset(cmd){
-  try{
-    await sendCommand(cmd);
-    cmdCount++;
-    document.getElementById('cmd-num').textContent=cmdCount;
-    showToast('✅ '+cmd,'var(--green)');
-    addLog(cmd,'Quick reset: '+cmd);
-  }catch(e){showToast('❌ '+e.message,'var(--red)');}
-}
-
+async function quickReset(cmd){try{await sendCommand(cmd);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;showToast('✅ '+cmd,'var(--green)');addLog(cmd,'Quick reset: '+cmd);}catch(e){showToast('❌ '+e.message,'var(--red)');}}
 async function sendCombo(commands,delayMs,label){
   showToast('🔥 COMBO: '+label,'var(--pink)');
-  for(let i=0;i<commands.length;i++){
-    await new Promise(r=>setTimeout(r,i===0?0:delayMs));
-    try{await sendCommand(commands[i]);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;addLog(commands[i],label);}catch(e){}
-  }
+  for(let i=0;i<commands.length;i++){await new Promise(r=>setTimeout(r,i===0?0:delayMs));try{await sendCommand(commands[i]);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;addLog(commands[i],label+' [step '+(i+1)+']');}catch(e){}}
 }
-
 async function triggerReckoning(){
   showToast('💀 THE RECKONING BEGINS...','var(--red)');
-  const steps=[{cmd:'dark_mode',w:0},{cmd:'gravity_random',w:2000},{cmd:'msg_countdown',w:3000},{cmd:'weather_blood',w:5000},{cmd:'spawn_swarm',w:8000},{cmd:'spawn_bowser_x',w:30000},{cmd:'weather_void',w:35000},{cmd:'earthquake',w:55000},{cmd:'flood_lava',w:58000}];
-  let prev=0;
-  for(const s of steps){await new Promise(r=>setTimeout(r,s.w-prev));prev=s.w;try{await sendCommand(s.cmd);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;addLog(s.cmd,'RECKONING: '+s.cmd);}catch(e){}}
+  const steps=[{cmd:'gravity_zero',w:0},{cmd:'spawn_swarm',w:2000},{cmd:'spawn_boo_swarm',w:3000},{cmd:'msg_countdown',w:4000},{cmd:'weather_blood',w:6000},{cmd:'time_chaos',w:10000},{cmd:'spawn_swarm',w:15000},{cmd:'spawn_bowser_x',w:30000},{cmd:'weather_void',w:35000},{cmd:'earthquake',w:55000},{cmd:'flood_lava',w:58000}];
+  let prev=0;for(const s of steps){await new Promise(r=>setTimeout(r,s.w-prev));prev=s.w;try{await sendCommand(s.cmd);cmdCount++;document.getElementById('cmd-num').textContent=cmdCount;addLog(s.cmd,'THE RECKONING');}catch(e){}}
 }
-
 function randomEffect(){
-  const all=[
-    'earthquake','lights_out','reverse_controls','slippery_floor','gravity_flip','disco_mode','screen_shake','warp_speed',
-    'bouncy_world','spinning_map','dark_mode','gravity_random','fake_game_over','random_teleport','giant_foot',
-    'spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_hammer_bro',
-    'spawn_thwomp','spawn_lakitu','spawn_spiny','spawn_whomp','spawn_king_boo','spawn_shy_guy',
-    'spawn_bobomb','spawn_wiggler','spawn_petey','spawn_kamek','spawn_doopliss',
-    'weather_fog','weather_rain','weather_storm','weather_blizzard','weather_sandstorm',
-    'weather_ash','weather_mud','weather_blood','weather_pollen','weather_toxic',
-    'weather_rainbow','weather_ice_crystals','weather_void','weather_ember','weather_cosmic',
-    'weather_blossom','weather_ground_fog','weather_mist',
-    'drop_star','drop_coin','make_tiny','make_giant',
-    'power_speed','power_infinite_jump','power_star_follow','power_freeze','power_tunnel_vision',
-    'msg_warning','msg_dad_watching','msg_red_warning','msg_behind_you','msg_fake_error',
-    'msg_mason_name','msg_six_seven','msg_bad_jump','msg_dad_rating','msg_goomba_better',
-    'bouncy_floor','spawn_boulder','spawn_maze','moving_platform','tilt_map','floor_holes',
-    'spawn_tower','spawn_castle_wall','spawn_question_blocks','coin_explosion','spawn_lava_pillars',
-    'slow_motion','freeze_frame','enemy_rage','lightning_strike'
-  ];
-  const pick = all[Math.floor(Math.random()*all.length)];
-  send(pick,'🎲 Random: '+pick,'var(--teal)');
+  const all=['earthquake','lights_out','screen_shake','cam_perlin_shake','zoom_punch','lightning_strike','gravity_flip','gravity_zero','gravity_super','gravity_sideways','gravity_random','moon_jump','slippery_floor','super_bounce','space_physics','wind_blast','explosion_yeet','fov_fisheye','fov_telephoto','cam_dutch_tilt','cam_orbit','disco_mode','post_invert','post_grayscale','bloom_max','chromatic_aberration','hue_shift','wireframe_mode','warp_speed','slow_motion','fast_forward','time_chaos','freeze_frame','enemy_rage','bouncy_world','spinning_map','dark_mode','fake_game_over','random_teleport','giant_foot','dad_face_sky','spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_hammer_bro','spawn_thwomp','spawn_lakitu','spawn_spiny','spawn_whomp','spawn_king_boo','spawn_shy_guy','spawn_bobomb','spawn_wiggler','spawn_kamek','spawn_doopliss','spawn_shadow_mario','spawn_piranha','spawn_blooper','spawn_petey','spawn_creeper','spawn_pikachu','spawn_sans','spawn_knuckles','spawn_swarm','spawn_goomba_army','spawn_shy_guy_army','spawn_boo_swarm','spawn_bobomb_squad','spawn_bullet_barrage','weather_fog','weather_rain','weather_storm','fire_zone','flood_water','weather_blizzard','weather_sandstorm','flood_lava','weather_ash','weather_mud','weather_blood','weather_pollen','weather_toxic','weather_rainbow','weather_ice_crystals','weather_void','weather_ember','weather_cosmic','weather_blossom','weather_ground_fog','weather_mist','skybox_swap','strobe_light','drop_star','drop_coin','make_tiny','make_giant','power_fire_flower','power_ice_flower','power_tanooki','power_propeller','power_cat_bell','power_boomerang','power_acorn','power_elytra','power_sonic_speed','power_hookshot','power_shockwave','power_rocket_boost','power_big_yeetus','power_pokemon_fly','power_kirby_inhale','spawn_tower_star','spawn_tower_vine','spawn_tower_cloud','spawn_tower_crystal','spawn_castle_sky','spawn_castle_ghost','spawn_castle_bowser','coin_explosion','bouncy_floor','spawn_boulder','spawn_question_blocks','msg_warning','msg_dad_watching','msg_red_warning','msg_behind_you','msg_mason_name','msg_six_seven','msg_fake_error','msg_bad_jump','msg_almost','msg_too_easy'];
+  const pick=all[Math.floor(Math.random()*all.length)];send(pick,'🎲 Random: '+pick,'var(--teal)');
 }
-function sendCustom(){const v=document.getElementById('custom-cmd').value.trim();if(!v)return;send(v,'📡 '+v,'var(--muted)');document.getElementById('custom-cmd').value='';}
-
-// Hotkeys
 document.addEventListener('keydown',e=>{
   if(document.getElementById('login-screen').style.display!=='none')return;
-  if(document.activeElement?.tagName==='INPUT')return;
+  if(document.activeElement?.tagName==='INPUT'||document.activeElement?.tagName==='SELECT')return;
   const k=e.key.toLowerCase();
   if(k==='0')resetAll();
   else if(k==='q')send('earthquake','🌋 Earthquake!','var(--red)');
   else if(k==='l')send('lights_out','🌑 Lights Out!','#555');
-  else if(k==='b')send('spawn_boss','👾 BOSS!','var(--purple)');
+  else if(k==='b')send('spawn_boss','💀 BOWSER!','var(--purple)');
   else if(k==='g')send('msg_good_job','✅ Good Job!','var(--green)');
   else if(k==='c')send('msg_countdown','⏱️ Countdown!','var(--orange)');
+  else if(k==='f')send('moon_jump','🌙 Moon Jump!','#fa0');
   else if(k==='r')triggerReckoning();
-  else if(k==='w'){const wx=['weather_fog','weather_rain','weather_storm','weather_blizzard','weather_sandstorm','weather_ash','weather_blood','weather_toxic','weather_ember','weather_cosmic','weather_void','weather_rainbow'];send(wx[Math.floor(Math.random()*wx.length)],'⛅ Random weather','var(--blue)');}
-  else if(k==='e'){const ex=['spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_swarm','spawn_thwomp','spawn_bobomb','spawn_shy_guy','spawn_king_boo','spawn_wiggler','spawn_spiny'];send(ex[Math.floor(Math.random()*ex.length)],'👾 Random enemy','var(--orange)');}
+  else if(k==='w'){const wx=['weather_fog','weather_rain','weather_storm','weather_blizzard','weather_sandstorm','weather_ash','weather_blood','weather_toxic','weather_ember','weather_cosmic','weather_void','weather_rainbow','weather_blossom','skybox_swap','weather_pollen','weather_ice_crystals','weather_ground_fog','flood_lava'];send(wx[Math.floor(Math.random()*wx.length)],'⛅ Random weather','var(--blue)');}
+  else if(k==='e'){const ex=['spawn_goomba','spawn_boo','spawn_chain_chomp','spawn_bullet','spawn_koopa','spawn_swarm','spawn_thwomp','spawn_bobomb','spawn_shy_guy','spawn_king_boo','spawn_wiggler','spawn_spiny','spawn_creeper','spawn_pikachu','spawn_sans','spawn_knuckles','spawn_shadow_mario','spawn_piranha'];send(ex[Math.floor(Math.random()*ex.length)],'👾 Random enemy','var(--orange)');}
 });
-
 function showToast(msg,color='var(--yellow)'){const c=document.getElementById('toast-container');const t=document.createElement('div');t.className='toast';t.style.setProperty('--toast-color',color);t.textContent=msg;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
 function addLog(cmd,label){const log=document.getElementById('cmd-log');if(log.children[0]?.style.fontStyle==='italic')log.innerHTML='';const e=document.createElement('div');e.className='log-entry';e.innerHTML=`<span class="log-time">${new Date().toLocaleTimeString()}</span><span>${cmd}</span> — ${label}`;log.prepend(e);while(log.children.length>50)log.removeChild(log.lastChild);}
 function clearLog(){document.getElementById('cmd-log').innerHTML='<div class="log-entry" style="color:var(--muted);font-style:italic">— log cleared —</div>';}
-document.getElementById('custom-cmd').addEventListener('keydown',e=>{if(e.key==='Enter')sendCustom();});
+document.getElementById('custom-msg-text').addEventListener('keydown',e=>{if(e.key==='Enter')sendCustomMessage();});
 </script>
 </body>
 </html>
